@@ -3,6 +3,7 @@ package utility.index.rtree;
 import java.io.BufferedReader;
 
 import spatialindex.rtree.RTree;
+import spatialindex.spatialindex.RWLock;
 import spatialindex.spatialindex.Region;
 import spatialindex.storagemanager.DiskStorageManager;
 import spatialindex.storagemanager.IBuffer;
@@ -184,5 +185,7 @@ public class MRTree extends RTree{
 		reader.close();
 	}
 	
-	
+	public RWLock getM_RWLock() {
+		return this.m_rwLock;
+	}
 }
