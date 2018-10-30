@@ -38,7 +38,6 @@ public class Global {
 	public static String delimiterSpace = " ";
 	public static String delimiterPound = "#";
 	
-	
 	// initBasePath
 	public static void initBasePath() throws Exception{
 		basePath = getBasePath();
