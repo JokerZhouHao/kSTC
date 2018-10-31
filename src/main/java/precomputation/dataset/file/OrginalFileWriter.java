@@ -13,20 +13,8 @@ import utility.io.IOUtility;
 public class OrginalFileWriter {
 	private BufferedWriter bw = null;
 	
-	public OrginalFileWriter(FileName fileName) throws Exception{
-		switch (fileName) {
-		case ID_NAME:
-			bw = IOUtility.getBW(Global.inputPath + "id_name.txt");
-			break;
-		case ID_COORD_LATLON:
-			bw = IOUtility.getBW(Global.inputPath + "id_coord_latlon.txt");
-			break;
-		case ID_TEXT:
-			bw = IOUtility.getBW(Global.inputPath + "id_text.txt");
-			break;
-		default:
-			break;
-		}
+	public OrginalFileWriter(String path) throws Exception{
+		bw = IOUtility.getBW(path);
 	}
 	
 	public void write(String str) throws Exception{
@@ -43,6 +31,7 @@ public class OrginalFileWriter {
 	
 	public void writeCoord(int id, String lat, String lon) throws Exception{
 		this.bw.write(String.valueOf(id));
+		this.bw.write(Global.delimiterLevel1);
 		this.bw.write(lat);
 		this.bw.write(Global.delimiterSpace);
 		this.bw.write(lon);

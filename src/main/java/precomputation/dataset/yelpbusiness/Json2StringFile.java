@@ -1,19 +1,23 @@
 package precomputation.dataset.yelpbusiness;
 
+import java.io.BufferedWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.SynchronousQueue;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
+import precomputation.dataset.file.OrginalFileWriter;
 import utility.Global;
 import utility.StringTools;
 import utility.io.IOUtility;
 import utility.io.IterableBufferReader;
+import utility.io.TimeUtility;
 
 /**
  * transfer json string to the file the format is us need
@@ -23,7 +27,7 @@ import utility.io.IterableBufferReader;
 public class Json2StringFile {
 	
 	private String pathJson = null;
-	private int numLine = -1;
+	private int numLine = 0;
 	
 	// attributions
 	private Map<String, String> attrNames = new HashMap<>();
@@ -50,7 +54,7 @@ public class Json2StringFile {
 	 * @throws Exception
 	 */
 	public int getNumLine() throws Exception{
-		if(numLine < 0) {
+		if(numLine == 0) {
 			IterableBufferReader<String> ibr = IOUtility.getIBW(pathJson);
 			for(String st : ibr) {
 				numLine++;
@@ -99,15 +103,15 @@ public class Json2StringFile {
 			c = str.charAt(i);
 			if(c != '\'') {
 				if(c == ',' || c=='}') {
-					sb.append('\'');
+					sb.append('"');
 					sb.append(c);
 				} else {
 					sb.append(c);
 					if(i > 0 && c == ' ' && str.charAt(i-1) == ':') {
-						sb.append('\'');	
+						sb.append('"');	
 					}
 				}
-			}
+			} else sb.append(c);
 		}
 		
 		return sb.toString();
@@ -186,20 +190,60 @@ public class Json2StringFile {
 		return sb.toString();
 	}
 	
+	/**
+	 * transfer json file to files
+	 * @throws Exception
+	 */
+	public void transToFile() throws Exception{
+		System.out.println("> start transfer json file to three files . . . ");
+		
+		getNumLine();
+		
+		OrginalFileWriter idNameWriter = new OrginalFileWriter(Global.pathIdName);
+		OrginalFileWriter idCoordWriter = new OrginalFileWriter(Global.pathIdCoord);
+		OrginalFileWriter idTextWriter = new OrginalFileWriter(Global.pathIdText);
+		idNameWriter.write(String.valueOf(numLine) + Global.delimiterPound);
+		idCoordWriter.write(String.valueOf(numLine) + Global.delimiterPound);
+		idTextWriter.write(String.valueOf(numLine) + Global.delimiterPound);
+		
+		JSONObject jo = null;
+		int counter = 0;
+		String lat=null, lon = null;
+		IterableBufferReader<String> ibr = IOUtility.getIBW(this.pathJson);
+		for(String line : ibr) {
+			jo = JSON.parseObject(line);
+			lat = this.getLatitude(jo);
+			lon = this.getLongtitude(jo);
+			if(lat != null && lon != null) {
+				idNameWriter.write(counter, getBussinessId(jo));
+				idCoordWriter.writeCoord(counter, getLatitude(jo), getLongtitude(jo));
+				idTextWriter.write(counter, getText(jo));
+				counter++;
+			}
+		}
+		idNameWriter.close();
+		idCoordWriter.close();
+		idTextWriter.close();
+		
+		System.out.println("> Over, spend time : " + TimeUtility.getGlobalSpendTime());
+	}
 	
 	public static void main(String[] args) throws Exception{
-		String path = Global.inputPath + "sample.json";
+		String path = Global.inputPath + "yelp_academic_dataset_business.json";
+//		String path = Global.inputPath + "sample.json";
 //		System.out.println(new Json2StringFile(path).getNumLine());
-		IterableBufferReader<String> ibr = IOUtility.getIBW(path);
-		JSONObject jo = JSON.parseObject(ibr.readLine());
-		System.out.println(new Json2StringFile(path).getBussinessId(jo));
-		System.out.println(new Json2StringFile(path).getAttrStr(jo, "attributes"));
-		System.out.println(new Json2StringFile(path).getAttrStr(jo, "address"));
-		System.out.println(new Json2StringFile(path).getAttrStr(jo, "hours"));
-		System.out.println(new Json2StringFile(path).getAttrStr(jo, "name"));
-		System.out.println(new Json2StringFile(path).getAttrStr(jo, "postal_code"));
-		ibr.close();
-		 
+//		IterableBufferReader<String> ibr = IOUtility.getIBW(path);
+//		JSONObject jo = JSON.parseObject(ibr.readLine());
+//		System.out.println(new Json2StringFile(path).getBussinessId(jo));
+//		System.out.println(new Json2StringFile(path).getAttrStr(jo, "attributes"));
+//		System.out.println(new Json2StringFile(path).getAttrStr(jo, "address"));
+//		System.out.println(new Json2StringFile(path).getAttrStr(jo, "hours"));
+//		System.out.println(new Json2StringFile(path).getAttrStr(jo, "name"));
+//		System.out.println(new Json2StringFile(path).getAttrStr(jo, "postal_code"));
+//		ibr.close();
+		
+		Json2StringFile jsf = new Json2StringFile(path);
+		jsf.transToFile();
 	}
 }
 

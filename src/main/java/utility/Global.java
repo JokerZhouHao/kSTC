@@ -29,6 +29,10 @@ public class Global {
 	public static String outPath = null;
 	public static String configPath = null;
 	
+	public static String pathIdName = null;
+	public static String pathIdText = null;
+	public static String pathIdCoord = null;
+	
 	// input file
 	public static String coordPath = "nidCoord.txt";
 	
@@ -83,6 +87,16 @@ public class Global {
 		
 		configPath = inputPath + "config.properties";
 		IOUtility.existsOrThrowsException(configPath);
+		
+		// loading config properties
+		configProps = new Properties();
+		configProps.load(new FileInputStream(Global.configPath));
+		
+		// set file path
+		pathIdName = inputPath + (String)configProps.get("fileIdName");
+		pathIdText = inputPath + (String)configProps.get("fileIdText");
+		pathIdCoord = inputPath + (String)configProps.get("fileCoord");
+		
 	}
 	
 	
@@ -122,6 +136,9 @@ public class Global {
 		System.out.println("inputPath : " + Global.inputPath);
 		System.out.println("outPath : " + Global.outPath);
 		System.out.println("configPath : " + Global.configPath);
+		System.out.println("pathIdName" + Global.pathIdName);
+		System.out.println("pathIdText : " + Global.pathIdText);
+		System.out.println("pathIdCoord : " + Global.pathIdCoord);
 		
 		System.out.println("\n--------------------------- rtree parameters --------------------------");
 		System.out.println("rtreePath : " + Global.rtreePath);
@@ -139,10 +156,6 @@ public class Global {
 			// set paths
 			initBasePath();
 			setAllPaths(DatasetType.values()[0]);
-			
-			// loading config properties
-			configProps = new Properties();
-			configProps.load(new FileInputStream(Global.configPath));
 			
 			// set rtree parameters
 			Global.initRTreeParameters();
