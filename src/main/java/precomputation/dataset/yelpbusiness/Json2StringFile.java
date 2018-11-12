@@ -202,9 +202,9 @@ public class Json2StringFile {
 		OrginalFileWriter idNameWriter = new OrginalFileWriter(Global.pathIdName);
 		OrginalFileWriter idCoordWriter = new OrginalFileWriter(Global.pathIdCoord);
 		OrginalFileWriter idTextWriter = new OrginalFileWriter(Global.pathIdText);
-		idNameWriter.write(String.valueOf(numLine) + Global.delimiterPound);
-		idCoordWriter.write(String.valueOf(numLine) + Global.delimiterPound);
-		idTextWriter.write(String.valueOf(numLine) + Global.delimiterPound);
+		idNameWriter.writeLine(Global.delimiterPound + String.valueOf(numLine));
+		idCoordWriter.writeLine(Global.delimiterPound + String.valueOf(numLine));
+		idTextWriter.writeLine(Global.delimiterPound + String.valueOf(numLine));
 		
 		JSONObject jo = null;
 		int counter = 0;
@@ -216,7 +216,7 @@ public class Json2StringFile {
 			lon = this.getLongtitude(jo);
 			if(lat != null && lon != null) {
 				idNameWriter.write(counter, getBussinessId(jo));
-				idCoordWriter.writeCoord(counter, getLatitude(jo), getLongtitude(jo));
+				idCoordWriter.writeCoord(counter, getLongtitude(jo), getLatitude(jo));
 				idTextWriter.write(counter, getText(jo));
 				counter++;
 			}

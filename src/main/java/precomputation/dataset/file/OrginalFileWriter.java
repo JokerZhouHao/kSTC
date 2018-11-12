@@ -17,7 +17,7 @@ public class OrginalFileWriter {
 		bw = IOUtility.getBW(path);
 	}
 	
-	public void write(String str) throws Exception{
+	public void writeLine(String str) throws Exception{
 		this.bw.write(str);
 		this.bw.write('\n');
 	}
@@ -29,12 +29,12 @@ public class OrginalFileWriter {
 		this.bw.write('\n');
 	}
 	
-	public void writeCoord(int id, String lat, String lon) throws Exception{
+	public void writeCoord(int id, String lon, String lat) throws Exception{
 		this.bw.write(String.valueOf(id));
 		this.bw.write(Global.delimiterLevel1);
-		this.bw.write(lat);
-		this.bw.write(Global.delimiterSpace);
 		this.bw.write(lon);
+		this.bw.write(Global.delimiterSpace);
+		this.bw.write(lat);
 		this.bw.write('\n');
 	}
 	
