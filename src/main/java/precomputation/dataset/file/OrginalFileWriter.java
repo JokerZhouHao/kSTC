@@ -1,6 +1,7 @@
 package precomputation.dataset.file;
 
 import java.io.BufferedWriter;
+import java.util.Set;
 
 import utility.Global;
 import utility.io.IOUtility;
@@ -35,6 +36,18 @@ public class OrginalFileWriter {
 		this.bw.write(lon);
 		this.bw.write(Global.delimiterSpace);
 		this.bw.write(lat);
+		this.bw.write('\n');
+	}
+	
+	public void writeWids(int id, Set<Integer> wids) throws Exception{
+		this.bw.write(String.valueOf(id));
+		this.bw.write(Global.delimiterLevel1);
+		Boolean sign = Boolean.TRUE;
+		for(Integer ig : wids) {
+			if(sign) sign = Boolean.FALSE;
+			else this.bw.write(Global.delimiterLevel2);
+			this.bw.write(String.valueOf(ig));
+		}
 		this.bw.write('\n');
 	}
 	

@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.RandomAccessFile;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -75,4 +76,20 @@ public class IOUtility {
 			throw new Exception("path : " + path + " no exists");
 		} else return true;
 	}
+	
+	public static void setFirstLine(String path, String line) throws Exception{
+		RandomAccessFile raf = new RandomAccessFile(new File(path), "rw");
+		raf.seek(0);
+		raf.writeBytes(line);
+		raf.close();
+	}
+	
+	public static String getFirstLine(String path) throws Exception{
+		BufferedReader br = IOUtility.getBR(path);
+		String line = br.readLine();
+		br.close();
+		return line;
+	}
+	
+	
 }

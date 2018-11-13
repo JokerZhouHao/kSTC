@@ -15,6 +15,10 @@ public class TimeUtility {
 	
 	public static long globalStartTime = System.currentTimeMillis();
 	
+	public static void init() {
+		
+	}
+	
 	public static String getTime() {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
 		return df.format(new Date());

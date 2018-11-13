@@ -1,5 +1,7 @@
 package utility;
 
+import java.util.List;
+
 /**
  * provide some function to deal string
  * @author ZhouHao
@@ -21,6 +23,15 @@ public class StringTools {
 		}
 		sb.append(str.substring(start));
 		sb.append(',');
+		return sb.toString();
+	}
+	
+	public static String strList2Str(List<String> list) {
+		StringBuffer sb = new StringBuffer();
+		for(String str : list) {
+			sb.append(str);
+			sb.append(' ');
+		}
 		return sb.toString();
 	}
 	

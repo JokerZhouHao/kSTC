@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import entity.Rectangle;
 import utility.io.IOUtility;
 
 /**
@@ -32,15 +33,28 @@ public class Global {
 	public static String pathIdName = null;
 	public static String pathIdText = null;
 	public static String pathIdCoord = null;
+	public static String pathIdWids = null;
+	public static String pathWidWord = null;
 	
-	// input file
-	public static String coordPath = "nidCoord.txt";
+	public static String pathTestFile = null;
+	
+	// index
+	public static String pathPidAndRtreeIdWordsIndex = null;
+	
+	// sign
+	public static String signNormalized = "[normalized]";
 	
 	/* file content delimiter sign */
 	public static String delimiterLevel1 = ": ";
 	public static String delimiterLevel2 = ",";
 	public static String delimiterSpace = " ";
 	public static String delimiterPound = "#";
+	
+	/* sub dataset */
+	public static Rectangle subYelpBus1 = new Rectangle(-125, 28, 15, 60);
+	
+//	public static String suffixFile = "";
+	public static String suffixFile = subYelpBus1.toString();
 	
 	// initBasePath
 	public static void initBasePath() throws Exception{
@@ -93,9 +107,16 @@ public class Global {
 		configProps.load(new FileInputStream(Global.configPath));
 		
 		// set file path
-		pathIdName = inputPath + (String)configProps.get("fileIdName");
-		pathIdText = inputPath + (String)configProps.get("fileIdText");
-		pathIdCoord = inputPath + (String)configProps.get("fileCoord");
+		pathTestFile = outPath + "test.txt";
+		pathIdName = inputPath + (String)configProps.get("fileIdName") + suffixFile;
+		pathIdText = inputPath + (String)configProps.get("fileIdText") + suffixFile;
+		pathIdCoord = inputPath + (String)configProps.get("fileCoord") + suffixFile;
+		pathIdWids = inputPath + (String)configProps.get("fileIdWids") + suffixFile;
+		pathWidWord = inputPath + (String)configProps.get("fileWidWord") + suffixFile;
+		
+		
+		// set index path
+		pathPidAndRtreeIdWordsIndex = outPath + (String)configProps.get("pathPidAndRtreeIdWordsIndex") + suffixFile + File.separator;
 		
 	}
 	
@@ -104,7 +125,7 @@ public class Global {
 	public static String rtreePath = null;
 	public static int rtreeBufferSize = 4096000;
 	public static int rtreePageSize = 32768;	// 400
-	public static int rtreeFanout = 800;
+	public static int rtreeFanout = 5;
 	public static int iindexBufferSize = 4096000;
 	public static int iindexPageSize = 128;
 	public static boolean iindexIsCreate = false;
@@ -112,9 +133,10 @@ public class Global {
 	
 	
 	private static void initRTreeParameters() {
-		rtreePath = Global.outPath + "rtree.rtreePageSize" + String.valueOf(Global.rtreePageSize) + 
-									 ".rtreeFanout" + String.valueOf(Global.rtreePageSize) + 
-									 ".iindexPageSize" + String.valueOf(Global.iindexPageSize);
+		rtreePath = Global.outPath + "rtree" + ".rtreeBufferSize" + String.valueOf(Global.rtreeBufferSize)
+								   + ".rtreePageSize" + String.valueOf(Global.rtreePageSize) 
+								   + ".rtreeFanout" + String.valueOf(Global.rtreePageSize) +  suffixFile + File.separator;
+									
 		if(!IOUtility.exists(rtreePath))	new File(rtreePath).mkdir();
 		
 		Global.rtreeBufferSize = Integer.parseInt((String)configProps.get("rtreeBufferSize"));

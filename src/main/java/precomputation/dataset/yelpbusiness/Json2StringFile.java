@@ -49,21 +49,6 @@ public class Json2StringFile {
 	}
 	
 	/**
-	 * get line num
-	 * @return
-	 * @throws Exception
-	 */
-	public int getNumLine() throws Exception{
-		if(numLine == 0) {
-			IterableBufferReader<String> ibr = IOUtility.getIBW(pathJson);
-			for(String st : ibr) {
-				numLine++;
-			}
-		}
-		return numLine;
-	}
-	
-	/**
 	 * getBussinessId
 	 * @param jo
 	 * @return
@@ -197,14 +182,12 @@ public class Json2StringFile {
 	public void transToFile() throws Exception{
 		System.out.println("> start transfer json file to three files . . . ");
 		
-		getNumLine();
-		
 		OrginalFileWriter idNameWriter = new OrginalFileWriter(Global.pathIdName);
 		OrginalFileWriter idCoordWriter = new OrginalFileWriter(Global.pathIdCoord);
 		OrginalFileWriter idTextWriter = new OrginalFileWriter(Global.pathIdText);
-		idNameWriter.writeLine(Global.delimiterPound + String.valueOf(numLine));
-		idCoordWriter.writeLine(Global.delimiterPound + String.valueOf(numLine));
-		idTextWriter.writeLine(Global.delimiterPound + String.valueOf(numLine));
+		idNameWriter.writeLine("               ");
+		idCoordWriter.writeLine("               ");
+		idTextWriter.writeLine("               ");
 		
 		JSONObject jo = null;
 		int counter = 0;
@@ -225,10 +208,16 @@ public class Json2StringFile {
 		idCoordWriter.close();
 		idTextWriter.close();
 		
+		String line = Global.delimiterPound + String.valueOf(counter);
+		IOUtility.setFirstLine(Global.pathIdName, line);
+		IOUtility.setFirstLine(Global.pathIdCoord, line);
+		IOUtility.setFirstLine(Global.pathIdText, line);
+		
 		System.out.println("> Over, spend time : " + TimeUtility.getGlobalSpendTime());
 	}
 	
 	public static void main(String[] args) throws Exception{
+		TimeUtility.init();
 		String path = Global.inputPath + "yelp_academic_dataset_business.json";
 //		String path = Global.inputPath + "sample.json";
 //		System.out.println(new Json2StringFile(path).getNumLine());

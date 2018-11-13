@@ -117,11 +117,11 @@ public class MRTree extends RTree{
 			String[] pidCoord = line.split(Global.delimiterLevel1);
 			int id = Integer.parseInt(pidCoord[0]);
 			String[] coord = pidCoord[1].split(Global.delimiterSpace);
-			float x = Float.parseFloat(coord[0]);
-			float y = Float.parseFloat(coord[1]);
-			if (x < -90 || x > 90 || y < -180 || y > 180) {
-				continue;
-			}
+			Double x = Double.parseDouble(coord[0]);
+			Double y = Double.parseDouble(coord[1]);
+//			if (x < -90 || x > 90 || y < -180 || y > 180) {
+//				continue;
+//			}
 			f1[0] = f2[0] = x;
 			f1[1] = f2[1] = y;
 			Region r = new Region(f1, f2);
@@ -159,11 +159,11 @@ public class MRTree extends RTree{
 			pidCoord = line.split(Global.delimiterLevel1);
 			int id = Integer.parseInt(pidCoord[0]);
 			String[] coord = pidCoord[1].split(Global.delimiterSpace);
-			float x = Float.parseFloat(coord[0]);
-			float y = Float.parseFloat(coord[1]);
-			if (x < -90 || x > 90 || y < -180 || y > 180) {
-				continue;
-			}
+			Double x = Double.parseDouble(coord[0]);
+			Double y = Double.parseDouble(coord[1]);
+//			if (x < -90 || x > 90 || y < -180 || y > 180) {
+//				continue;
+//			}
 			f1[0] = f2[0] = x;
 			f1[1] = f2[1] = y;
 			Region r = new Region(f1, f2);

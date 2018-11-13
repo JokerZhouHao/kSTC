@@ -1,5 +1,10 @@
 package precomputation.dataset.file;
 
+import java.io.BufferedReader;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
+
 import utility.Global;
 import utility.io.IOUtility;
 import utility.io.IterableBufferReader;
@@ -16,7 +21,7 @@ public class FileLoader {
 		String[] arr = null;
 		for(String line : ibr) {
 			if(line.startsWith(Global.delimiterPound)) {
-				names = new String[Integer.parseInt(line.split(Global.delimiterPound)[1])];
+				names = new String[Integer.parseInt(line.split(Global.delimiterPound)[1].trim())];
 			} else {
 				arr = line.split(Global.delimiterLevel1);
 				names[Integer.parseInt(arr[0])] = arr[1];
@@ -38,7 +43,7 @@ public class FileLoader {
 		int id = 0;
 		for(String line : ibr) {
 			if(line.startsWith(Global.delimiterPound)) {
-				coords = new double[Integer.parseInt(line.split(Global.delimiterPound)[1])][2];
+				coords = new double[Integer.parseInt(line.split(Global.delimiterPound)[1].trim())][2];
 			} else {
 				arr = line.split(Global.delimiterLevel1);
 				id = Integer.parseInt(arr[0]);
@@ -59,7 +64,7 @@ public class FileLoader {
 		int id = 0;
 		for(String line : ibr) {
 			if(line.startsWith(Global.delimiterPound)) {
-				texts = new String[Integer.parseInt(line.split(Global.delimiterPound)[1])];
+				texts = new String[Integer.parseInt(line.split(Global.delimiterPound)[1].trim())];
 			} else {
 				start = line.indexOf(Global.delimiterLevel1);
 				id = Integer.parseInt(line.substring(0, start));
@@ -70,12 +75,54 @@ public class FileLoader {
 		return texts;
 	}
 	
+	public static Set<Integer>[] loadIdWids(String fp) throws Exception{
+		BufferedReader br = IOUtility.getBR(fp);
+		String line = br.readLine();
+		int numId = Integer.parseInt(line.split(Global.delimiterPound)[1]);
+		
+		Set<Integer>[] allWids = new Set[numId];
+		String[] arr = null;
+		int id;
+		Set<Integer> wids = null;
+		
+		while(null != (line = br.readLine())) {
+			arr = line.split(Global.delimiterLevel1);
+			allWids[Integer.parseInt(arr[0])] = wids = new HashSet<>();
+			arr = arr[1].split(Global.delimiterLevel2);
+			for(String st : arr) {
+				wids.add(Integer.parseInt(st));
+			}
+		}
+		br.close();
+		return allWids;
+	}
+	
+	public static String[] loadWords(String fp) throws Exception{
+		BufferedReader br = IOUtility.getBR(fp);
+		String line = br.readLine();
+		int numId = Integer.parseInt(line.split(Global.delimiterPound)[1].trim());
+		
+		String[] words = new String[numId];
+		int wid = 0;
+		String[] arr = null;
+		while(null != (line = br.readLine())) {
+			arr = line.split(Global.delimiterLevel1);
+			wid = Integer.parseInt(arr[0]);
+			words[wid] = arr[1];
+		}
+		br.close();
+		
+		return words;
+	}
+	
 	public static void main(String[] args) throws Exception{
 //		String str = "#123";
 //		System.out.println(str.split("#")[1]);
 //		FileLoader.loadNames(Global.pathIdName);
 //		FileLoader.loadCoords(Global.pathIdCoord);
 //		FileLoader.loadText(Global.pathIdText);
+//		FileLoader.loadIdWids(Global.pathIdWids);
+		FileLoader.loadWords(Global.pathWidWord);
 		
 //		double db = -115.283122245;
 //		float ft = -115.283122245f;

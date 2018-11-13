@@ -27,11 +27,10 @@ public abstract  class AbstractLuceneIndex {
 	protected IndexSearcher indexSearcher = null;
 	protected String indexPath = null;
 	
-	public AbstractLuceneIndex() {}
-	
 	public AbstractLuceneIndex(String indexPath) {
 		super();
 		this.indexPath = indexPath;
+		analyzer = new StandardAnalyzer();
 	}
 	
 	public void setIndexPath(String indexPath) throws Exception{
@@ -49,8 +48,7 @@ public abstract  class AbstractLuceneIndex {
 	}
 	
 	// openIndexWriter
-	protected void openIndexWriter() throws Exception{
-		analyzer = new StandardAnalyzer();
+	public void openIndexWriter() throws Exception{
 		if(!new File(indexPath).exists()) {
 			new File(indexPath).mkdir();
 		}
