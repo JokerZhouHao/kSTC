@@ -40,6 +40,7 @@ public class Global {
 	
 	// index
 	public static String pathPidAndRtreeIdWordsIndex = null;
+	public static String pathTestIndex = null;
 	
 	// sign
 	public static String signNormalized = "[normalized]";
@@ -117,7 +118,7 @@ public class Global {
 		
 		// set index path
 		pathPidAndRtreeIdWordsIndex = outPath + (String)configProps.get("pathPidAndRtreeIdWordsIndex") + suffixFile + File.separator;
-		
+		pathTestIndex = outPath + "test" + File.separator;
 	}
 	
 	

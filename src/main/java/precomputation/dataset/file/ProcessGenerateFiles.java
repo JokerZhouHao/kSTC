@@ -122,51 +122,53 @@ public class ProcessGenerateFiles {
 	/**
 	 * building pid wids index
 	 * @param index
-	 * @param pidTexts
+	 * @param texts
 	 * @throws Exception
 	 */
-	public static void buildPidWordsIndex(IdWordsIndex index, Set<Integer>[] allWids) throws Exception{
-		for(int i=0; i<allWids.length; i++) {
-			index.addDoc(i, allWids[i]);
+	public static void buildPidWordsIndex(IdWordsIndex index, String[] texts ) throws Exception{
+		for(int i=0; i<texts.length; i++) {
+			index.addWordsDoc(i, texts[i]);
 		}
 	}
 	
 	/**
 	 * building rtreeid words index
 	 * @param index
-	 * @param pidTexts
+	 * @param texts
 	 * @param rtree
 	 * @param rtreeId
 	 * @return
 	 * @throws Exception
 	 */
-	public static Set<Integer> buildRtreeidWordsIndex(IdWordsIndex index, Set<Integer>[] allWids, MRTree rtree, int rtreeId) throws Exception{
-		Set<Integer> wids = new HashSet<>();
+	public static StringBuffer buildRtreeidWordsIndex(IdWordsIndex index, String[] texts , MRTree rtree, int rtreeId) throws Exception{
+		StringBuffer sb = new StringBuffer();
 		if(rtreeId == Integer.MIN_VALUE) {
 			rtreeId = rtree.getRoot();
 		}
 		Node node = rtree.readNode(rtreeId);
 		if(node.isLeaf()) {
 			for(int child = 0; child < node.m_children; child++) {
-				wids.addAll(allWids[node.m_pIdentifier[child]]);
+				sb.append(" ");
+				sb.append(texts[node.m_pIdentifier[child]]);
 			}
 		} else {
 			for(int child = 0; child < node.m_children; child++) {
-				wids.addAll(buildRtreeidWordsIndex(index, allWids, rtree, node.m_pIdentifier[child]));
+				sb.append(" ");
+				sb.append(buildRtreeidWordsIndex(index, texts, rtree, node.m_pIdentifier[child]));
 			}
 		}
-		index.addDoc(-node.m_identifier - 1, wids);
-		return wids;
+		index.addWordsDoc(-node.m_identifier - 1, sb.toString());
+		return sb;
 	}
 	
 	public static void buildPidAndRtreeIdWordsIndex(String pathIndex) throws Exception{
 		System.out.println("> start build pid_rtreeid_words_index");
 		IdWordsIndex index = new IdWordsIndex(pathIndex);
 		index.openIndexWriter();
-		Set<Integer>[] allWids = FileLoader.loadIdWids(Global.pathIdWids);
-		ProcessGenerateFiles.buildPidWordsIndex(index, allWids);
+		String[] texts = FileLoader.loadText(Global.pathIdText);
+		ProcessGenerateFiles.buildPidWordsIndex(index, texts);
 		System.out.println("> over build pids");
-		ProcessGenerateFiles.buildRtreeidWordsIndex(index, allWids, MRTree.getInstanceInDisk(), Integer.MIN_VALUE);
+		ProcessGenerateFiles.buildRtreeidWordsIndex(index, texts, MRTree.getInstanceInDisk(), Integer.MIN_VALUE);
 		System.out.println("> over build rtreeids");
 		index.close();
 		System.out.println("> over, spend time : " + TimeUtility.getGlobalSpendTime());
@@ -187,12 +189,12 @@ public class ProcessGenerateFiles {
 //		String pathCoords = Global.pathIdCoord + Global.subYelpBus1.toString();
 //		ProcessGenerateFiles.normalizedCoordFile(pathCoords, Global.subYelpBus1);
 		
-//		String placeFile = Global.pathIdCoord + Global.signNormalized;
-//		String treeFile = Global.rtreePath;
+		String placeFile = Global.pathIdCoord + Global.signNormalized;
+		String treeFile = Global.rtreePath;
 //		ProcessGenerateFiles.buildRTree(placeFile, treeFile, Global.rtreeFanout, Global.rtreeBufferSize, Global.rtreePageSize);
-//		MRTree rtree = MRTree.getInstanceInDisk();
-//		System.out.println(rtree.getTreeHeight());
-//		System.out.println(rtree.getRoot());
+		MRTree rtree = MRTree.getInstanceInDisk();
+		System.out.println(rtree.getTreeHeight());
+		System.out.println(rtree.getRoot());
 		
 //		PrintStream ps = new PrintStream(new File(Global.pathTestFile));
 //		System.setErr(ps);

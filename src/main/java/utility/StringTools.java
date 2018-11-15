@@ -1,5 +1,7 @@
 package utility;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -26,16 +28,19 @@ public class StringTools {
 		return sb.toString();
 	}
 	
-	public static String strList2Str(List<String> list) {
+	public static String collection2Str(Collection col) {
 		StringBuffer sb = new StringBuffer();
-		for(String str : list) {
-			sb.append(str);
+		for(Object ob : col) {
+			sb.append(String.valueOf(ob));
 			sb.append(' ');
 		}
 		return sb.toString();
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(StringTools.splitUpperString("Zhou"));
+		List<String> words = new ArrayList<>();
+		words.add("12");
+		words.add("23");
+		System.out.println(StringTools.collection2Str(words));
 	}
 }

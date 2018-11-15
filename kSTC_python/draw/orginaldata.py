@@ -2,11 +2,16 @@ import matplotlib.pyplot as plt
 from utility.io import IterableReader
 from utility.io import Global
 from utility import myplt
+from matplotlib import interactive
+import random
 
 class OrginalDataDraw:
 
     @staticmethod
     def drawCoord(path):
+        fig = plt.figure(random.randint(1, 10000))
+        ax = fig.add_subplot(111)
+
         allCoords = [[], []]
         reader = IterableReader(path)
         i = 0
@@ -21,8 +26,9 @@ class OrginalDataDraw:
             allCoordsCopy[0].append(allCoords[0][i])
             allCoordsCopy[1].append(allCoords[1][i])
 
-        plt.scatter(allCoords[0], allCoords[1], s=1)
+        ax.scatter(allCoords[0], allCoords[1], s=1)
 
+        interactive(True)
         plt.show()
 
 # pathCoord = Global.pathCoord
@@ -30,5 +36,7 @@ class OrginalDataDraw:
 
 pathCoord = Global.pathCoord + '([-125.0, 28.0], [15.0, 60.0])'
 OrginalDataDraw.drawCoord(pathCoord)
+pathCoord = Global.pathCoord + '([-125.0, 28.0], [15.0, 60.0])[normalized]'
+OrginalDataDraw.drawCoord(pathCoord)
 
-
+plt.pause(1200)
