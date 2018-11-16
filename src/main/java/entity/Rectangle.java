@@ -1,5 +1,7 @@
 package entity;
 
+import spatialindex.spatialindex.Point;
+
 /**
  * 
  * @author ZhouHao
@@ -11,6 +13,10 @@ public class Rectangle {
 	public double westSouthLat = 0; 	// west south latitude
 	public double eastNorthLont = 0;	// east north longitude
 	public double eastNorthLat = 0;	// east north latitude
+	
+	public Rectangle(Point westSouthLocation, Point eastNorthLocation) {
+		this(westSouthLocation.m_pCoords[0], westSouthLocation.m_pCoords[1], eastNorthLocation.m_pCoords[0], eastNorthLocation.m_pCoords[1]);
+	}
 	
 	public Rectangle(double westSouthLont, double westSouthLat, double eastNorthLont, double eastNorthLat) {
 		super();

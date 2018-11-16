@@ -1,8 +1,15 @@
 package utility.index.rtree;
 
 import java.io.BufferedReader;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
+import entity.Node;
+import entity.NodeCollection;
+import entity.QueryParams;
 import spatialindex.rtree.RTree;
+import spatialindex.spatialindex.Point;
 import spatialindex.spatialindex.RWLock;
 import spatialindex.spatialindex.Region;
 import spatialindex.storagemanager.DiskStorageManager;
@@ -183,6 +190,38 @@ public class MRTree extends RTree{
 			System.err.println("Structure is INVALID!");
 
 		reader.close();
+	}
+	
+	public List<Node> rangeQuery(QueryParams qParams, Node centerNode, NodeCollection nodeCol, Point[] allPoints){
+		List<Node> neighbors = new ArrayList<>();
+		LinkedList<Integer> idQueue = new LinkedList<>();
+		idQueue.add(getRoot());
+		int id = 0;
+		int child = 0;
+		spatialindex.rtree.Node rNode = null;
+		Node pNode = null;
+		while(!idQueue.isEmpty()) {
+			id = idQueue.pollFirst();
+			rNode = readNode(id);
+			if(rNode.isLeaf()) {
+				for(child=0; child < rNode.m_children; child++) {
+					if(null != (pNode = nodeCol.get(rNode.m_pIdentifier[child])) &&
+						pNode.clusterId <= 0 &&
+						centerNode.location.getMinimumDistance(allPoints[rNode.m_pIdentifier[child]]) <= qParams.epsilon) {
+						neighbors.add(pNode);
+					}
+				}
+			} else {
+				for(child=0; child < rNode.m_children; child++) {
+					if(null != (pNode = nodeCol.get(rNode.m_pIdentifier[child])) &&
+						centerNode.location.getMinimumDistance(rNode.m_pMBR[child]) <= qParams.epsilon) {
+						idQueue.add(rNode.m_pIdentifier[child]);
+					}
+				}
+			}
+		}
+		if(neighbors.isEmpty())	return null;
+		else return neighbors;
 	}
 	
 	public RWLock getM_RWLock() {

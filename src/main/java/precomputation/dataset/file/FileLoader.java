@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
+import spatialindex.spatialindex.Point;
 import utility.Global;
 import utility.io.IOUtility;
 import utility.io.IterableBufferReader;
@@ -54,6 +55,36 @@ public class FileLoader {
 			}
 		}
 		return coords;
+	}
+	
+	/**
+	 * loadLocations
+	 * @param fp
+	 * @return
+	 * @throws Exception
+	 */
+	public static Point[] loadPoints(String fp) throws Exception{
+		IterableBufferReader<String> ibr = IOUtility.getIBW(fp);
+		Point[] points = null;
+		String[] arr = null;
+		double[] location = null;
+		int id = 0;
+		for(String line : ibr) {
+			if(line.startsWith(Global.delimiterPound)) {
+				points = new Point[Integer.parseInt(line.split(Global.delimiterPound)[1].trim())];
+			} else {
+				arr = line.split(Global.delimiterLevel1);
+				id = Integer.parseInt(arr[0]);
+				arr = arr[1].split(Global.delimiterSpace);
+				
+				location = new double[2];
+				location[0] = Double.parseDouble(arr[0]);
+				location[1] = Double.parseDouble(arr[1]);
+				
+				points[id] = new Point(location);
+			}
+		}
+		return points;
 	}
 	
 	public static String[] loadText(String fp) throws Exception{
@@ -120,9 +151,10 @@ public class FileLoader {
 //		System.out.println(str.split("#")[1]);
 //		FileLoader.loadNames(Global.pathIdName);
 //		FileLoader.loadCoords(Global.pathIdCoord);
+		FileLoader.loadPoints(Global.pathIdCoord);
 //		FileLoader.loadText(Global.pathIdText);
 //		FileLoader.loadIdWids(Global.pathIdWids);
-		FileLoader.loadWords(Global.pathWidWord);
+//		FileLoader.loadWords(Global.pathWidWord);
 		
 //		double db = -115.283122245;
 //		float ft = -115.283122245f;

@@ -199,7 +199,7 @@ public class ProcessGenerateFiles {
 //		PrintStream ps = new PrintStream(new File(Global.pathTestFile));
 //		System.setErr(ps);
 		
-		String pathIndex = Global.pathPidAndRtreeIdWordsIndex;
-		ProcessGenerateFiles.buildPidAndRtreeIdWordsIndex(pathIndex);
+//		String pathIndex = Global.pathPidAndRtreeIdWordsIndex;
+//		ProcessGenerateFiles.buildPidAndRtreeIdWordsIndex(pathIndex);
 	}
 }
