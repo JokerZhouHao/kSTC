@@ -192,8 +192,8 @@ public class MRTree extends RTree{
 		reader.close();
 	}
 	
-	public List<Node> rangeQuery(QueryParams qParams, Node centerNode, NodeCollection nodeCol, Point[] allPoints){
-		List<Node> neighbors = new ArrayList<>();
+	public LinkedList<Node> rangeQuery(QueryParams qParams, Node centerNode, NodeCollection nodeCol, Point[] allPoints){
+		LinkedList<Node> neighbors = new LinkedList<>();
 		LinkedList<Integer> idQueue = new LinkedList<>();
 		idQueue.add(getRoot());
 		int id = 0;
@@ -206,14 +206,14 @@ public class MRTree extends RTree{
 			if(rNode.isLeaf()) {
 				for(child=0; child < rNode.m_children; child++) {
 					if(null != (pNode = nodeCol.get(rNode.m_pIdentifier[child])) &&
-						pNode.clusterId <= 0 &&
+						!pNode.hasInCluster() &&
 						centerNode.location.getMinimumDistance(allPoints[rNode.m_pIdentifier[child]]) <= qParams.epsilon) {
 						neighbors.add(pNode);
 					}
 				}
 			} else {
 				for(child=0; child < rNode.m_children; child++) {
-					if(null != (pNode = nodeCol.get(rNode.m_pIdentifier[child])) &&
+					if(null != (pNode = nodeCol.get(-rNode.m_pIdentifier[child] - 1)) &&
 						centerNode.location.getMinimumDistance(rNode.m_pMBR[child]) <= qParams.epsilon) {
 						idQueue.add(rNode.m_pIdentifier[child]);
 					}

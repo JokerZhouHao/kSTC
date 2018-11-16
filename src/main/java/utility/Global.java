@@ -23,6 +23,8 @@ public class Global {
 	public static String basePath = null;
 	public static String baseDatasetPath = null;
 	
+	public static final double alpha = 0.5; // the weight of distance in caculate score
+	
 	// set the paths for dealed dataset
 	public static DatasetType datasetType = null;
 	public static String datasetPath = null;

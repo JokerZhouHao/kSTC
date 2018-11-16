@@ -2,10 +2,13 @@ package utility;
 
 import java.util.Comparator;
 
+import entity.Cluster;
 import entity.Node;
 
 public class MComparator<T> implements Comparator<T> {
 	private int type = -1; // 0 is compare node distance, 1 is compare node score
+	
+	public MComparator() {}
 	
 	public MComparator(int type) {
 		this.type = type;
@@ -25,8 +28,13 @@ public class MComparator<T> implements Comparator<T> {
 			if(node1.score > node2.score)	return 1;
 			else if(node1.score == node2.score)	return 0;
 			else return -1;
+		} else if(o1 instanceof Cluster) {
+			Cluster c1 = (Cluster)o1;
+			Cluster c2 = (Cluster)o2;
+			if(c1.getScore() > c2.getScore()) return 1;
+			else if(c1.getScore() == c2.getScore()) return 0;
+			else return -1;
 		}
-		// TODO Auto-generated method stub
 		return 0;
 	}
 	

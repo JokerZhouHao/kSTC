@@ -39,6 +39,10 @@ import org.apache.lucene.util.BytesRefBuilder;
 import org.apache.lucene.util.NumericUtils;
 import org.apache.lucene.util.QueryBuilder;
 
+import entity.Node;
+import entity.NodeCollection;
+import entity.QueryParams;
+import spatialindex.spatialindex.Point;
 import utility.Global;
 import utility.StringTools;
 import utility.indexlucene.AbstractLuceneIndex;
@@ -81,22 +85,28 @@ public class IdWordsIndex extends AbstractLuceneIndex {
 		indexWriter.addDocument(doc);
 	}
 	
-	public Set<Integer> searchWords(List<String> words) throws Exception {
+	public NodeCollection searchWords(QueryParams queryParams, Point[] allLocations) throws Exception {
 		Query query = null;
-		query = queryAndWordsParser.parse(StringTools.collection2Str(words));
-		
+		query = queryAndWordsParser.parse(StringTools.collection2Str(queryParams.sWords));
 		TopDocs results = indexSearcher.search(query, Integer.MAX_VALUE);
 		ScoreDoc[] hits = results.scoreDocs;
 		
 		if(0 == hits.length)	return null;
-		Set<Integer> resSet = new HashSet<>();
+		int id = 0;
+		double dis = Double.MAX_VALUE;
+		NodeCollection nodeCol = new NodeCollection();
+//		Set<Integer> resSet = new HashSet<>();
 		Document doc = null;
 		for(int i=0; i<hits.length; i++) {
 			doc = indexSearcher.doc(hits[i].doc);
+			id = Integer.parseInt(doc.get(fieldId));
+			if(id >= 0)	dis = queryParams.location.getMinimumDistance(allLocations[id]);
+			else dis = Double.MAX_VALUE;
+			nodeCol.add(new Node(id, allLocations[id], dis, 1 - hits[i].score/queryParams.sWords.size()));
 //			System.out.println(hits[i]);
-			resSet.add(Integer.parseInt(doc.get(fieldId)));
+//			resSet.add(Integer.parseInt(doc.get(fieldId)));
 		}
-		return resSet;
+		return nodeCol;
 	}
 	
 	public Set<Integer> searchWids(List<Integer> wids) throws Exception {
@@ -173,7 +183,7 @@ public class IdWordsIndex extends AbstractLuceneIndex {
 		sWords.add("caterers");
 //		sWords.add("event");
 //		sWords.add("sandwiches");
-		System.out.println(index.searchWords(sWords));
+//		System.out.println(index.searchWords(sWords));
 		
 		index.close();
 	}
