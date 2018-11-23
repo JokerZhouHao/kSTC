@@ -1,7 +1,9 @@
 package precomputation.dataset.file;
 
 import java.io.BufferedReader;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -146,15 +148,38 @@ public class FileLoader {
 		return words;
 	}
 	
+	public static List<String>[] loadTerms(String fp) throws Exception{
+		BufferedReader br = IOUtility.getBR(fp);
+		String line = br.readLine();
+		int numId = Integer.parseInt(line.split(Global.delimiterPound)[1].trim());
+		
+		List<String>[] allTerms = new List[numId];
+		int pid = 0;
+		String[] arr = null;
+		while(null != (line = br.readLine())) {
+			arr = line.split(Global.delimiterLevel1);
+			pid = Integer.parseInt(arr[0]);
+			allTerms[pid] = new ArrayList<>();
+			arr = arr[1].split(Global.delimiterSpace);
+			for(String st : arr) {
+				if(!st.equals(""))	allTerms[pid].add(st);
+			}
+		}
+		br.close();
+		
+		return allTerms;
+	}
+	
 	public static void main(String[] args) throws Exception{
 //		String str = "#123";
 //		System.out.println(str.split("#")[1]);
 //		FileLoader.loadNames(Global.pathIdName);
 //		FileLoader.loadCoords(Global.pathIdCoord);
-		FileLoader.loadPoints(Global.pathIdCoord);
+//		FileLoader.loadPoints(Global.pathIdCoord);
 //		FileLoader.loadText(Global.pathIdText);
 //		FileLoader.loadIdWids(Global.pathIdWids);
 //		FileLoader.loadWords(Global.pathWidWord);
+		FileLoader.loadTerms(Global.pathIdTerms);
 		
 //		double db = -115.283122245;
 //		float ft = -115.283122245f;

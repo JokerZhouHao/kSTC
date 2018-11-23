@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import entity.Rectangle;
+import entity.SGPLInfo;
 import utility.io.IOUtility;
 import utility.io.TimeUtility;
 
@@ -45,6 +46,12 @@ public class Global {
 	// index
 	public static String pathPidAndRtreeIdWordsIndex = null;
 	public static String pathTestIndex = null;
+	
+	// SGPL
+	public static int zorderWidth = 0;
+	public static int zorderHeight = 0;
+	public static SGPLInfo sgplInfo = null;
+	public static String pathTerm2CellColIndex = null;
 	
 	// sign
 	public static String signNormalized = "[normalized]";
@@ -131,8 +138,13 @@ public class Global {
 		
 		// set num
 		numNode = Integer.parseInt((String)configProps.get("numNode"));
+		
+		// SGPL
+		zorderWidth = Integer.parseInt((String)configProps.get("zorderWidth"));
+		zorderHeight = Integer.parseInt((String)configProps.get("zorderHeight"));
+		sgplInfo = SGPLInfo.getGlobalInstance();
+		pathTerm2CellColIndex =outPath + (String)configProps.get("pathTerm2CellColIndex") + suffixFile + signNormalized + File.separator;
 	}
-	
 	
 	/* rtree index setting parameters */
 	public static String rtreePath = null;
@@ -187,6 +199,12 @@ public class Global {
 		
 		System.out.println("\n--------------------------- num parameters --------------------------");
 		System.out.println("numNode : " + Global.numNode);
+		
+		System.out.println("\n--------------------------- SGPL --------------------------");
+		System.out.println("zorderWidth : " + Global.zorderWidth);
+		System.out.println("zorderHeight : " + Global.zorderHeight);
+		System.out.println("SGPLInfo : " + Global.sgplInfo);
+		System.out.println("pathTerm2CellColIndex : " + Global.pathTerm2CellColIndex);
 	}
 	
 	static {

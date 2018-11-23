@@ -2,6 +2,8 @@ package entity;
 
 import java.io.Serializable;
 
+import utility.Global;
+
 public class SGPLInfo implements Serializable{
 	
 	/**
@@ -14,7 +16,9 @@ public class SGPLInfo implements Serializable{
 	private double lngStep;
 	private int zOrder;
 	
-	public SGPLInfo(double minLat, double latStep, double minLng, double lngStep, int zOrder){
+	private static SGPLInfo sgplInfo = null;
+	
+	public SGPLInfo(double minLng, double lngStep, double minLat, double latStep, int zOrder){
 		this.minLat = minLat;
 		this.minLng = minLng;
 		this.latStep = latStep;
@@ -22,6 +26,14 @@ public class SGPLInfo implements Serializable{
 		this.zOrder = zOrder;
 	}
 
+	public static SGPLInfo getGlobalInstance() {
+		if(sgplInfo == null) {
+			double i = 1.0;
+			sgplInfo = new SGPLInfo(0, i/Global.zorderWidth, 0, i/Global.zorderHeight, Global.zorderWidth * Global.zorderHeight);
+		}
+		return sgplInfo;
+	}
+	
 	public double getMinLat() {
 		return minLat;
 	}
@@ -58,6 +70,16 @@ public class SGPLInfo implements Serializable{
 		return this.getZOrderId((int)(lon/lngStep), (int)(lat/latStep));
 	}
 	
+	public int getZOrderId(double[] lonLat) {
+		return getZOrderId(lonLat[0], lonLat[1]);
+	}
+	
+	@Override
+	public String toString() {
+		return "SGPLInfo [minLat=" + minLat + ", latStep=" + latStep + ", minLng=" + minLng + ", lngStep=" + lngStep
+				+ ", zOrder=" + zOrder + "]";
+	}
+
 	public static void main(String[] args) {
 		SGPLInfo info = new SGPLInfo(0, 0.125, 0, 0.125, 64);
 		System.out.println(info.getZOrderId(0, 0));

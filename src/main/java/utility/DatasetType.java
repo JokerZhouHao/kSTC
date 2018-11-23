@@ -7,6 +7,6 @@ package utility;
  * 2018/10/24
  */
 public enum DatasetType {
-	yelp_academic_dataset_business,
-	test
+	test,
+	yelp_academic_dataset_business
 }

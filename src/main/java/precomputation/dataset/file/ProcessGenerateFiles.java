@@ -9,14 +9,19 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 
+import entity.Cell;
+import entity.CellCollection;
 import entity.Rectangle;
+import entity.SGPLInfo;
 import index.IdWordsIndex;
+import index.Term2CellColIndex;
 import spatialindex.rtree.Node;
 import utility.Global;
 import utility.index.rtree.MRTree;
@@ -98,7 +103,11 @@ public class ProcessGenerateFiles {
 		System.out.println("> over, spend time : " + TimeUtility.getGlobalSpendTime());
 	}
 	
-	
+	/**
+	 * generate id_terms file
+	 * @param pathIdTerms
+	 * @throws Exception
+	 */
 	public static void generateIdTermsFile(String pathIdTerms) throws Exception{
 		System.out.println("> start generate file " + pathIdTerms);
 		String[] allTxts = FileLoader.loadText(Global.pathIdText);
@@ -138,6 +147,21 @@ public class ProcessGenerateFiles {
 			ofw.writeCoord(i, String.valueOf((coords[i][0]-rect.westSouthLont)/spanLon), String.valueOf((coords[i][1]-rect.westSouthLat)/spanLat));
 		}
 		ofw.close();
+		System.out.println("> over, spend time : " + TimeUtility.getGlobalSpendTime());
+	}
+	
+	/**
+	 * buiding rtree
+	 * @param placefile
+	 * @param treefile
+	 * @param fanout
+	 * @param buffersize
+	 * @param pagesize
+	 * @throws Exception
+	 */
+	public static void buildRTree(String placefile, String treefile, int fanout, int buffersize, int pagesize)throws Exception{
+		System.out.println("> start building rtree");
+		MRTree.buildRTree(placefile, treefile, fanout, buffersize, pagesize);
 		System.out.println("> over, spend time : " + TimeUtility.getGlobalSpendTime());
 	}
 	
@@ -183,6 +207,11 @@ public class ProcessGenerateFiles {
 		return sb;
 	}
 	
+	/**
+	 * building pid and rtree id words index
+	 * @param pathIndex
+	 * @throws Exception
+	 */
 	public static void buildPidAndRtreeIdWordsIndex(String pathIndex) throws Exception{
 		System.out.println("> start build pid_rtreeid_words_index");
 		IdWordsIndex index = new IdWordsIndex(pathIndex);
@@ -196,10 +225,37 @@ public class ProcessGenerateFiles {
 		System.out.println("> over, spend time : " + TimeUtility.getGlobalSpendTime());
 	}
 	
-	public static void buildRTree(String placefile, String treefile, int fanout, int buffersize, int pagesize)throws Exception{
-		System.out.println("> start building rtree");
-		MRTree.buildRTree(placefile, treefile, fanout, buffersize, pagesize);
-		System.out.println("> over, spend time : " + TimeUtility.getGlobalSpendTime());
+	public static void buildTermCellColIndex(String pathIndex) throws Exception{
+		System.out.println("> start " + pathIndex + " . . . ");
+		double[][] coords = FileLoader.loadCoords(Global.pathIdCoord + Global.signNormalized);
+		List<String>[] allTerms = FileLoader.loadTerms(Global.pathIdTerms);
+		SGPLInfo sInfo = Global.sgplInfo;
+		Map<String, CellCollection> allTerm2CellC = new HashMap<>();
+		CellCollection cellC = null;
+		Cell cell = null;
+		int cellId = 0;
+		for(int i=0; i<allTerms.length; i++) {
+			cellId = sInfo.getZOrderId(coords[i]);
+			for(String st : allTerms[i]) {
+				if(null == (cellC = allTerm2CellC.get(st))) {
+					cellC = new CellCollection();
+					allTerm2CellC.put(st, cellC);
+				}
+				if(null == (cell = cellC.get(cellId))) {
+					cell = new Cell(cellId);
+					cellC.add(cell);
+				}
+				cell.addPid(i);
+			}
+		}
+		
+		Term2CellColIndex index = new Term2CellColIndex(pathIndex);
+		index.openIndexWriter();
+		for(Entry<String, CellCollection> en : allTerm2CellC.entrySet()) {
+			index.addDoc(en.getKey(), en.getValue());
+		}
+		index.close();
+		System.out.println("> Over, spend time : " + TimeUtility.getGlobalSpendTime());
 	}
 	
 	public static void main(String[] args) throws Exception{
@@ -229,5 +285,13 @@ public class ProcessGenerateFiles {
 		/* building pid and rtreeid words index */
 //		String pathIndex = Global.pathPidAndRtreeIdWordsIndex;
 //		ProcessGenerateFiles.buildPidAndRtreeIdWordsIndex(pathIndex);
+		
+		/* building term_cellCol_index */
+		String pathTerm2CellCIndex = Global.pathTerm2CellColIndex;
+//		ProcessGenerateFiles.buildTermCellColIndex(pathTerm2CellCIndex);
+//		Term2CellColIndex t2CIndex = new Term2CellColIndex(pathTerm2CellCIndex);
+//		t2CIndex.openIndexReader();
+//		System.out.println(t2CIndex.searchTerm("f"));
+//		t2CIndex.close();
 	}
 }
