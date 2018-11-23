@@ -42,6 +42,7 @@ import org.apache.lucene.util.QueryBuilder;
 import entity.Node;
 import entity.NodeCollection;
 import entity.QueryParams;
+import precomputation.dataset.file.FileLoader;
 import spatialindex.spatialindex.Point;
 import utility.Global;
 import utility.StringTools;
@@ -95,15 +96,22 @@ public class IdWordsIndex extends AbstractLuceneIndex {
 		int id = 0;
 		double dis = Double.MAX_VALUE;
 		NodeCollection nodeCol = new NodeCollection();
+		Point pot = null;
 //		Set<Integer> resSet = new HashSet<>();
 		Document doc = null;
 		for(int i=0; i<hits.length; i++) {
 			doc = indexSearcher.doc(hits[i].doc);
 			id = Integer.parseInt(doc.get(fieldId));
-			if(id >= 0)	dis = queryParams.location.getMinimumDistance(allLocations[id]);
-			else dis = Double.MAX_VALUE;
-			nodeCol.add(new Node(id, allLocations[id], dis, 1 - hits[i].score/queryParams.sWords.size()));
-//			System.out.println(hits[i]);
+			if(id >= 0) {
+				pot = allLocations[id];
+				dis = queryParams.location.getMinimumDistance(allLocations[id]);
+			}
+			else {
+				pot = null;
+				dis = Double.MAX_VALUE;
+			}
+			nodeCol.add(new Node(id, pot, dis, 1 - hits[i].score/queryParams.sWords.size()));
+//			System.out.println(String.valueOf(id) + " " + hits[i].score/queryParams.sWords.size());
 //			resSet.add(Integer.parseInt(doc.get(fieldId)));
 		}
 		return nodeCol;
@@ -166,24 +174,27 @@ public class IdWordsIndex extends AbstractLuceneIndex {
 	}
 	
 	public static void testSearchWords() throws Exception{
+		Point[] allLocations = FileLoader.loadPoints(Global.pathIdCoord);
+		
 		IdWordsIndex index = new IdWordsIndex(Global.pathPidAndRtreeIdWordsIndex);
-//		index.openIndexWriter();
-//		
-//		int id = 0;
-//		List<String> words = new ArrayList<>();
-//		
-//		index.addWordsDoc(0, "ab bc");
-//		index.addWordsDoc(0, "er ab");
-//		
-//		index.close();
+		index.openIndexWriter();
+		
+		index.addWordsDoc(0, "a b c d");
+		index.addWordsDoc(1, "b c e f");
+		
+		index.close();
 		
 		index.openIndexReader();
 		
 		List<String> sWords = new ArrayList<>();
-		sWords.add("caterers");
-//		sWords.add("event");
-//		sWords.add("sandwiches");
-//		System.out.println(index.searchWords(sWords));
+//		sWords.add("a");
+		sWords.add("b");
+		sWords.add("d");
+		QueryParams qParams = new QueryParams();
+		double[] pots = {0.1, 0.2};
+		qParams.location = new Point(pots);
+		qParams.sWords = sWords;
+		System.out.println(index.searchWords(qParams, allLocations));
 		
 		index.close();
 	}

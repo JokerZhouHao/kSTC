@@ -12,7 +12,7 @@ import utility.MComparator;
 
 public class PNodeCollection {
 	private List<Node> pNodes = new ArrayList<>();	// just record coordinate node
-	private int curIndex = 0; 
+	private int curIndex = -1; 
 	private static final MComparator<Node> cptDis = new MComparator<>(0);
 	private static final MComparator<Node> cptScore = new MComparator<>(1);
 	
@@ -36,12 +36,17 @@ public class PNodeCollection {
 		return this;
 	}
 	
-	public Node first() {
-		return pNodes.get(curIndex);
+	public Node first(int offset) {
+		int i = curIndex + offset;
+		if(i<0) return pNodes.get(0);
+		else if(i>=pNodes.size())	return pNodes.get(pNodes.size()-1);
+		else return pNodes.get(i);
 	}
 	
 	public Node next() {
-		while(curIndex != pNodes.size() && !pNodes.get(curIndex++).isInitStatus());
+		do {
+			curIndex++;
+		} while(curIndex != pNodes.size() && pNodes.get(curIndex).isClassified());
 		if(curIndex==pNodes.size())	return null;
 		return pNodes.get(curIndex);
 	}
@@ -54,8 +59,6 @@ public class PNodeCollection {
 		}
 		return disAndScore;
 	}
-	
-	
 	
 	public List<Node> getPNodes() {
 		return pNodes;

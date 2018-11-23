@@ -15,6 +15,12 @@ import java.io.RandomAccessFile;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import entity.Cluster;
+import entity.Node;
+import entity.QueryParams;
+import entity.SortedClusters;
+import utility.Global;
+
 /**
  * 
  * @author ZhouHao
@@ -91,5 +97,21 @@ public class IOUtility {
 		return line;
 	}
 	
-	
+	public static void writeSortedClusters(String path, QueryParams qParams, SortedClusters sClu) throws Exception{
+		BufferedWriter bw = IOUtility.getBW(path);
+		bw.write("qParams" + Global.delimiterLevel1 + String.valueOf(qParams.location.getCoord(0))
+				+ " " + String.valueOf(qParams.location.getCoord(1)));
+		bw.write('\n');
+		
+		for(Cluster clu : sClu.getClusters()) {
+			bw.write("Cluster" + Global.delimiterLevel1 +String.valueOf(clu.getId()));
+			bw.write('\n');
+			for(Node nd : clu.getPNodes()) {
+				bw.write(nd.toString());
+				bw.write('\n');
+			}
+		}
+		
+		bw.close();
+	}
 }

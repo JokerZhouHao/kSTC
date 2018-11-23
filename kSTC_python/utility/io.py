@@ -1,11 +1,14 @@
 class Global:
     datasetType = 'yelp_academic_dataset_business'
+    # datasetType = 'test'
     pathInput = 'D:\\kSTC\\Dataset\\' + datasetType + '\\input\\'
     pathOutput = 'D:\\kSTC\\Dataset\\' + datasetType + '\\output\\'
 
     pathName = pathInput + 'id_name.txt'
     pathCoord = pathInput + 'id_coord_longtitude_latitude.txt'
     pathText = pathInput + 'id_text.txt'
+
+    pathResult = pathOutput + 'result.txt'
 
     delimiterLevel1 = ": "
     delimiterLevel2 = ","

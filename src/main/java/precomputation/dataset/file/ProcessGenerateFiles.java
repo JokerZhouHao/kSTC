@@ -21,6 +21,7 @@ import spatialindex.rtree.Node;
 import utility.Global;
 import utility.index.rtree.MRTree;
 import utility.io.IOUtility;
+import utility.io.LuceneUtility;
 import utility.io.TimeUtility;
 
 /**
@@ -97,6 +98,27 @@ public class ProcessGenerateFiles {
 		System.out.println("> over, spend time : " + TimeUtility.getGlobalSpendTime());
 	}
 	
+	
+	public static void generateIdTermsFile(String pathIdTerms) throws Exception{
+		System.out.println("> start generate file " + pathIdTerms);
+		String[] allTxts = FileLoader.loadText(Global.pathIdText);
+		BufferedWriter bw = IOUtility.getBW(pathIdTerms);
+		bw.write(Global.delimiterPound + String.valueOf(allTxts.length) + "\n");
+		Set<String> terms = new HashSet<>();
+		for(int i=0; i<allTxts.length; i++) {
+			terms.clear();
+			bw.write(String.valueOf(i));
+			bw.write(Global.delimiterLevel1);
+			terms.addAll(LuceneUtility.getTerms(allTxts[i]));
+			for(String st : terms) {
+				bw.write(st);
+				bw.write(Global.delimiterSpace);
+			}
+			bw.write('\n');
+		}
+		bw.close();
+		System.out.println("> Over.");
+	}
 	
 	/**
 	 * normalize coordinate
@@ -181,24 +203,30 @@ public class ProcessGenerateFiles {
 	}
 	
 	public static void main(String[] args) throws Exception{
-		TimeUtility.init();
-		
-		// generateIdWidsFile
+		/* generateIdWidsFile */
 //		ProcessGenerateFiles.generateIdWidsFile(Global.pathIdText, Global.pathIdWids, Global.pathWidWord);
 		
 //		String pathCoords = Global.pathIdCoord + Global.subYelpBus1.toString();
 //		ProcessGenerateFiles.normalizedCoordFile(pathCoords, Global.subYelpBus1);
 		
-		String placeFile = Global.pathIdCoord + Global.signNormalized;
-		String treeFile = Global.rtreePath;
-//		ProcessGenerateFiles.buildRTree(placeFile, treeFile, Global.rtreeFanout, Global.rtreeBufferSize, Global.rtreePageSize);
-		MRTree rtree = MRTree.getInstanceInDisk();
-		System.out.println(rtree.getTreeHeight());
-		System.out.println(rtree.getRoot());
+		/* generate id_terms file */
+//		String pathIdTerms = Global.pathIdTerms;
+//		ProcessGenerateFiles.generateIdTermsFile(pathIdTerms);
 		
+		/* generate rtree */
+//		String placeFile = Global.pathIdCoord + Global.signNormalized;
+////		String placeFile = Global.pathIdCoord;
+//		String treeFile = Global.rtreePath;
+//		ProcessGenerateFiles.buildRTree(placeFile, treeFile, Global.rtreeFanout, Global.rtreeBufferSize, Global.rtreePageSize);
+//		MRTree rtree = MRTree.getInstanceInDisk();
+//		System.out.println(rtree.getTreeHeight());
+//		System.out.println(rtree.getRoot());
+		
+		/* set error stream */
 //		PrintStream ps = new PrintStream(new File(Global.pathTestFile));
 //		System.setErr(ps);
 		
+		/* building pid and rtreeid words index */
 //		String pathIndex = Global.pathPidAndRtreeIdWordsIndex;
 //		ProcessGenerateFiles.buildPidAndRtreeIdWordsIndex(pathIndex);
 	}

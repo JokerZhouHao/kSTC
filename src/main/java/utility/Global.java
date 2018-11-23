@@ -8,6 +8,7 @@ import java.util.Properties;
 
 import entity.Rectangle;
 import utility.io.IOUtility;
+import utility.io.TimeUtility;
 
 /**
  * 
@@ -37,6 +38,7 @@ public class Global {
 	public static String pathIdCoord = null;
 	public static String pathIdWids = null;
 	public static String pathWidWord = null;
+	public static String pathIdTerms = null;
 	
 	public static String pathTestFile = null;
 	
@@ -53,11 +55,14 @@ public class Global {
 	public static String delimiterSpace = " ";
 	public static String delimiterPound = "#";
 	
+	/* num */
+	public static int numNode = 0;
+	
 	/* sub dataset */
 	public static Rectangle subYelpBus1 = new Rectangle(-125, 28, 15, 60);
 	
 //	public static String suffixFile = "";
-	public static String suffixFile = subYelpBus1.toString();
+	public static String suffixFile = null;
 	
 	// initBasePath
 	public static void initBasePath() throws Exception{
@@ -109,18 +114,23 @@ public class Global {
 		configProps = new Properties();
 		configProps.load(new FileInputStream(Global.configPath));
 		
+		suffixFile = (String)configProps.get("suffixFile");
+		
 		// set file path
 		pathTestFile = outPath + "test.txt";
 		pathIdName = inputPath + (String)configProps.get("fileIdName") + suffixFile;
 		pathIdText = inputPath + (String)configProps.get("fileIdText") + suffixFile;
 		pathIdCoord = inputPath + (String)configProps.get("fileCoord") + suffixFile;
 		pathIdWids = inputPath + (String)configProps.get("fileIdWids") + suffixFile;
+		pathIdTerms = inputPath + (String)configProps.get("fileIdTerms") + suffixFile;
 		pathWidWord = inputPath + (String)configProps.get("fileWidWord") + suffixFile;
-		
 		
 		// set index path
 		pathPidAndRtreeIdWordsIndex = outPath + (String)configProps.get("pathPidAndRtreeIdWordsIndex") + suffixFile + File.separator;
 		pathTestIndex = outPath + "test" + File.separator;
+		
+		// set num
+		numNode = Integer.parseInt((String)configProps.get("numNode"));
 	}
 	
 	
@@ -136,12 +146,6 @@ public class Global {
 	
 	
 	private static void initRTreeParameters() {
-		rtreePath = Global.outPath + "rtree" + ".rtreeBufferSize" + String.valueOf(Global.rtreeBufferSize)
-								   + ".rtreePageSize" + String.valueOf(Global.rtreePageSize) 
-								   + ".rtreeFanout" + String.valueOf(Global.rtreePageSize) +  suffixFile + File.separator;
-									
-		if(!IOUtility.exists(rtreePath))	new File(rtreePath).mkdir();
-		
 		Global.rtreeBufferSize = Integer.parseInt((String)configProps.get("rtreeBufferSize"));
 		Global.rtreePageSize = Integer.parseInt((String)configProps.get("rtreePageSize"));
 		Global.rtreeFanout = Integer.parseInt((String)configProps.get("rtreeFanout"));
@@ -149,6 +153,11 @@ public class Global {
 		Global.iindexPageSize = Integer.parseInt((String)configProps.get("iindexPageSize"));
 		Global.iindexIsCreate = Boolean.parseBoolean((String)configProps.get("iindexIsCreate"));
 		Global.iindexIsWeighted = Boolean.parseBoolean((String)configProps.get("iindexIsWeighted"));
+		
+		rtreePath = Global.outPath + "rtree" + ".rtreeBufferSize" + String.valueOf(Global.rtreeBufferSize)
+								   + ".rtreePageSize" + String.valueOf(Global.rtreePageSize) 
+								   + ".rtreeFanout" + String.valueOf(Global.rtreeFanout) +  suffixFile + File.separator;
+		if(!IOUtility.exists(rtreePath))	new File(rtreePath).mkdir();
 	}
 	
 	public static void display() {
@@ -163,6 +172,7 @@ public class Global {
 		System.out.println("configPath : " + Global.configPath);
 		System.out.println("pathIdName" + Global.pathIdName);
 		System.out.println("pathIdText : " + Global.pathIdText);
+		System.out.println("pathIdTerms : " + Global.pathIdTerms);
 		System.out.println("pathIdCoord : " + Global.pathIdCoord);
 		
 		System.out.println("\n--------------------------- rtree parameters --------------------------");
@@ -174,13 +184,19 @@ public class Global {
 		System.out.println("iindexPageSize : " + Global.iindexPageSize);
 		System.out.println("iindexIsCreate : " + Global.iindexIsCreate);
 		System.out.println("iindexIsWeighted : " + Global.iindexIsWeighted);
+		
+		System.out.println("\n--------------------------- num parameters --------------------------");
+		System.out.println("numNode : " + Global.numNode);
 	}
 	
 	static {
 		try {
+			TimeUtility.init();
+			
 			// set paths
 			initBasePath();
 			setAllPaths(DatasetType.values()[0]);
+//			setAllPaths(DatasetType.values()[1]);
 			
 			// set rtree parameters
 			Global.initRTreeParameters();
