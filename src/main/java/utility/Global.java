@@ -19,6 +19,19 @@ import utility.io.TimeUtility;
  */
 public class Global {
 	
+	public static final double minPositiveDouble = 0.000000000001;
+	
+	public static int compareDouble(double d1, double d2) {
+		if(d1 - d2 >= minPositiveDouble)	return 1;
+		else if(d1 - d2 >= -minPositiveDouble) return 0;
+		else return -1;
+	}
+	
+	public static Boolean isZero(double d) {
+		if(d >= -minPositiveDouble && d < minPositiveDouble)	return Boolean.TRUE;
+		else return Boolean.FALSE;
+	}
+	
 	private static Properties configProps = null;
 	
 	public static String projectName = "kSTC";
@@ -45,6 +58,7 @@ public class Global {
 	
 	// index
 	public static String pathPidAndRtreeIdWordsIndex = null;
+	public static String pathCellidPidWordsIndex = null;
 	public static String pathTestIndex = null;
 	
 	// SGPL
@@ -134,6 +148,7 @@ public class Global {
 		
 		// set index path
 		pathPidAndRtreeIdWordsIndex = outPath + (String)configProps.get("pathPidAndRtreeIdWordsIndex") + suffixFile + File.separator;
+		pathCellidPidWordsIndex = outPath + (String)configProps.get("pathCellidPidWordsIndex") + suffixFile + signNormalized + File.separator;
 		pathTestIndex = outPath + "test" + File.separator;
 		
 		// set num
@@ -155,7 +170,6 @@ public class Global {
 	public static int iindexPageSize = 128;
 	public static boolean iindexIsCreate = false;
 	public static boolean iindexIsWeighted = false;
-	
 	
 	private static void initRTreeParameters() {
 		Global.rtreeBufferSize = Integer.parseInt((String)configProps.get("rtreeBufferSize"));

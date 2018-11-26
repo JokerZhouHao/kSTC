@@ -20,9 +20,11 @@ import entity.Cell;
 import entity.CellCollection;
 import entity.Rectangle;
 import entity.SGPLInfo;
+import index.CellidPidWordsIndex;
 import index.IdWordsIndex;
 import index.Term2CellColIndex;
 import spatialindex.rtree.Node;
+import spatialindex.spatialindex.Point;
 import utility.Global;
 import utility.index.rtree.MRTree;
 import utility.io.IOUtility;
@@ -225,6 +227,20 @@ public class ProcessGenerateFiles {
 		System.out.println("> over, spend time : " + TimeUtility.getGlobalSpendTime());
 	}
 	
+	public static void buildCellidPidWordsIndex(String pathIndex) throws Exception{
+		System.out.println("> start build " + pathIndex);
+		SGPLInfo sInfo = Global.sgplInfo;
+		CellidPidWordsIndex index = new CellidPidWordsIndex(pathIndex);
+		index.openIndexWriter();
+		String[] texts = FileLoader.loadText(Global.pathIdText);
+		Point[] points = FileLoader.loadPoints(Global.pathIdCoord + Global.signNormalized);
+		for(int i=0; i<texts.length; i++) {
+			index.addWordsDoc(sInfo.getZOrderId(points[i].m_pCoords), i, texts[i]);
+		}
+		index.close();
+		System.out.println("> over, spend time : " + TimeUtility.getGlobalSpendTime());
+	}
+	
 	public static void buildTermCellColIndex(String pathIndex) throws Exception{
 		System.out.println("> start " + pathIndex + " . . . ");
 		double[][] coords = FileLoader.loadCoords(Global.pathIdCoord + Global.signNormalized);
@@ -286,8 +302,12 @@ public class ProcessGenerateFiles {
 //		String pathIndex = Global.pathPidAndRtreeIdWordsIndex;
 //		ProcessGenerateFiles.buildPidAndRtreeIdWordsIndex(pathIndex);
 		
+		/* building cellidpid words index */
+		String pathCellidpidWordsIndex = Global.pathCellidPidWordsIndex;
+		ProcessGenerateFiles.buildCellidPidWordsIndex(pathCellidpidWordsIndex);
+		
 		/* building term_cellCol_index */
-		String pathTerm2CellCIndex = Global.pathTerm2CellColIndex;
+//		String pathTerm2CellCIndex = Global.pathTerm2CellColIndex;
 //		ProcessGenerateFiles.buildTermCellColIndex(pathTerm2CellCIndex);
 //		Term2CellColIndex t2CIndex = new Term2CellColIndex(pathTerm2CellCIndex);
 //		t2CIndex.openIndexReader();

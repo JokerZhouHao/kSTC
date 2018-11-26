@@ -34,6 +34,12 @@ public class MComparator<T> implements Comparator<T> {
 			if(c1.getScore() > c2.getScore()) return 1;
 			else if(c1.getScore() == c2.getScore()) return 0;
 			else return -1;
+		} else if(o1 instanceof Double) {
+			Double d1 = (Double)o1;
+			Double d2 = (Double)o2;
+			if(d1 > d2) return -1;
+			else if(d1==d2)	return 0;
+			else return 1;
 		}
 		return 0;
 	}

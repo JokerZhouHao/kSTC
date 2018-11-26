@@ -1,7 +1,12 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 
+import spatialindex.spatialindex.Point;
 import utility.Global;
 
 public class SGPLInfo implements Serializable{
@@ -12,6 +17,7 @@ public class SGPLInfo implements Serializable{
 	private static final long serialVersionUID = 6411549802970603504L;
 	private double minLat;
 	private double latStep;
+	private double halfLatStep;
 	private double minLng;
 	private double lngStep;
 	private int zOrder;
@@ -21,7 +27,9 @@ public class SGPLInfo implements Serializable{
 	public SGPLInfo(double minLng, double lngStep, double minLat, double latStep, int zOrder){
 		this.minLat = minLat;
 		this.minLng = minLng;
+		
 		this.latStep = latStep;
+		this.halfLatStep = latStep/2;
 		this.lngStep = lngStep;
 		this.zOrder = zOrder;
 	}
@@ -74,6 +82,75 @@ public class SGPLInfo implements Serializable{
 		return getZOrderId(lonLat[0], lonLat[1]);
 	}
 	
+	public int nearestBelowCellY(double yCoord) {
+		if(yCoord<=0.0)	return 0;
+		return (int)((yCoord+Global.minPositiveDouble)/latStep);
+	}
+	
+	public int nearestAboveCellY(double yCoord) {
+		if(yCoord >= Global.zorderHeight * latStep)	return Global.zorderHeight;
+		int y = (int)((yCoord+Global.minPositiveDouble)/latStep);
+		if(Global.isZero(y*latStep - yCoord)) return y;
+		else return y+1;
+	}
+	
+	public int nearestLeftCellX(double xCoord) {
+		if(Global.compareDouble(xCoord, Global.minPositiveDouble) <= 0) return 0;
+		return (int)((xCoord+Global.minPositiveDouble)/lngStep);
+	}
+	
+	public int nearestRightCellX(double xCoord) {
+		if(Global.compareDouble(xCoord, Global.minPositiveDouble) <= 0) return 0;
+		if(xCoord >= Global.zorderWidth * lngStep) { return Global.zorderWidth;}
+		int x = (int)((xCoord+Global.minPositiveDouble)/lngStep);
+		if(Global.isZero(x*lngStep - xCoord))	return x;
+		else return x+1;
+	}
+	
+	public Map<Integer, Boolean> cover(Circle circle){
+		int maxY = nearestAboveCellY(circle.center[1] + circle.radius);
+		int minY = nearestBelowCellY(circle.center[1] - circle.radius);
+		int Y;
+		double maxYCoord = maxY * latStep;
+		double YCoord1, YCoord2;
+		Map<Integer, Boolean> zids = new TreeMap();
+		int minX, maxX, X1, X2, leftX=0, rightX=0;
+		double[] passXX = null;
+		for(Y=minY, YCoord1=minY*latStep, YCoord2=YCoord1 + latStep; Global.compareDouble(YCoord2, maxYCoord) <= 0; 
+			Y++, YCoord1=YCoord2, YCoord2 += latStep) {
+			if(Global.compareDouble(circle.center[1] - YCoord1, halfLatStep) >= 0) {
+				passXX = circle.passXX(YCoord1);
+				if(null == passXX) leftX = Integer.MAX_VALUE;
+				else {
+					leftX = nearestRightCellX(passXX[0]);
+					rightX = nearestLeftCellX(passXX[1]);
+				}
+				passXX = circle.passXX(YCoord2);
+				minX =  nearestLeftCellX(passXX[0]);
+				maxX = nearestRightCellX(passXX[1]);
+			} else {
+				passXX = circle.passXX(YCoord2);
+				if(null == passXX) leftX = Integer.MAX_VALUE;
+				else {
+					leftX = nearestRightCellX(passXX[0]);
+					rightX = nearestLeftCellX(passXX[1]);
+				}
+				passXX = circle.passXX(YCoord1);
+				minX =  nearestLeftCellX(passXX[0]);
+				maxX = nearestRightCellX(passXX[1]);
+			}
+			
+			for(X1 = minX, X2 = X1+1; X2 <= maxX; X1 = X2, X2++) {
+				if(X1 >= leftX && X2 <= rightX) {
+					zids.put(getZOrderId(X1, Y), Boolean.TRUE);
+				} else zids.put(getZOrderId(X1, Y), Boolean.FALSE);
+			}
+		}
+		if(zids.isEmpty())	return null;
+		else return zids;
+	}
+	
+	
 	@Override
 	public String toString() {
 		return "SGPLInfo [minLat=" + minLat + ", latStep=" + latStep + ", minLng=" + minLng + ", lngStep=" + lngStep
@@ -81,13 +158,32 @@ public class SGPLInfo implements Serializable{
 	}
 
 	public static void main(String[] args) {
-		SGPLInfo info = new SGPLInfo(0, 0.125, 0, 0.125, 64);
+		SGPLInfo info = Global.sgplInfo;
+//		SGPLInfo info = new SGPLInfo(0, 0.125, 0, 0.125, 64);
+//		System.out.println(info.getZOrderId(0, 0));
+//		System.out.println(info.getZOrderId(1, 1));
+//		System.out.println(info.getZOrderId(1, 0));
+//		System.out.println(info.getZOrderId(4, 3));
+//		System.out.println(info.getZOrderId(6, 6));
 		System.out.println(info.getZOrderId(0, 0));
-		System.out.println(info.getZOrderId(1, 1));
-		System.out.println(info.getZOrderId(1, 3));
-		System.out.println(info.getZOrderId(3, 1));
-		System.out.println(info.getZOrderId(4, 3));
-		System.out.println(info.getZOrderId(6, 6));
-		System.out.println(info.getZOrderId(0.126, 0.126));
+		
+//		System.out.println(info.getLngStep());
+//		System.out.println(info.getLatStep());
+//		System.out.println();
+//		
+//		System.out.println(info.nearestAboveCellY(0.35));
+//		System.out.println(info.nearestBelowCellY(0.35));
+//		System.out.println();
+//		
+//		System.out.println(info.nearestLeftCellX(0.75));
+//		System.out.println(info.nearestRightCellX(0.75));
+		
+//		double[] center = {0.35, 0.47};
+//		double radius = 0.15;
+//		Map<Integer, Boolean> zids = sgplInfo.cover(new Circle(radius, center));
+//		for(Entry<Integer, Boolean> en : zids.entrySet()) {
+//			System.out.println(en.getKey() + " " + en.getValue());
+//		}
+		
 	}
 }

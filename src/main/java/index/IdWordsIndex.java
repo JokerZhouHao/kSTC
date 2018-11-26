@@ -174,15 +174,15 @@ public class IdWordsIndex extends AbstractLuceneIndex {
 	}
 	
 	public static void testSearchWords() throws Exception{
-		Point[] allLocations = FileLoader.loadPoints(Global.pathIdCoord);
+		Point[] allLocations = FileLoader.loadPoints(Global.pathIdCoord + Global.signNormalized);
 		
-		IdWordsIndex index = new IdWordsIndex(Global.pathPidAndRtreeIdWordsIndex);
-		index.openIndexWriter();
-		
-		index.addWordsDoc(0, "a b c d");
-		index.addWordsDoc(1, "b c e f");
-		
-		index.close();
+		IdWordsIndex index = new IdWordsIndex(Global.pathCellidPidWordsIndex);
+//		index.openIndexWriter();
+//		
+//		index.addWordsDoc(0, "a b c d");
+//		index.addWordsDoc(1, "b c e f");
+//		
+//		index.close();
 		
 		index.openIndexReader();
 		
@@ -202,7 +202,6 @@ public class IdWordsIndex extends AbstractLuceneIndex {
 	
 	
 	public static void main(String[] args) throws Exception{
-//		IdWordsIndex.testSearchWids();
 		IdWordsIndex.testSearchWords();
 	}
 }
