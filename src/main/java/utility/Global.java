@@ -59,6 +59,7 @@ public class Global {
 	// index
 	public static String pathPidAndRtreeIdWordsIndex = null;
 	public static String pathCellidPidWordsIndex = null;
+	public static String pathCellidRtreeidOrPidWordsIndex = null;
 	public static String pathTestIndex = null;
 	
 	// SGPL
@@ -149,6 +150,7 @@ public class Global {
 		// set index path
 		pathPidAndRtreeIdWordsIndex = outPath + (String)configProps.get("pathPidAndRtreeIdWordsIndex") + suffixFile + File.separator;
 		pathCellidPidWordsIndex = outPath + (String)configProps.get("pathCellidPidWordsIndex") + suffixFile + signNormalized + File.separator;
+		pathCellidRtreeidOrPidWordsIndex = outPath + (String)configProps.get("pathCellidRtreeidOrPidWordsIndex") + suffixFile + signNormalized + File.separator;
 		pathTestIndex = outPath + "test" + File.separator;
 		
 		// set num
@@ -227,8 +229,8 @@ public class Global {
 			
 			// set paths
 			initBasePath();
-			setAllPaths(DatasetType.values()[0]);
-//			setAllPaths(DatasetType.values()[1]);
+//			setAllPaths(DatasetType.values()[0]);
+			setAllPaths(DatasetType.values()[1]);
 			
 			// set rtree parameters
 			Global.initRTreeParameters();

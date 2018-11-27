@@ -17,6 +17,7 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.similarities.BM25Similarity;
+import org.apache.lucene.search.similarities.ClassicSimilarity;
 import org.apache.lucene.util.BytesRef;
 
 import entity.Node;
@@ -32,6 +33,7 @@ public class CellidPidWordsIndex extends AbstractLuceneIndex{
 	private static final String fieldId = "cellidpid";
 	private static final String fieldWords = "words";
 	private static QueryParser queryAndWordsParser = null;
+	public static final int signRtreeNode = Integer.MIN_VALUE; 
 	
 	public CellidPidWordsIndex(String indexPath) throws Exception{
 		super(indexPath);
@@ -44,6 +46,7 @@ public class CellidPidWordsIndex extends AbstractLuceneIndex{
 		// TODO Auto-generated method stub
 		super.openIndexReader();
 		this.indexSearcher.setSimilarity(new BM25Similarity());
+//		this.indexSearcher.setSimilarity(new ClassicSimilarity());
 	}
 	
 	public void addWordsDoc(int cellid, int pid, String words) throws Exception{
@@ -70,10 +73,12 @@ public class CellidPidWordsIndex extends AbstractLuceneIndex{
 		ByteBuffer bb = null;
 		Document doc = null;
 		int cellid, pid = 0;
+		double maxScore = hits[0].score;
 		for(int i=0; i<hits.length; i++) {
 			doc = indexSearcher.doc(hits[i].doc);
 			bb = ByteBuffer.wrap(doc.getBinaryValue(fieldId).bytes);
 			cellid = bb.getInt();
+			if(cellid == signRtreeNode)	continue;
 			pid = bb.getInt();
 			if(null == (nList = cellid2Node.get(cellid))) {
 				nList = new ArrayList<>();
@@ -81,11 +86,46 @@ public class CellidPidWordsIndex extends AbstractLuceneIndex{
 			}
 			pot = allLocations[pid];
 			dis = queryParams.location.getMinimumDistance(allLocations[pid]);
-			nList.add(new Node(pid, pot, dis, 1 - hits[i].score/queryParams.sWords.size()));
+			nList.add(new Node(pid, pot, dis, 1 - hits[i].score/maxScore));
 //			System.out.println(String.valueOf(id) + " " + hits[i].score/queryParams.sWords.size());
 //			resSet.add(Integer.parseInt(doc.get(fieldId)));
 		}
+		if(cellid2Node.isEmpty())	return null;
 		return cellid2Node;
+	}
+	
+	public NodeCollection searchWordsReNodeCol(QueryParams queryParams, Point[] allLocations) throws Exception {
+		Query query = null;
+		query = queryAndWordsParser.parse(StringTools.collection2Str(queryParams.sWords));
+		TopDocs results = indexSearcher.search(query, Integer.MAX_VALUE);
+		ScoreDoc[] hits = results.scoreDocs;
+		
+		if(0 == hits.length)	return null;
+		double dis = Double.MAX_VALUE;
+		NodeCollection nodeCol = new NodeCollection();
+		Point pot = null;
+		ByteBuffer bb = null;
+		Document doc = null;
+		int pid = 0;
+		double maxScore = hits[0].score;
+		for(int i=0; i<hits.length; i++) {
+			doc = indexSearcher.doc(hits[i].doc);
+			bb = ByteBuffer.wrap(doc.getBinaryValue(fieldId).bytes);
+			bb.getInt();
+			pid = bb.getInt();
+			if(pid >= 0) {
+				pot = allLocations[pid];
+				dis = queryParams.location.getMinimumDistance(allLocations[pid]);
+			}
+			else {
+				pot = null;
+				dis = Double.MAX_VALUE;
+			}
+			nodeCol.add(new Node(pid, pot, dis, 1 - hits[i].score/maxScore));
+//			System.out.println(String.valueOf(id) + " " + hits[i].score/queryParams.sWords.size());
+//			resSet.add(Integer.parseInt(doc.get(fieldId)));
+		}
+		return nodeCol;
 	}
 	
 	public static void testSearchWords() throws Exception{

@@ -77,9 +77,9 @@ public class SortedClusters {
 		
 		for(Cluster clu : clusters) {
 			sb.append("Cluster:" + String.valueOf(clu.getId()) + " " + 
-//					 String.valueOf(clu.getMinDisAndScore()[0]) + " " + 
-//					 String.valueOf(clu.getMinDisAndScore()[1]) + " " + 
-//					 String.valueOf(clu.getScore()) + 
+					 String.valueOf(clu.getMinDisAndScore()[0]) + " " + 
+					 String.valueOf(clu.getMinDisAndScore()[1]) + " " + 
+					 String.valueOf(clu.getScore()) + 
 					 "\n");
 			for(Node nd : clu.getPNodes()) {
 				sb.append(nd.toString());

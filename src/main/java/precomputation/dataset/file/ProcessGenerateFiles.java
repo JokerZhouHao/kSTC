@@ -215,7 +215,7 @@ public class ProcessGenerateFiles {
 	 * @throws Exception
 	 */
 	public static void buildPidAndRtreeIdWordsIndex(String pathIndex) throws Exception{
-		System.out.println("> start build pid_rtreeid_words_index");
+		System.out.println("> start build " + pathIndex);
 		IdWordsIndex index = new IdWordsIndex(pathIndex);
 		index.openIndexWriter();
 		String[] texts = FileLoader.loadText(Global.pathIdText);
@@ -227,6 +227,11 @@ public class ProcessGenerateFiles {
 		System.out.println("> over, spend time : " + TimeUtility.getGlobalSpendTime());
 	}
 	
+	/**
+	 * build Cellid Pid Words Index
+	 * @param pathIndex
+	 * @throws Exception
+	 */
 	public static void buildCellidPidWordsIndex(String pathIndex) throws Exception{
 		System.out.println("> start build " + pathIndex);
 		SGPLInfo sInfo = Global.sgplInfo;
@@ -240,6 +245,52 @@ public class ProcessGenerateFiles {
 		index.close();
 		System.out.println("> over, spend time : " + TimeUtility.getGlobalSpendTime());
 	}
+	
+	
+	
+	public static void buildPidWordsIndex(SGPLInfo sInfo, CellidPidWordsIndex index, Point[] points, String[] texts ) throws Exception{
+		for(int i=0; i<texts.length; i++) {
+			index.addWordsDoc(sInfo.getZOrderId(points[i].m_pCoords), i, texts[i]);
+		}
+	}
+	
+	public static StringBuffer buildRtreeidWordsIndex(SGPLInfo sInfo, CellidPidWordsIndex index, String[] texts , MRTree rtree, int rtreeId) throws Exception{
+		StringBuffer sb = new StringBuffer();
+		if(rtreeId == Integer.MIN_VALUE) {
+			rtreeId = rtree.getRoot();
+		}
+		Node node = rtree.readNode(rtreeId);
+		if(node.isLeaf()) {
+			for(int child = 0; child < node.m_children; child++) {
+				sb.append(" ");
+				sb.append(texts[node.m_pIdentifier[child]]);
+			}
+		} else {
+			for(int child = 0; child < node.m_children; child++) {
+				sb.append(" ");
+				sb.append(buildRtreeidWordsIndex(sInfo, index, texts, rtree, node.m_pIdentifier[child]));
+			}
+		}
+		index.addWordsDoc(CellidPidWordsIndex.signRtreeNode, -node.m_identifier - 1, sb.toString());
+		return sb;
+	}
+	
+	public static void buildCellidRtreeidOrPidWordsIndex(String pathIndex) throws Exception{
+		System.out.println("> start build " + pathIndex);
+		SGPLInfo sInfo = Global.sgplInfo;
+		CellidPidWordsIndex index = new CellidPidWordsIndex(pathIndex);
+		index.openIndexWriter();
+		String[] texts = FileLoader.loadText(Global.pathIdText);
+		Point[] points = FileLoader.loadPoints(Global.pathIdCoord + Global.signNormalized);
+		ProcessGenerateFiles.buildPidWordsIndex(sInfo, index, points, texts);
+		System.out.println("> over build pids");
+		ProcessGenerateFiles.buildRtreeidWordsIndex(sInfo, index, texts, MRTree.getInstanceInDisk(), Integer.MIN_VALUE);
+		System.out.println("> over build rtreeids");
+		index.close();
+		System.out.println("> over, spend time : " + TimeUtility.getGlobalSpendTime());
+	}
+	
+	
 	
 	public static void buildTermCellColIndex(String pathIndex) throws Exception{
 		System.out.println("> start " + pathIndex + " . . . ");
@@ -303,8 +354,12 @@ public class ProcessGenerateFiles {
 //		ProcessGenerateFiles.buildPidAndRtreeIdWordsIndex(pathIndex);
 		
 		/* building cellidpid words index */
-		String pathCellidpidWordsIndex = Global.pathCellidPidWordsIndex;
-		ProcessGenerateFiles.buildCellidPidWordsIndex(pathCellidpidWordsIndex);
+//		String pathCellidpidWordsIndex = Global.pathCellidPidWordsIndex;
+//		ProcessGenerateFiles.buildCellidPidWordsIndex(pathCellidpidWordsIndex);
+		
+		/* building cellid rtreeid pid words index */
+		String pathCellidRtreeidOrPidWordsIndex = Global.pathCellidRtreeidOrPidWordsIndex;
+		ProcessGenerateFiles.buildCellidRtreeidOrPidWordsIndex(pathCellidRtreeidOrPidWordsIndex);
 		
 		/* building term_cellCol_index */
 //		String pathTerm2CellCIndex = Global.pathTerm2CellColIndex;

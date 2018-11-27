@@ -10,12 +10,13 @@ class Scatter:
     colors = ['#6b8ba4', 'b', '#7f2b0a', '#e50000', '#ffcfdc', '#06470c', '#15b01a', '#c7fdb5', '#516572', '#6b8ba4', '#a2cffe', '#e6daa6']
     index_colors = -1
 
-    def __init__(self, fig=None, xs=None, ys=None):
+    def __init__(self, fig=None, xs=None, ys=None, title='title'):
         if fig is None:
             self.fig = plt.figure(random.randint(1, 10000), figsize=(10.1023, 6.5), tight_layout=True)
         else:
             self.fig = fig
         # self.fig = plt.figure(random.randint(1, 10000))
+        self.fig.canvas.set_window_title(title)
 
         if xs is None:
             self.xs = []
@@ -35,7 +36,6 @@ class Scatter:
             self.ax = self.fig.add_subplot(111)
 
 
-
     def draw_scatter(self, points, s=1, marker='o', c='r'):
         # self.ax.scatter(points[0], points[1], s=s, marker=marker, c=(random.uniform(0, 1), random.uniform(0, 1), random.uniform(0, 1)))
         Scatter.index_colors = Scatter.index_colors + 1
@@ -51,8 +51,8 @@ class Scatter:
         plt.show()
 
     @staticmethod
-    def draw_orginal_coord(path, s=1, marker='o', show=True):
-        scatter = Scatter()
+    def draw_orginal_coord(path, s=1, marker='o', show=True, title='title'):
+        scatter = Scatter(title=title)
         allCoords = [[], []]
         reader = IterableReader(path)
         i = 0
@@ -67,8 +67,8 @@ class Scatter:
         return scatter
 
     @staticmethod
-    def draw_result(all_coord_path, result_path, s=10, show=True):
-        scatter = Scatter.draw_orginal_coord(all_coord_path, s=s, show=False)
+    def draw_result(all_coord_path, result_path, s=10, show=True, title='title'):
+        scatter = Scatter.draw_orginal_coord(all_coord_path, s=s, show=False, title=title)
 
         allCoords = [[], []]
         centerCoords = [[], []]
@@ -93,6 +93,7 @@ class Scatter:
 
         if show:
             scatter.show()
+        Scatter.index_colors = -1
         return scatter
 
 
@@ -101,8 +102,11 @@ class Scatter:
 pathCoord = Global.pathCoord + '([-125.0, 28.0], [15.0, 60.0])[normalized]'
 # Scatter.draw_orginal_coord(pathCoord, s=20, show=False)
 
-pathResult = Global.pathResult
-Scatter.draw_result(pathCoord, pathResult, s=10, show=True)
+
+pathResultAlgEucBase = Global.pathOutput + 'result_ecu_base.txt'
+pathResultAlgEucFast = Global.pathOutput + 'result_ecu_fast.txt'
+Scatter.draw_result(pathCoord, pathResultAlgEucBase, s=10, show=True, title=pathResultAlgEucBase)
+Scatter.draw_result(pathCoord, pathResultAlgEucFast, s=10, show=True, title=pathResultAlgEucFast)
 
 
 

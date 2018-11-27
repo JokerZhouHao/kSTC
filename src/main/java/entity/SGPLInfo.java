@@ -1,7 +1,9 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
@@ -107,13 +109,13 @@ public class SGPLInfo implements Serializable{
 		else return x+1;
 	}
 	
-	public Map<Integer, Boolean> cover(Circle circle){
+	public List<CellSign> cover(Circle circle){
 		int maxY = nearestAboveCellY(circle.center[1] + circle.radius);
 		int minY = nearestBelowCellY(circle.center[1] - circle.radius);
 		int Y;
 		double maxYCoord = maxY * latStep;
 		double YCoord1, YCoord2;
-		Map<Integer, Boolean> zids = new TreeMap();
+		List<CellSign> zids = new ArrayList<>();
 		int minX, maxX, X1, X2, leftX=0, rightX=0;
 		double[] passXX = null;
 		for(Y=minY, YCoord1=minY*latStep, YCoord2=YCoord1 + latStep; Global.compareDouble(YCoord2, maxYCoord) <= 0; 
@@ -126,8 +128,13 @@ public class SGPLInfo implements Serializable{
 					rightX = nearestLeftCellX(passXX[1]);
 				}
 				passXX = circle.passXX(YCoord2);
-				minX =  nearestLeftCellX(passXX[0]);
-				maxX = nearestRightCellX(passXX[1]);
+				if(null==passXX) {
+					minX =  nearestLeftCellX(circle.center[0] - circle.radius);
+					maxX = nearestRightCellX(circle.center[0] + circle.radius);
+				} else {
+					minX =  nearestLeftCellX(passXX[0]);
+					maxX = nearestRightCellX(passXX[1]);
+				}
 			} else {
 				passXX = circle.passXX(YCoord2);
 				if(null == passXX) leftX = Integer.MAX_VALUE;
@@ -136,14 +143,20 @@ public class SGPLInfo implements Serializable{
 					rightX = nearestLeftCellX(passXX[1]);
 				}
 				passXX = circle.passXX(YCoord1);
-				minX =  nearestLeftCellX(passXX[0]);
-				maxX = nearestRightCellX(passXX[1]);
+				if(null==passXX) {
+					minX =  nearestLeftCellX(circle.center[0] - circle.radius);
+					maxX = nearestRightCellX(circle.center[0] + circle.radius);
+				} else {
+					minX =  nearestLeftCellX(passXX[0]);
+					maxX = nearestRightCellX(passXX[1]);
+				}
 			}
 			
 			for(X1 = minX, X2 = X1+1; X2 <= maxX; X1 = X2, X2++) {
 				if(X1 >= leftX && X2 <= rightX) {
-					zids.put(getZOrderId(X1, Y), Boolean.TRUE);
-				} else zids.put(getZOrderId(X1, Y), Boolean.FALSE);
+					zids.add(new CellSign(getZOrderId(X1, Y), Boolean.TRUE));
+					
+				} else zids.add(new CellSign(getZOrderId(X1, Y), Boolean.FALSE));
 			}
 		}
 		if(zids.isEmpty())	return null;
@@ -165,7 +178,7 @@ public class SGPLInfo implements Serializable{
 //		System.out.println(info.getZOrderId(1, 0));
 //		System.out.println(info.getZOrderId(4, 3));
 //		System.out.println(info.getZOrderId(6, 6));
-		System.out.println(info.getZOrderId(0, 0));
+		System.out.println(info.getZOrderId(0.8, 0.9));
 		
 //		System.out.println(info.getLngStep());
 //		System.out.println(info.getLatStep());
@@ -178,12 +191,12 @@ public class SGPLInfo implements Serializable{
 //		System.out.println(info.nearestLeftCellX(0.75));
 //		System.out.println(info.nearestRightCellX(0.75));
 		
-//		double[] center = {0.35, 0.47};
-//		double radius = 0.15;
-//		Map<Integer, Boolean> zids = sgplInfo.cover(new Circle(radius, center));
-//		for(Entry<Integer, Boolean> en : zids.entrySet()) {
-//			System.out.println(en.getKey() + " " + en.getValue());
-//		}
+		double[] center = {0.35, 0.47};
+		double radius = 0.15;
+		List<CellSign> zids = sgplInfo.cover(new Circle(radius, center));
+		for(CellSign cs : zids) {
+			System.out.println(cs);
+		}
 		
 	}
 }

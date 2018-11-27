@@ -35,6 +35,11 @@ public class NoiseRecoder {
 		}
 	}
 	
+	public void clear() {
+		this.disList.clear();
+		this.scoList.clear();
+	}
+	
 	public void addDisNoise(NodeNeighbors nn) {
 		this.disList.add(nn);
 	}

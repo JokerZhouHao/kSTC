@@ -9,8 +9,10 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.Map.Entry;
 
 import entity.CellCollection;
+import entity.CellSign;
 import entity.Circle;
 import entity.Cluster;
 import entity.NeighborStack;
@@ -22,6 +24,8 @@ import entity.PNodeCollection;
 import entity.QueryParams;
 import entity.SGPLInfo;
 import entity.SortedClusters;
+import entity.fastrange.NgbNodes;
+import index.CellidPidWordsIndex;
 import index.IdWordsIndex;
 import index.Term2CellColIndex;
 import precomputation.dataset.file.FileLoader;
@@ -40,20 +44,19 @@ import utility.io.TimeUtility;
 public class AlgEucDisFastRange {
 	
 	private Point[] allLocations = null;
-	private IdWordsIndex idWordsIndex = null;
-	private Term2CellColIndex term2CellCIndex = null;
+	private CellidPidWordsIndex cellidWIndex = null;
 	private NoiseRecoder noiseRecoder = new NoiseRecoder();
 	private SGPLInfo sgplInfo = Global.sgplInfo;
-	private MComparator<Double> compDoubleDescend = new MComparator<Double>();
 	private Circle sCircle = new Circle(0.0, new double[2]);
 	
 	public AlgEucDisFastRange() throws Exception{
 		allLocations = FileLoader.loadPoints(Global.pathIdCoord + Global.signNormalized);
 //		allLocations = FileLoader.loadPoints(Global.pathIdCoord);
-		idWordsIndex = new IdWordsIndex(Global.pathPidAndRtreeIdWordsIndex);
-		idWordsIndex.openIndexReader();
-		term2CellCIndex = new Term2CellColIndex(Global.pathTerm2CellColIndex);
-		term2CellCIndex.openIndexReader();
+//		cellidWIndex = new CellidPidWordsIndex(Global.pathCellidPidWordsIndex);
+		
+		cellidWIndex = new CellidPidWordsIndex(Global.pathCellidRtreeidOrPidWordsIndex);
+		
+		cellidWIndex.openIndexReader();
 	}
 	
 	/**
@@ -63,13 +66,17 @@ public class AlgEucDisFastRange {
 	 * @throws Exception
 	 */
 	public SortedClusters excuteQuery(QueryParams qParams) throws Exception{
-		NodeCollection nodeCol = idWordsIndex.searchWords(qParams, allLocations);
-		PNodeCollection disPNodeCol = nodeCol.getPNodeCollection().sortByDistance();
-		PNodeCollection scorePNodeCol = nodeCol.getPNodeCollection().copy().sortByScore();
-		List<CellCollection> termsCells = new ArrayList<>();
-		for(String term : qParams.sWords) {
-			termsCells.add(term2CellCIndex.searchTerm(term));
+		sCircle.radius = qParams.epsilon;
+		Map<Integer, List<Node>> cellid2Nodes = cellidWIndex.searchWords(qParams, allLocations);
+		if(null == cellid2Nodes)	return null;
+		
+		/* building sort distance node collection and sort score node collection */
+		List<Node> nodes = new ArrayList<>();
+		for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
+			nodes.addAll(en.getValue());
 		}
+		PNodeCollection disPNodeCol = new PNodeCollection(nodes).sortByDistance();
+		PNodeCollection scorePNodeCol = new PNodeCollection(nodes).sortByScore();
 		
 		SortedClusters sClusters = new SortedClusters(qParams);
 		Cluster cluster = null;
@@ -82,8 +89,8 @@ public class AlgEucDisFastRange {
 		
 		Boolean signAccessDis = Boolean.TRUE;
 		
-		Set<Integer> clusteredCells = new HashSet<>();
-		Map<Integer, Set<Integer>> cellPids = new HashMap<>();
+		/* recode clustered cells */
+		Map<Integer, Integer> clusteredCells = new HashMap<>();
 		
 		do {
 			if(signAccessDis) {
@@ -92,13 +99,13 @@ public class AlgEucDisFastRange {
 				curNode = scorePNodeCol.next();
 			}
 			
-			if(curNode == null)	break;	// all nodes are accessed
+			if(curNode == null)	break;	// all nodes have accessed
 			else if(curNode.isNoise()) {
 				if(signAccessDis)	noiseRecoder.addDisNoise(new NodeNeighbors(curNode, curNode.neighbors));
 				else noiseRecoder.addScoNoise(new NodeNeighbors(curNode, curNode.neighbors));
 				continue;
 			}
-			cluster = getCluster(termsCells, qParams, curClusterId, curNode, nodeCol, signAccessDis);
+			cluster = getCluster(cellid2Nodes, clusteredCells, qParams, curClusterId, curNode, signAccessDis);
 			if(null != cluster) {
 				sClusters.add(cluster);
 				curClusterId++;
@@ -120,48 +127,50 @@ public class AlgEucDisFastRange {
 			else signAccessDis = Boolean.TRUE;
 		} while(bound <= topKScore);
 		
+		noiseRecoder.clear();
+		
 		return sClusters;
 	}
 	
+
 	/**
 	 * get cluster
+	 * @param cellid2Nodes
+	 * @param clusteredCells
 	 * @param qParams
 	 * @param clusterId
 	 * @param qNode
-	 * @param nodeCol
+	 * @param signAccessDis
 	 * @return
 	 * @throws Exception
 	 */
-	public Cluster getCluster(List<CellCollection> termsCells, Set<Integer> clusteredCells, Map<Integer, Set<Integer>> cellPids, 
-			QueryParams qParams, int clusterId, Node qNode, 
-			NodeCollection nodeCol, Boolean signAccessDis ) throws Exception{
-		NeighborStack ngbStack = new NeighborStack();
-		TreeMap<Double, LinkedList<Node>> ngb = null;
-		
-		ngb = fastRange()
-		
-		
-		
-		
-		Set<Node> addedNodes = new HashSet<>();
+	public Cluster getCluster(Map<Integer, List<Node>> cellid2Nodes, Map<Integer, Integer> clusteredCells,
+			QueryParams qParams, int clusterId, Node qNode, Boolean signAccessDis ) throws Exception{
+		List<Node> addedNodes = new ArrayList<>();
 		LinkedList<Node> neighbors = new LinkedList<>();
-		LinkedList<Node> ngb = null;
+		NgbNodes ngb = null;
+		LinkedList<Node> ngbNodes = null;
 		Node centerNode = null;
-		ngb = rtree.rangeQuery(qParams, clusterId, qNode, nodeCol, allLocations);
+		ngb = fastRange(cellid2Nodes, clusteredCells, qParams, clusterId, qNode);
+		
 		if(null == ngb) {
 			return null;
 		} else if(ngb.size() < qParams.minpts) {
 			qNode.setToNoise();
-			if(signAccessDis)	noiseRecoder.addDisNoise(new NodeNeighbors(qNode, ngb));
-			else noiseRecoder.addScoNoise(new NodeNeighbors(qNode, ngb));
+			ngbNodes = ngb.toList();
+			if(signAccessDis)	noiseRecoder.addDisNoise(new NodeNeighbors(qNode, ngbNodes));
+			else noiseRecoder.addScoNoise(new NodeNeighbors(qNode, ngbNodes));
 			return null;
 		} else {
 			qNode.clusterId = clusterId;
-			addedNodes.addAll(ngb);
-			for(Node nd : ngb) {
+			addedNodes.add(qNode);
+			ngbNodes = ngb.toList();
+			for(Node nd : ngbNodes) {
 				if(nd.isNoise()) {
+					addedNodes.add(nd);
 					nd.clusterId = clusterId;
 				} else if(nd.isInitStatus()) {
+					addedNodes.add(nd);
 					nd.clusterId = clusterId;
 					neighbors.add(nd);
 				}
@@ -169,19 +178,17 @@ public class AlgEucDisFastRange {
 			
 			while(!neighbors.isEmpty()) {
 				centerNode = neighbors.pollFirst();
-				ngb = rtree.rangeQuery(qParams, clusterId, centerNode, nodeCol, allLocations);
-				if(ngb == null) {
-					continue;
-				} else if (ngb.size() < qParams.minpts) {
-					centerNode.setToNoise();
-					centerNode.neighbors = ngb;
+				ngb = fastRange(cellid2Nodes, clusteredCells, qParams, clusterId, centerNode);
+				if(ngb == null || ngb.size() < qParams.minpts) {
 					continue;
 				} else {
-					addedNodes.addAll(ngb);
-					for(Node nd : ngb) {
+					ngbNodes = ngb.toList();
+					for(Node nd : ngbNodes) {
 						if(nd.isNoise()) {
+							addedNodes.add(nd);
 							nd.clusterId = clusterId;
 						} else if(nd.isInitStatus()){
+							addedNodes.add(nd);
 							nd.clusterId = clusterId;
 							neighbors.add(nd);
 						}
@@ -194,79 +201,62 @@ public class AlgEucDisFastRange {
 		} else return null;
 	}
 	
-	public TreeMap<Double, LinkedList<Node>> fastRange(List<CellCollection> termsCells, Set<Integer> clusteredCells, Map<Integer, Set<Integer>> cellPids,
-			QueryParams qParams, int clusterId, Node qNode, 
-			NodeCollection nodeCol) throws Exception{
+	/**
+	 * fastRange
+	 * @param cellid2Nodes
+	 * @param clusteredCells
+	 * @param qParams
+	 * @param clusterId
+	 * @param qNode
+	 * @return
+	 * @throws Exception
+	 */
+	public NgbNodes fastRange(Map<Integer, List<Node>> cellid2Nodes, Map<Integer, Integer> clusteredCells,
+			QueryParams qParams, int clusterId, Node qNode) throws Exception{
+		/* skipping rule */
+		sCircle.center = qNode.location.m_pCoords;
+		List<CellSign> coveredCellids = sgplInfo.cover(sCircle);
+		Boolean sign = Boolean.TRUE;
 		
+		for(CellSign cs : coveredCellids) {
+			if(!clusteredCells.containsKey(cs.getId())) {
+				sign = Boolean.FALSE;
+				break;
+			}
+		}
+		if(sign)	return null;
 		
+		/* fast range */
+		sCircle.center = qNode.location.m_pCoords;
+		NgbNodes ngb = new NgbNodes();
+		List<Node> cellNodes = null;
+		double dis = 0.0;
+		Integer tIn = 0;
 		
-		
+		for(CellSign cs : coveredCellids) {
+			if(null == (cellNodes = cellid2Nodes.get(cs.getId())))	continue;
+			if(null != (tIn = clusteredCells.get(cs.getId())) && tIn!=clusterId) continue;
+			sign = Boolean.TRUE;
+			for(Node nd : cellNodes) {
+				if(nd.hasInCluster(clusterId)) {
+					ngb.add(NgbNodes.signUsedKey, nd);
+				} else if(!nd.isClassified()) {
+					if(!cs.getSign())	sign = Boolean.FALSE;
+					dis = nd.location.getMinimumDistance(qNode.location);
+					if(dis <= qParams.epsilon)	ngb.add(dis, nd);
+				}
+			}
+			if(sign)	clusteredCells.put(cs.getId(), clusterId);
+		}
+		if(0==ngb.size())	return null;
+		return ngb;
 	}
 	
-	
-	/* test test */
-	public static void testTest() throws Exception{
-		QueryParams qParams = new QueryParams();
-		qParams.k = 4;
-		double[] loca = {0.7, 0.1};
-		qParams.location = new Point(loca);
-		List<String> words = new ArrayList<>();
-		words.add("c");
-//		words.add("c");
-//		words.add("f");
-//		words.add("c");
-		qParams.sWords = words;
-		qParams.minpts = 5;
-		qParams.epsilon = 0.5;
-		AlgEucDisFastRange alg = new AlgEucDisFastRange();
-		SortedClusters sClu = alg.excuteQuery(qParams);
-		System.out.println(sClu);
-		
-		String resPath = Global.outPath + "result.txt";
-		IOUtility.writeSortedClusters(resPath, qParams, sClu);
-		
-		System.out.println("用时：" + TimeUtility.getGlobalSpendTime());
-	}
-	
-	/* test yelp buss */
-	public static void testYelpBuss() throws Exception{
-		String[] allTxt = FileLoader.loadText(Global.pathIdText);
-		Point[] allCoord = FileLoader.loadPoints(Global.pathIdCoord + Global.signNormalized);
-		
-		int id = new Random().nextInt(Global.numNode);
-		
-		QueryParams qParams = new QueryParams(allCoord[id], allTxt[id], 1, 10, 0.01, 10);
-		
-//		QueryParams qParams = new QueryParams();
-//		double[] loca = {0.32591626714285715, 0.48902884999999996};
-//		qParams.location = new Point(loca);
-//		List<String> words = new ArrayList<>();
-//		words.add("91");
-////		words.add("c");
-////		words.add("f");
-////		words.add("c");
-//		qParams.sWords = words;
-//		qParams.k = 10;
-//		qParams.epsilon = 0.01;
-//		qParams.minpts = 10;
-		
-		AlgEucDisFastRange alg = new AlgEucDisFastRange();
-		SortedClusters sClu = alg.excuteQuery(qParams);
-		System.out.println(sClu);
-		
-		String resPath = Global.outPath + "result.txt";
-		IOUtility.writeSortedClusters(resPath, qParams, sClu);
-		
-		System.out.println("共簇：" + sClu.getClusters().size());
-		
-		System.out.println("用时：" + TimeUtility.getGlobalSpendTime());
-	}
 	
 	/**
 	 * @param args
 	 * @throws Exception
 	 */
 	public static void main(String[] args) throws Exception{
-		AlgEucDisFastRange.testYelpBuss();
 	}
 }

@@ -15,6 +15,7 @@ import entity.NoiseRecoder;
 import entity.PNodeCollection;
 import entity.QueryParams;
 import entity.SortedClusters;
+import index.CellidPidWordsIndex;
 import index.IdWordsIndex;
 import precomputation.dataset.file.FileLoader;
 import spatialindex.spatialindex.Point;
@@ -31,15 +32,20 @@ import utility.io.TimeUtility;
 public class AlgEucDisBase {
 	
 	private Point[] allLocations = null;
-	private IdWordsIndex idWordsIndex = null;
+//	private IdWordsIndex idWordsIndex = null;
+	private CellidPidWordsIndex cellidIndex = null;
 	private MRTree rtree = null;
 	private NoiseRecoder noiseRecoder = new NoiseRecoder();
 	
 	public AlgEucDisBase() throws Exception{
 		allLocations = FileLoader.loadPoints(Global.pathIdCoord + Global.signNormalized);
 //		allLocations = FileLoader.loadPoints(Global.pathIdCoord);
-		idWordsIndex = new IdWordsIndex(Global.pathPidAndRtreeIdWordsIndex);
-		idWordsIndex.openIndexReader();
+//		idWordsIndex = new IdWordsIndex(Global.pathPidAndRtreeIdWordsIndex);
+//		idWordsIndex.openIndexReader();
+		
+		cellidIndex = new CellidPidWordsIndex(Global.pathCellidRtreeidOrPidWordsIndex);
+		cellidIndex.openIndexReader();
+		
 		rtree = MRTree.getInstanceInDisk();
 	}
 	
@@ -50,7 +56,9 @@ public class AlgEucDisBase {
 	 * @throws Exception
 	 */
 	public SortedClusters excuteQuery(QueryParams qParams) throws Exception{
-		NodeCollection nodeCol = idWordsIndex.searchWords(qParams, allLocations);
+//		NodeCollection nodeCol = idWordsIndex.searchWords(qParams, allLocations);
+		NodeCollection nodeCol = cellidIndex.searchWordsReNodeCol(qParams, allLocations);
+		
 		PNodeCollection disPNodeCol = nodeCol.getPNodeCollection().sortByDistance();
 		PNodeCollection scorePNodeCol = nodeCol.getPNodeCollection().copy().sortByScore();
 		
@@ -100,6 +108,8 @@ public class AlgEucDisBase {
 			else signAccessDis = Boolean.TRUE;
 		} while(bound <= topKScore);
 		
+		noiseRecoder.clear();
+		
 		return sClusters;
 	}
 	
@@ -113,7 +123,7 @@ public class AlgEucDisBase {
 	 * @throws Exception
 	 */
 	public Cluster getCluster(QueryParams qParams, int clusterId, Node qNode, NodeCollection nodeCol, Boolean signAccessDis ) throws Exception{
-		Set<Node> addedNodes = new HashSet<>();
+		List<Node> addedNodes = new ArrayList<>();
 		LinkedList<Node> neighbors = new LinkedList<>();
 		LinkedList<Node> ngb = null;
 		Node centerNode = null;
@@ -127,11 +137,13 @@ public class AlgEucDisBase {
 			return null;
 		} else {
 			qNode.clusterId = clusterId;
-			addedNodes.addAll(ngb);
+			addedNodes.add(qNode);
 			for(Node nd : ngb) {
 				if(nd.isNoise()) {
+					addedNodes.add(nd);
 					nd.clusterId = clusterId;
 				} else if(nd.isInitStatus()) {
+					addedNodes.add(nd);
 					nd.clusterId = clusterId;
 					neighbors.add(nd);
 				}
@@ -140,18 +152,15 @@ public class AlgEucDisBase {
 			while(!neighbors.isEmpty()) {
 				centerNode = neighbors.pollFirst();
 				ngb = rtree.rangeQuery(qParams, clusterId, centerNode, nodeCol, allLocations);
-				if(ngb == null) {
-					continue;
-				} else if (ngb.size() < qParams.minpts) {
-					centerNode.setToNoise();
-					centerNode.neighbors = ngb;
-					continue;
-				} else {
-					addedNodes.addAll(ngb);
+                if(ngb == null || ngb.size() < qParams.minpts) {
+                    continue;
+                } else {
 					for(Node nd : ngb) {
 						if(nd.isNoise()) {
+							addedNodes.add(nd);
 							nd.clusterId = clusterId;
 						} else if(nd.isInitStatus()){
+							addedNodes.add(nd);
 							nd.clusterId = clusterId;
 							neighbors.add(nd);
 						}
@@ -164,69 +173,10 @@ public class AlgEucDisBase {
 		} else return null;
 	}
 	
-	/* test test */
-	public static void testTest() throws Exception{
-		QueryParams qParams = new QueryParams();
-		qParams.k = 4;
-		double[] loca = {0.7, 0.1};
-		qParams.location = new Point(loca);
-		List<String> words = new ArrayList<>();
-		words.add("c");
-//		words.add("c");
-//		words.add("f");
-//		words.add("c");
-		qParams.sWords = words;
-		qParams.minpts = 5;
-		qParams.epsilon = 0.5;
-		AlgEucDisBase alg = new AlgEucDisBase();
-		SortedClusters sClu = alg.excuteQuery(qParams);
-		System.out.println(sClu);
-		
-		String resPath = Global.outPath + "result.txt";
-		IOUtility.writeSortedClusters(resPath, qParams, sClu);
-		
-		System.out.println("用时：" + TimeUtility.getGlobalSpendTime());
-	}
-	
-	/* test yelp buss */
-	public static void testYelpBuss() throws Exception{
-		String[] allTxt = FileLoader.loadText(Global.pathIdText);
-		Point[] allCoord = FileLoader.loadPoints(Global.pathIdCoord + Global.signNormalized);
-		
-		int id = new Random().nextInt(Global.numNode);
-		
-		QueryParams qParams = new QueryParams(allCoord[id], allTxt[id], 1, 10, 0.01, 10);
-		
-//		QueryParams qParams = new QueryParams();
-//		double[] loca = {0.32591626714285715, 0.48902884999999996};
-//		qParams.location = new Point(loca);
-//		List<String> words = new ArrayList<>();
-//		words.add("91");
-////		words.add("c");
-////		words.add("f");
-////		words.add("c");
-//		qParams.sWords = words;
-//		qParams.k = 10;
-//		qParams.epsilon = 0.01;
-//		qParams.minpts = 10;
-		
-		AlgEucDisBase alg = new AlgEucDisBase();
-		SortedClusters sClu = alg.excuteQuery(qParams);
-		System.out.println(sClu);
-		
-		String resPath = Global.outPath + "result.txt";
-		IOUtility.writeSortedClusters(resPath, qParams, sClu);
-		
-		System.out.println("共簇：" + sClu.getClusters().size());
-		
-		System.out.println("用时：" + TimeUtility.getGlobalSpendTime());
-	}
-	
 	/**
 	 * @param args
 	 * @throws Exception
 	 */
 	public static void main(String[] args) throws Exception{
-		AlgEucDisBase.testYelpBuss();
 	}
 }

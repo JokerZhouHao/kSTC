@@ -68,6 +68,7 @@ public class IdWordsIndex extends AbstractLuceneIndex {
 		// TODO Auto-generated method stub
 		super.openIndexReader();
 		this.indexSearcher.setSimilarity(new BM25Similarity());
+//		this.indexSearcher.setSimilarity(new ClassicSimilarity());
 	}
 
 	public void addWidsDoc(int id, Set<Integer> wids) throws Exception{
@@ -99,6 +100,7 @@ public class IdWordsIndex extends AbstractLuceneIndex {
 		Point pot = null;
 //		Set<Integer> resSet = new HashSet<>();
 		Document doc = null;
+		double maxScore = hits[0].score;
 		for(int i=0; i<hits.length; i++) {
 			doc = indexSearcher.doc(hits[i].doc);
 			id = Integer.parseInt(doc.get(fieldId));
@@ -110,7 +112,7 @@ public class IdWordsIndex extends AbstractLuceneIndex {
 				pot = null;
 				dis = Double.MAX_VALUE;
 			}
-			nodeCol.add(new Node(id, pot, dis, 1 - hits[i].score/queryParams.sWords.size()));
+			nodeCol.add(new Node(id, pot, dis, 1 - hits[i].score/maxScore));
 //			System.out.println(String.valueOf(id) + " " + hits[i].score/queryParams.sWords.size());
 //			resSet.add(Integer.parseInt(doc.get(fieldId)));
 		}
