@@ -18,6 +18,7 @@ import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 
 import entity.Cell;
 import entity.CellCollection;
+import entity.KSortedCollection;
 import entity.Rectangle;
 import entity.SGPLInfo;
 import index.CellidPidWordsIndex;
@@ -247,13 +248,30 @@ public class ProcessGenerateFiles {
 	}
 	
 	
-	
+	/**
+	 * build Pid Words Index
+	 * @param sInfo
+	 * @param index
+	 * @param points
+	 * @param texts
+	 * @throws Exception
+	 */
 	public static void buildPidWordsIndex(SGPLInfo sInfo, CellidPidWordsIndex index, Point[] points, String[] texts ) throws Exception{
 		for(int i=0; i<texts.length; i++) {
 			index.addWordsDoc(sInfo.getZOrderId(points[i].m_pCoords), i, texts[i]);
 		}
 	}
 	
+	/**
+	 * build Rtreeid Words Index
+	 * @param sInfo
+	 * @param index
+	 * @param texts
+	 * @param rtree
+	 * @param rtreeId
+	 * @return
+	 * @throws Exception
+	 */
 	public static StringBuffer buildRtreeidWordsIndex(SGPLInfo sInfo, CellidPidWordsIndex index, String[] texts , MRTree rtree, int rtreeId) throws Exception{
 		StringBuffer sb = new StringBuffer();
 		if(rtreeId == Integer.MIN_VALUE) {
@@ -290,8 +308,11 @@ public class ProcessGenerateFiles {
 		System.out.println("> over, spend time : " + TimeUtility.getGlobalSpendTime());
 	}
 	
-	
-	
+	/**
+	 * build Term CellCol Index
+	 * @param pathIndex
+	 * @throws Exception
+	 */
 	public static void buildTermCellColIndex(String pathIndex) throws Exception{
 		System.out.println("> start " + pathIndex + " . . . ");
 		double[][] coords = FileLoader.loadCoords(Global.pathIdCoord + Global.signNormalized);
@@ -325,7 +346,47 @@ public class ProcessGenerateFiles {
 		System.out.println("> Over, spend time : " + TimeUtility.getGlobalSpendTime());
 	}
 	
+	
+	
+	/**
+	 * generate K Neighbor Dis File
+	 * @param filePath
+	 * @param k
+	 * @throws Exception
+	 */
+	public static void generateKNeighborDisFile(String filePath, int k) throws Exception{
+		System.out.println("> start build " + filePath);
+		Point[] allPoints = FileLoader.loadPoints(Global.pathIdCoord + Global.signNormalized);
+		MRTree rtree = MRTree.getInstanceInDisk();
+		List<entity.Node> neighbors = null;
+		KSortedCollection<entity.Node> tNodes = null;
+		KSortedCollection<entity.Node> allSortedNodes = new KSortedCollection<>(Integer.MAX_VALUE);
+		double radius = 0.00002;
+		for(int i=0; i<allPoints.length; i++) {
+			radius = 0.00002;
+			neighbors = null;
+			while(null == neighbors || neighbors.size() < k) {
+				radius *= 5;
+				neighbors = rtree.rangeQuery(allPoints[i], radius, allPoints);
+			}
+			tNodes = new KSortedCollection<entity.Node>(k, neighbors);
+			allSortedNodes.add(new entity.Node(i, allPoints[i], tNodes.getK().distance, 0.0));
+		}
+		
+		BufferedWriter bw = IOUtility.getBW(filePath);
+		bw.write(Global.delimiterPound + String.valueOf(allSortedNodes.size()) + "\n");
+		for(entity.Node nd : allSortedNodes.toList()) {
+			bw.write(String.valueOf(nd.distance));
+			bw.write(Global.delimiterLevel1);
+			bw.write(String.valueOf(nd.id));
+			bw.write('\n');
+		}
+		bw.close();
+		System.out.println("> over, spend time : " + TimeUtility.getGlobalSpendTime());
+	}
+	
 	public static void main(String[] args) throws Exception{
+		/*********************  alg ecu dis dbscan starting *******************************/ 
 		/* generateIdWidsFile */
 //		ProcessGenerateFiles.generateIdWidsFile(Global.pathIdText, Global.pathIdWids, Global.pathWidWord);
 		
@@ -358,8 +419,8 @@ public class ProcessGenerateFiles {
 //		ProcessGenerateFiles.buildCellidPidWordsIndex(pathCellidpidWordsIndex);
 		
 		/* building cellid rtreeid pid words index */
-		String pathCellidRtreeidOrPidWordsIndex = Global.pathCellidRtreeidOrPidWordsIndex;
-		ProcessGenerateFiles.buildCellidRtreeidOrPidWordsIndex(pathCellidRtreeidOrPidWordsIndex);
+//		String pathCellidRtreeidOrPidWordsIndex = Global.pathCellidRtreeidOrPidWordsIndex;
+//		ProcessGenerateFiles.buildCellidRtreeidOrPidWordsIndex(pathCellidRtreeidOrPidWordsIndex);
 		
 		/* building term_cellCol_index */
 //		String pathTerm2CellCIndex = Global.pathTerm2CellColIndex;
@@ -368,5 +429,12 @@ public class ProcessGenerateFiles {
 //		t2CIndex.openIndexReader();
 //		System.out.println(t2CIndex.searchTerm("f"));
 //		t2CIndex.close();
+		
+		/*********************  alg ecu dis dbscan ending *******************************/ 
+		
+		/* building k neighbor dis file */
+		int k = 20;
+		String pathKNeighborDis = Global.outPath + String.valueOf(k) + Global.signKNeighborDis;
+		ProcessGenerateFiles.generateKNeighborDisFile(pathKNeighborDis, k);
 	}
 }

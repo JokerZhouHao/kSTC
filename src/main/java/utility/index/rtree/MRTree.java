@@ -224,6 +224,36 @@ public class MRTree extends RTree{
 		else return neighbors;
 	}
 	
+	public List<Node> rangeQuery(Point centerNode, Double radius, Point[] allPoints){
+		List<Node> neighbors = new LinkedList<>();
+		LinkedList<Integer> idQueue = new LinkedList<>();
+		idQueue.add(getRoot());
+		int id = 0;
+		int child = 0;
+		spatialindex.rtree.Node rNode = null;
+		double distance = 0.0;
+		while(!idQueue.isEmpty()) {
+			id = idQueue.pollFirst();
+			rNode = readNode(id);
+			if(rNode.isLeaf()) {
+				for(child=0; child < rNode.m_children; child++) {
+					distance = centerNode.getMinimumDistance(allPoints[rNode.m_pIdentifier[child]]);
+					if(distance <= radius) {
+						neighbors.add(new Node(rNode.m_pIdentifier[child], allPoints[rNode.m_pIdentifier[child]], distance, 0.0));
+					}
+				}
+			} else {
+				for(child=0; child < rNode.m_children; child++) {
+					if(centerNode.getMinimumDistance(rNode.m_pMBR[child]) <= radius) {
+						idQueue.add(rNode.m_pIdentifier[child]);
+					}
+				}
+			}
+		}
+		if(neighbors.isEmpty())	return null;
+		else return neighbors;
+	}
+	
 	public RWLock getM_RWLock() {
 		return this.m_rwLock;
 	}

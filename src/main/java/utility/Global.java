@@ -69,7 +69,8 @@ public class Global {
 	public static String pathTerm2CellColIndex = null;
 	
 	// sign
-	public static String signNormalized = "[normalized]";
+	public final static String signNormalized = "[normalized]";
+	public final static String signKNeighborDis = "_neighbor_dis.txt";
 	
 	/* file content delimiter sign */
 	public static String delimiterLevel1 = ": ";

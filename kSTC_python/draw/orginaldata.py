@@ -96,17 +96,49 @@ class Scatter:
         Scatter.index_colors = -1
         return scatter
 
+    @staticmethod
+    def draw_k_nearest_distance(file_path, s=10, show=True, title='title'):
+        scatter = Scatter(title=title)
 
+        allCoords = [[], []]
+        reader = IterableReader(file_path)
+        i = 1
+        for line in reader:
+                allCoords[0].append(i)
+                coords = line.split(Global.delimiterLevel1)
+                allCoords[1].append(float(coords[0]))
+                i = i + 1
+        scatter.draw_scatter(allCoords, s=s, marker='v')
+
+        if show:
+            scatter.show()
+        Scatter.index_colors = -1
+        return scatter
+
+
+########## draw orginal data ##############
 # pathCoord = Global.pathCoord
 # pathCoord = Global.pathCoord + '([-125.0, 28.0], [15.0, 60.0])'
-pathCoord = Global.pathCoord + '([-125.0, 28.0], [15.0, 60.0])[normalized]'
+# pathCoord = Global.pathCoord + '([-125.0, 28.0], [15.0, 60.0])[normalized]'
 # Scatter.draw_orginal_coord(pathCoord, s=20, show=False)
 
 
-pathResultAlgEucBase = Global.pathOutput + 'result_ecu_base.txt'
-pathResultAlgEucFast = Global.pathOutput + 'result_ecu_fast.txt'
-Scatter.draw_result(pathCoord, pathResultAlgEucBase, s=10, show=True, title=pathResultAlgEucBase)
-Scatter.draw_result(pathCoord, pathResultAlgEucFast, s=10, show=True, title=pathResultAlgEucFast)
+########## draw result data ###############
+# pathResultAlgEucBase = Global.pathOutput + 'result_ecu_base.txt'
+# pathResultAlgEucFast = Global.pathOutput + 'result_ecu_fast.txt'
+# Scatter.draw_result(pathCoord, pathResultAlgEucBase, s=10, show=True, title=pathResultAlgEucBase)
+# Scatter.draw_result(pathCoord, pathResultAlgEucFast, s=10, show=True, title=pathResultAlgEucFast)
+
+
+########## draw k nearest distance ########
+path_k_nearest = Global.pathOutput + '3_neighbor_dis.txt'
+Scatter.draw_k_nearest_distance(path_k_nearest, s=1, title=path_k_nearest)
+# path_k_nearest = Global.pathOutput + '4_neighbor_dis.txt'
+# Scatter.draw_k_nearest_distance(path_k_nearest, s=1, title=path_k_nearest)
+# path_k_nearest = Global.pathOutput + '5_neighbor_dis.txt'
+# Scatter.draw_k_nearest_distance(path_k_nearest, s=1, title=path_k_nearest)
+path_k_nearest = Global.pathOutput + '20_neighbor_dis.txt'
+Scatter.draw_k_nearest_distance(path_k_nearest, s=1, title=path_k_nearest)
 
 
 
