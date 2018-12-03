@@ -14,6 +14,11 @@ public class Node {
 	public double score = 0;	// 1 - the relation of the node to searched words
 	public int clusterId = 0;	// the clusterId of the node, -1 is noise, 0 is init value, >0 is clusterId
 	
+	public double UNDEFINED = Double.MAX_VALUE;
+	public double coreDistance = 0.0;
+	public double reachabilityDistance = 0.0;
+	public Boolean isProcessed = Boolean.FALSE;
+	
 	public LinkedList<Node> neighbors = null;
 	
 	public Node(int id, Point location, double distance, double score) {

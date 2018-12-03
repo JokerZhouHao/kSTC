@@ -429,7 +429,6 @@ public class ProcessGenerateFiles {
 //		t2CIndex.openIndexReader();
 //		System.out.println(t2CIndex.searchTerm("f"));
 //		t2CIndex.close();
-		
 		/*********************  alg ecu dis dbscan ending *******************************/ 
 		
 		/* building k neighbor dis file */
