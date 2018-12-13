@@ -51,6 +51,15 @@ public class OrginalFileWriter {
 		this.bw.write('\n');
 	}
 	
+	public void writeIdCoreAndDirectDis(int id, double coreDis, double reachDis) throws Exception{
+		bw.write(String.valueOf(id));
+		bw.write(Global.delimiterLevel1);
+		bw.write(String.valueOf(coreDis));
+		bw.write(Global.delimiterSpace);
+		bw.write(String.valueOf(reachDis));
+		bw.write('\n');
+	}
+	
 	public void close() throws Exception{
 		this.bw.close();
 	}

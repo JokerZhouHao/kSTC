@@ -133,6 +133,37 @@ public class ProcessGenerateFiles {
 	}
 	
 	/**
+	 * generate wid_terms file
+	 * @param pathIdTerms
+	 * @throws Exception
+	 */
+	public static void generateWidTermsFile(String pathWidTerms) throws Exception{
+		System.out.println("> start generate file " + pathWidTerms);
+		String[] allTxts = FileLoader.loadText(Global.pathIdText);
+		BufferedWriter bw = IOUtility.getBW(pathWidTerms);
+		bw.write(Global.delimiterPound + "              \n");
+		Set<String> allTerms = new HashSet<>();
+		int wid = 0;
+		List<String> terms = null;
+		for(int i=0; i<allTxts.length; i++) {
+			terms = LuceneUtility.getTerms(allTxts[i]);
+			for(String st : terms) {
+				if(!allTerms.contains(st)) {
+					bw.write(String.valueOf(wid++));
+					bw.write(Global.delimiterLevel1);
+					bw.write(st);
+					bw.write('\n');
+				}
+			}
+			allTerms.addAll(terms);
+		}
+		bw.close();
+		IOUtility.setFirstLine(pathWidTerms, Global.delimiterPound + String.valueOf(wid + 1));
+		System.out.println("> Over.");
+	}
+	
+	
+	/**
 	 * normalize coordinate
 	 * @param pathCoordFile
 	 * @param rect
@@ -397,6 +428,10 @@ public class ProcessGenerateFiles {
 //		String pathIdTerms = Global.pathIdTerms;
 //		ProcessGenerateFiles.generateIdTermsFile(pathIdTerms);
 		
+		/* generate wid_terms file */
+		String pathWidTerms = Global.pathWidTerms;
+		ProcessGenerateFiles.generateWidTermsFile(pathWidTerms);
+		
 		/* generate rtree */
 //		String placeFile = Global.pathIdCoord + Global.signNormalized;
 ////		String placeFile = Global.pathIdCoord;
@@ -432,8 +467,8 @@ public class ProcessGenerateFiles {
 		/*********************  alg ecu dis dbscan ending *******************************/ 
 		
 		/* building k neighbor dis file */
-		int k = 20;
-		String pathKNeighborDis = Global.outPath + String.valueOf(k) + Global.signKNeighborDis;
-		ProcessGenerateFiles.generateKNeighborDisFile(pathKNeighborDis, k);
+//		int k = 20;
+//		String pathKNeighborDis = Global.outPath + String.valueOf(k) + Global.signKNeighborDis;
+//		ProcessGenerateFiles.generateKNeighborDisFile(pathKNeighborDis, k);
 	}
 }

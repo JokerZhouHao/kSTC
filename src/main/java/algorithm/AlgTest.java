@@ -16,6 +16,7 @@ public class AlgTest {
 	
 	public static AlgEucDisBase eucBase = null;
 	public static AlgEucDisFastRange eucFast = null;
+	public static AlgEucDisBaseOptics eucBaseOptics = null;
 	
 	/**
 	 * test alg euc
@@ -35,12 +36,17 @@ public class AlgTest {
 			System.out.println("----------------------- AlgEucDisFastRange ----------------------");
 			sClusters = AlgTest.eucFast.excuteQuery(qParams);
 			resPath = Global.outPath + "result_ecu_fast.txt";
+		} else if(algName.contains("AlgEucDisBaseOptics")) {
+			System.out.println("----------------------- AlgEucDisBaseOptics ----------------------");
+			sClusters = AlgTest.eucBaseOptics.excuteQuery(qParams, Global.pathOrderObjects);
+			resPath = Global.outPath + "result_ecu_base_optics.txt";
 		}
 		System.out.println(sClusters);
 		
-		IOUtility.writeSortedClusters(resPath, qParams, sClusters);
-		
-		System.out.println("共簇：" + sClusters.getClusters().size());
+		if(null != sClusters) {
+			IOUtility.writeSortedClusters(resPath, qParams, sClusters);
+			System.out.println("共簇：" + sClusters.getClusters().size());
+		}
 		
 		System.out.println("用时：" + TimeUtility.getGlobalSpendTime());
 	}
@@ -57,22 +63,22 @@ public class AlgTest {
 		int id = new Random().nextInt(Global.numNode);
 		
 		// #QueryParams [location=[0.07741439372142855, 0.7209741612375], sWords=[4628], k=10, epsilon=1.0E-4, minpts=5]
-		QueryParams qParams = new QueryParams(allCoord[id], allTxt[id], 3, 3, 0.005, 2);
+//		QueryParams qParams = new QueryParams(allCoord[id], allTxt[id], 3, 3, 0.005, 2);
 		
 		/* fast range */
 //		#QueryParams [location=[0.07129198357142852, 0.25200787187500007], sWords=[w, pet], k=5, epsilon=0.08, minpts=2]
-//		QueryParams qParams = new QueryParams();
-//		double[] loca = {0.07129198357142852, 0.25200787187500007};
-//		qParams.location = new Point(loca);
-//		List<String> words = new ArrayList<>();
-////		words.add("91");
-////		words.add("f");
-//		words.add("w");
-//		words.add("pet");
-//		qParams.sWords = words;
-//		qParams.k = 5;
-//		qParams.epsilon = 0.08;
-//		qParams.minpts = 2;
+		QueryParams qParams = new QueryParams();
+		double[] loca = {0.07129198357142852, 0.25200787187500007};
+		qParams.location = new Point(loca);
+		List<String> words = new ArrayList<>();
+//		words.add("91");
+//		words.add("t");
+		words.add("w");
+		words.add("pet");
+		qParams.sWords = words;
+		qParams.k = 5;
+		qParams.epsilon = 0.004;
+		qParams.minpts = 3;
 		
 		/* base */
 //		QueryParams qParams = new QueryParams();
@@ -94,12 +100,13 @@ public class AlgTest {
 	public static void main(String[] args) throws Exception{
 		AlgTest.eucBase = new AlgEucDisBase();
 		AlgTest.eucFast = new AlgEucDisFastRange();
+		AlgTest.eucBaseOptics = new AlgEucDisBaseOptics();
 		
 		QueryParams qParams = AlgTest.getQParams();
 		
-		AlgTest.testAlgEuc("fast", qParams);
-		AlgTest.testAlgEuc("base", qParams);
-		
+//		AlgTest.testAlgEuc("fast", qParams);
+//		AlgTest.testAlgEuc("base", qParams);
+		AlgTest.testAlgEuc("AlgEucDisBaseOptics", qParams);
 		
 	}
 

@@ -152,7 +152,6 @@ public class AlgEucDisFastRange {
 		LinkedList<Node> ngbNodes = null;
 		Node centerNode = null;
 		ngb = fastRange(cellid2Nodes, clusteredCells, qParams, clusterId, qNode);
-		
 		if(null == ngb) {
 			return null;
 		} else if(ngb.size() < qParams.minpts) {

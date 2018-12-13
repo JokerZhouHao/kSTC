@@ -39,6 +39,4 @@ public class NgbNodes {
 	public int size() {
 		return size;
 	}
-	
-	
 }

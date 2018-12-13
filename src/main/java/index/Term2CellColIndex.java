@@ -4,14 +4,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.IntPoint;
 import org.apache.lucene.document.StoredField;
 import org.apache.lucene.document.StringField;
-import org.apache.lucene.index.Term;
 import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.util.BytesRef;
 

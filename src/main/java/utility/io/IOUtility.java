@@ -11,6 +11,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.RandomAccessFile;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -53,6 +55,15 @@ public class IOUtility {
 	
 	public static DataOutputStream getDos(String fp) throws Exception{
 		return new DataOutputStream(new BufferedOutputStream(new FileOutputStream(fp)));
+	}
+	
+	// object
+	public static ObjectInputStream getOIS(String fp) throws Exception{
+		return new ObjectInputStream(new BufferedInputStream(new FileInputStream(fp)));
+	}
+	
+	public static ObjectOutputStream getOOS(String fp) throws Exception{
+		return new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(fp)));
 	}
 	
 	// GZIP

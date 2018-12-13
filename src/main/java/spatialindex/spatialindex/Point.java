@@ -29,7 +29,9 @@
 
 package spatialindex.spatialindex;
 
-public class Point implements IShape, Cloneable
+import java.io.Serializable;
+
+public class Point implements IShape, Cloneable, Serializable
 {
 	public double[] m_pCoords = null;
 

@@ -32,6 +32,10 @@ public class Global {
 		else return Boolean.FALSE;
 	}
 	
+	// query parameters
+	public static double steepDegree = 0.0;
+	public static double steepOppositeDegree = 1 - steepDegree;
+	
 	private static Properties configProps = null;
 	
 	public static String projectName = "kSTC";
@@ -53,6 +57,8 @@ public class Global {
 	public static String pathIdWids = null;
 	public static String pathWidWord = null;
 	public static String pathIdTerms = null;
+	public static String pathWidTerms = null;
+	public static String pathOrderObjects = null;
 	
 	public static String pathTestFile = null;
 	
@@ -139,6 +145,10 @@ public class Global {
 		
 		suffixFile = (String)configProps.get("suffixFile");
 		
+		// query parameters
+		steepDegree =  Double.parseDouble((String)configProps.get("steepDegree"));
+		steepOppositeDegree = 1 - steepDegree;
+		
 		// set file path
 		pathTestFile = outPath + "test.txt";
 		pathIdName = inputPath + (String)configProps.get("fileIdName") + suffixFile;
@@ -146,7 +156,9 @@ public class Global {
 		pathIdCoord = inputPath + (String)configProps.get("fileCoord") + suffixFile;
 		pathIdWids = inputPath + (String)configProps.get("fileIdWids") + suffixFile;
 		pathIdTerms = inputPath + (String)configProps.get("fileIdTerms") + suffixFile;
+		pathWidTerms = inputPath + (String)configProps.get("fileWidTerms") + suffixFile;
 		pathWidWord = inputPath + (String)configProps.get("fileWidWord") + suffixFile;
+		pathOrderObjects = outPath + (String)configProps.get("fileOrderObjects") + suffixFile;
 		
 		// set index path
 		pathPidAndRtreeIdWordsIndex = outPath + (String)configProps.get("pathPidAndRtreeIdWordsIndex") + suffixFile + File.separator;
@@ -191,6 +203,8 @@ public class Global {
 	
 	public static void display() {
 		System.out.println("--------------------------- base path --------------------------");
+		System.out.println("steepDegree : " + Global.steepDegree);
+		System.out.println("steepOppositeDegree : " + Global.steepOppositeDegree);
 		System.out.println("projectName : " + Global.projectName);
 		System.out.println("basePath : " + Global.basePath);
 		System.out.println("baseDatasetPath : " + Global.baseDatasetPath);
@@ -202,7 +216,9 @@ public class Global {
 		System.out.println("pathIdName" + Global.pathIdName);
 		System.out.println("pathIdText : " + Global.pathIdText);
 		System.out.println("pathIdTerms : " + Global.pathIdTerms);
+		System.out.println("pathWidTerms : " + Global.pathWidTerms);
 		System.out.println("pathIdCoord : " + Global.pathIdCoord);
+		System.out.println("pathOrderObjects : " + Global.pathOrderObjects);
 		
 		System.out.println("\n--------------------------- rtree parameters --------------------------");
 		System.out.println("rtreePath : " + Global.rtreePath);

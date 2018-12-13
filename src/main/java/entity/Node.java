@@ -1,23 +1,28 @@
 package entity;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import spatialindex.spatialindex.Point;
 import utility.Global;
 
-public class Node {
+public class Node implements Serializable{
 	public Integer id = 0;	// >=0 is pid, <0 is rtree node
 	public Point location = null;
 	public double distance = 0;	// the distance of the node to searched location
 	public double score = 0;	// 1 - the relation of the node to searched words
 	public int clusterId = 0;	// the clusterId of the node, -1 is noise, 0 is init value, >0 is clusterId
 	
-	public double UNDEFINED = Double.MAX_VALUE;
-	public double coreDistance = 0.0;
-	public double reachabilityDistance = 0.0;
+	public static final double UNDEFINED = 1.5;
+	public double coreDistance = UNDEFINED;
+	public double reachabilityDistance = UNDEFINED;
 	public Boolean isProcessed = Boolean.FALSE;
+	public double disToCenter = 0.0;
+	
+	public Boolean isUsed = Boolean.FALSE;
 	
 	public LinkedList<Node> neighbors = null;
 	
@@ -56,6 +61,13 @@ public class Node {
 		this.clusterId = 0;
 	}
 	
+	public void setCoreDistance(QueryParams qParams, List<Node> neighbors) {
+		if(neighbors.size() < qParams.minpts)	this.coreDistance = UNDEFINED;
+		else {
+			this.coreDistance = new KSortedCollection<Node>(KSortedCollection.CPTNODEDISTOCENTER, qParams.minpts, neighbors).getK().disToCenter;
+		}
+	}
+	
 	@Override
 	public int hashCode() {
 		return id.hashCode();
@@ -66,7 +78,7 @@ public class Node {
 		if(id == ((Node)obj).id)	return Boolean.TRUE;
 		else return Boolean.FALSE;
 	}
-
+	
 	@Override
 	public String toString() {
 		return id + Global.delimiterLevel1 + location.getCoord(0) + Global.delimiterSpace + location.getCoord(1);

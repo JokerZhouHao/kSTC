@@ -16,6 +16,8 @@ public class PNodeCollection {
 	private static final MComparator<Node> cptDis = new MComparator<>(0);
 	private static final MComparator<Node> cptScore = new MComparator<>(1);
 	
+	private int indexFirstNoUsed = 0;
+	
 	public PNodeCollection() {}
 	
 	public PNodeCollection(Collection<Node> nodes) {
@@ -66,6 +68,26 @@ public class PNodeCollection {
 
 	public PNodeCollection copy() {
 		return new PNodeCollection(pNodes);
+	}
+	
+	public int refreshFirstIndex() {
+		for(int i=indexFirstNoUsed; i<pNodes.size(); i++) {
+			if(!pNodes.get(i).isUsed) {
+				indexFirstNoUsed = i;
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	public double getFirstNoUsedDis() {
+		if(indexFirstNoUsed==pNodes.size())	return 1000;
+		return pNodes.get(indexFirstNoUsed).distance;
+	}
+	
+	public double getFirstNoUsedScore() {
+		if(indexFirstNoUsed==pNodes.size())	return 1000;
+		return pNodes.get(indexFirstNoUsed).score;
 	}
 	
 	public static void main(String args[]) throws Exception{

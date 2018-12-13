@@ -1,12 +1,16 @@
 package precomputation.dataset.file;
 
 import java.io.BufferedReader;
+import java.io.EOFException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import entity.Node;
 import spatialindex.spatialindex.Point;
 import utility.Global;
 import utility.io.IOUtility;
@@ -170,6 +174,39 @@ public class FileLoader {
 		return allTerms;
 	}
 	
+	public static String[] loadAllTerms(String fp) throws Exception{
+		BufferedReader br = IOUtility.getBR(fp);
+		String line = br.readLine();
+		int numId = Integer.parseInt(line.split(Global.delimiterPound)[1].trim());
+		
+		String[] allTerms = new String[numId];
+		int pid = 0;
+		String[] arr = null;
+		int wid = 0;
+		while(null != (line = br.readLine())) {
+			arr = line.split(Global.delimiterLevel1);
+			allTerms[wid++] = arr[1];
+		}
+		br.close();
+		
+		return allTerms;
+	}
+	
+	public static List<Node> loadOrderedFile(String fp) throws Exception{
+		ObjectInputStream ois = IOUtility.getOIS(fp);
+		List<Node> nodes = new ArrayList<>();
+		Node tNd = null;
+		try {
+			while(Boolean.TRUE)
+				nodes.add((Node)ois.readObject());
+		} catch (EOFException e) {
+			// TODO: handle exception
+		}
+		ois.close();
+		if(nodes.isEmpty())	return null;
+		else return nodes;
+	}
+	
 	public static void main(String[] args) throws Exception{
 //		String str = "#123";
 //		System.out.println(str.split("#")[1]);
@@ -179,7 +216,21 @@ public class FileLoader {
 //		FileLoader.loadText(Global.pathIdText);
 //		FileLoader.loadIdWids(Global.pathIdWids);
 //		FileLoader.loadWords(Global.pathWidWord);
-		FileLoader.loadTerms(Global.pathIdTerms);
+//		FileLoader.loadTerms(Global.pathIdTerms);
+		String[] allTerms = FileLoader.loadAllTerms(Global.pathWidTerms);
+		
+		
+		ObjectOutputStream oos = IOUtility.getOOS(Global.pathTestFile);
+		double []cods = {1.0, 2.0};
+		Node nd1 = new Node(1, new Point(cods), 1.0, 1.0);
+		Node nd2 = new Node(2, new Point(cods), 2.0, 2.0);
+		Node nd3 = new Node(2, new Point(cods), 2.0, 2.0);
+		oos.writeObject(nd1);
+		oos.writeObject(nd2);
+		oos.writeObject(nd3);
+		oos.close();
+		List<Node> nds = loadOrderedFile(Global.pathTestFile);
+		System.out.println(nds);
 		
 //		double db = -115.283122245;
 //		float ft = -115.283122245f;

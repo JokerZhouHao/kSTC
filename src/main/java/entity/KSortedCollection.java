@@ -13,6 +13,9 @@ public class KSortedCollection<T> {
 	private int k = 0;
 	private ArrayList<T> nodes = null;
 	private final static MComparator<Node> cptNode = new MComparator<>(0);
+	private final static MComparator<Node> cptNodeDisToCenter = new MComparator<>(4);
+	private int typeCpt = -1; // 0 is cptNodeDisToCenter
+	public final static int CPTNODEDISTOCENTER = 0;
 	
 	public KSortedCollection(int k) {
 		this.k = k;
@@ -27,9 +30,15 @@ public class KSortedCollection<T> {
 		}
 	}
 	
+	public KSortedCollection(int typeCpt, int k, Collection<T> collection) {
+		this(k, collection);
+		this.typeCpt = typeCpt;
+	}
+	
 	public void add(T t) {
 		int index = 0;
-		if(t instanceof Node) index = Collections.binarySearch((ArrayList<Node>)nodes, (Node)t, cptNode);
+		if(typeCpt==CPTNODEDISTOCENTER) index = Collections.binarySearch((ArrayList<Node>)nodes, (Node)t, cptNodeDisToCenter);
+		else if(t instanceof Node) index = Collections.binarySearch((ArrayList<Node>)nodes, (Node)t, cptNode);
 		else if(t instanceof Integer) index = Collections.binarySearch((ArrayList<Integer>)nodes, (Integer)t);
 		else if(t instanceof Double) index = Collections.binarySearch((ArrayList<Double>)nodes, (Double)t);
 		else if(t instanceof Float) index = Collections.binarySearch((ArrayList<Float>)nodes, (Float)t);
