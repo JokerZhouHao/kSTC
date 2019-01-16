@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import entity.QueryParams;
 import entity.Rectangle;
 import entity.SGPLInfo;
 import utility.io.IOUtility;
@@ -35,6 +36,8 @@ public class Global {
 	// query parameters
 	public static double steepDegree = 0.0;
 	public static double steepOppositeDegree = 1 - steepDegree;
+	public static QueryParams opticQParams = null;
+	public static int maxPidNeighbors4Bytes = 0;
 	
 	private static Properties configProps = null;
 	
@@ -59,13 +62,14 @@ public class Global {
 	public static String pathIdTerms = null;
 	public static String pathWidTerms = null;
 	public static String pathOrderObjects = null;
-	
+	public static String pathPidNeighborLen = null; // 记录每个term对应的pid neighbors的int数量
 	public static String pathTestFile = null;
 	
 	// index
 	public static String pathPidAndRtreeIdWordsIndex = null;
 	public static String pathCellidPidWordsIndex = null;
 	public static String pathCellidRtreeidOrPidWordsIndex = null;
+	public static String pathTerm2PidNeighborsIndex = null;
 	public static String pathTestIndex = null;
 	
 	// SGPL
@@ -148,6 +152,9 @@ public class Global {
 		// query parameters
 		steepDegree =  Double.parseDouble((String)configProps.get("steepDegree"));
 		steepOppositeDegree = 1 - steepDegree;
+		opticQParams = new QueryParams(Double.parseDouble((String)configProps.get("opticEpsilon")),
+				Integer.parseInt((String)configProps.get("opticMinpts")));
+		maxPidNeighbors4Bytes = Integer.parseInt((String)configProps.get("maxPidNeighborsBytes"))/4;
 		
 		// set file path
 		pathTestFile = outPath + "test.txt";
@@ -158,11 +165,13 @@ public class Global {
 		pathIdTerms = inputPath + (String)configProps.get("fileIdTerms") + suffixFile;
 		pathWidTerms = inputPath + (String)configProps.get("fileWidTerms") + suffixFile;
 		pathWidWord = inputPath + (String)configProps.get("fileWidWord") + suffixFile;
+		pathPidNeighborLen = inputPath + (String)configProps.get("filePidNeighborLen") + suffixFile;
 		pathOrderObjects = outPath + (String)configProps.get("fileOrderObjects") + suffixFile;
 		
 		// set index path
 		pathPidAndRtreeIdWordsIndex = outPath + (String)configProps.get("pathPidAndRtreeIdWordsIndex") + suffixFile + File.separator;
 		pathCellidPidWordsIndex = outPath + (String)configProps.get("pathCellidPidWordsIndex") + suffixFile + signNormalized + File.separator;
+		pathTerm2PidNeighborsIndex = outPath + (String)configProps.get("pathTerm2PidNeighborsIndex") + suffixFile + signNormalized + File.separator;
 		pathCellidRtreeidOrPidWordsIndex = outPath + (String)configProps.get("pathCellidRtreeidOrPidWordsIndex") + suffixFile + signNormalized + File.separator;
 		pathTestIndex = outPath + "test" + File.separator;
 		
@@ -202,6 +211,10 @@ public class Global {
 	}
 	
 	public static void display() {
+		System.out.println("--------------------------- params --------------------------");
+		System.out.println("maxPidNeighborsBits : " + maxPidNeighbors4Bytes);
+		
+		
 		System.out.println("--------------------------- base path --------------------------");
 		System.out.println("steepDegree : " + Global.steepDegree);
 		System.out.println("steepOppositeDegree : " + Global.steepOppositeDegree);
@@ -217,8 +230,11 @@ public class Global {
 		System.out.println("pathIdText : " + Global.pathIdText);
 		System.out.println("pathIdTerms : " + Global.pathIdTerms);
 		System.out.println("pathWidTerms : " + Global.pathWidTerms);
+		System.out.println("pathPidNeighborLen : " + Global.pathPidNeighborLen);
 		System.out.println("pathIdCoord : " + Global.pathIdCoord);
 		System.out.println("pathOrderObjects : " + Global.pathOrderObjects);
+		
+		System.out.println("pathTerm2PidNeighborsIndex : " + Global.pathTerm2PidNeighborsIndex);
 		
 		System.out.println("\n--------------------------- rtree parameters --------------------------");
 		System.out.println("rtreePath : " + Global.rtreePath);

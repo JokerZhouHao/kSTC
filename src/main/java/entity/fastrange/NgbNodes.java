@@ -6,15 +6,24 @@ import java.util.List;
 import java.util.TreeMap;
 import java.util.Map.Entry;
 
-import entity.NeighborStack;
 import entity.Node;
 import utility.MComparator;
 
 public class NgbNodes {
 	private final static MComparator<Double> compDoubleDescend = new MComparator<Double>();
-	private TreeMap<Double, LinkedList<Node>> nodes = new TreeMap<>(compDoubleDescend);
+	private TreeMap<Double, LinkedList<Node>> nodes = null;
 	public final static double signUsedKey = Double.MAX_VALUE;
 	public int size = 0;
+	
+	public NgbNodes() {
+		nodes = new TreeMap<>(compDoubleDescend);
+	}
+	
+	public NgbNodes(Boolean isAscend) {
+		if(isAscend) {
+			nodes = new TreeMap<>();
+		} else nodes = new TreeMap<>(compDoubleDescend);
+	}
 	
 	public void add(double dis, Node node) {
 		LinkedList<Node> ns = null;

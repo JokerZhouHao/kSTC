@@ -36,12 +36,12 @@ import utility.io.IOUtility;
  */
 public class AlgEucDisBaseOptics {
 	
-	private Point[] allLocations = null;
-	private CellidPidWordsIndex cellidWIndex = null;
-	private NoiseRecoder noiseRecoder = new NoiseRecoder();
-	private SGPLInfo sgplInfo = Global.sgplInfo;
-	private Circle sCircle = new Circle(0.0, new double[2]);
-	private SteepArea tSteepArea = new SteepArea();
+	protected Point[] allLocations = null;
+	protected CellidPidWordsIndex cellidWIndex = null;
+	protected NoiseRecoder noiseRecoder = new NoiseRecoder();
+	protected SGPLInfo sgplInfo = Global.sgplInfo;
+	protected Circle sCircle = new Circle(0.0, new double[2]);
+	protected SteepArea tSteepArea = new SteepArea();
 	
 	public AlgEucDisBaseOptics() throws Exception{
 		allLocations = FileLoader.loadPoints(Global.pathIdCoord + Global.signNormalized);
@@ -60,12 +60,31 @@ public class AlgEucDisBaseOptics {
 	 * @throws Exception
 	 */
 	public SortedClusters excuteQuery(QueryParams qParams, String pathOrderedFile) throws Exception{
+		// 采用lucene分词产生的wid_terms.txt([-125.0, 28.0], [15.0, 60]文件全部是小写，故输入的查询关键词得先转化为小写
+		List<String> tWs = new ArrayList<>();
+		for(String w : qParams.sWords)	tWs.add(w.toLowerCase());
+		qParams.sWords = tWs;
+		
 		sCircle.radius = qParams.epsilon;
 		Map<Integer, List<Node>> cellid2Nodes = cellidWIndex.searchWords(qParams, allLocations);
 		if(null == cellid2Nodes)	return null;
 		
 		List<Node> sortedNodes = optics(cellid2Nodes, qParams, pathOrderedFile);
 		
+		return excuteQuery(qParams, pathOrderedFile, cellid2Nodes, sortedNodes);
+	}
+	
+	/**
+	 * excuteQuery
+	 * @param qParams
+	 * @param pathOrderedFile
+	 * @param cellid2Nodes
+	 * @param sortedNodes
+	 * @return
+	 * @throws Exception
+	 */
+	public SortedClusters excuteQuery(QueryParams qParams, String pathOrderedFile, Map<Integer, List<Node>> cellid2Nodes,
+			List<Node> sortedNodes) throws Exception{
 		/* building sort distance node collection and sort score node collection */
 		List<Node> nodes = new ArrayList<>();
 		for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
@@ -142,6 +161,7 @@ public class AlgEucDisBaseOptics {
 		return sClusters;
 	}
 	
+	
 	public List<Node> optics(Map<Integer, List<Node>> cellid2Nodes, QueryParams qParams, String pathOrderedFile) throws Exception{
 		List<Node> orderedNodes = new ArrayList<>();
 		OrginalFileWriter ofw = null;
@@ -162,6 +182,11 @@ public class AlgEucDisBaseOptics {
 	}
 	
 	public void expandClusterOrder(Map<Integer, List<Node>> cellid2Nodes, Node centerNode, QueryParams qParams, List<Node> orderedNodes, OrginalFileWriter ofw) throws Exception{
+		
+		if(centerNode.id == 59048) {
+			System.out.println(centerNode);
+		}
+			
 		List<Node> neighbors = fastRange(cellid2Nodes, qParams, centerNode);
 		centerNode.isProcessed = Boolean.TRUE;
 		centerNode.reachabilityDistance = Node.UNDEFINED;
@@ -173,6 +198,13 @@ public class AlgEucDisBaseOptics {
 			orderSeeds.update(neighbors, centerNode);
 			while(!orderSeeds.isEmpty()) {
 				centerNode = orderSeeds.pollFirst();
+				
+				
+				if(centerNode.id == 59048) {
+					System.out.println(centerNode);
+				}
+					
+					
 				neighbors = fastRange(cellid2Nodes, qParams, centerNode);
 				centerNode.isProcessed = Boolean.TRUE;
 				centerNode.setCoreDistance(qParams, neighbors);

@@ -59,6 +59,43 @@ public class CellidPidWordsIndex extends AbstractLuceneIndex{
 		indexWriter.addDocument(doc);
 	}
 	
+	public Map<Integer, List<Node>> searchWords(List<String> words, Point[] allLocations) throws Exception {
+		Query query = null;
+		synchronized (queryAndWordsParser) {
+			query = queryAndWordsParser.parse(StringTools.collection2Str(words));
+		}
+		TopDocs results = indexSearcher.search(query, Integer.MAX_VALUE);
+		ScoreDoc[] hits = results.scoreDocs;
+		
+		if(0 == hits.length)	return null;
+		double dis = Double.MAX_VALUE;
+		Point pot = null;
+		Map<Integer, List<Node>> cellid2Node = new HashMap<>();
+		List<Node> nList = null;
+		ByteBuffer bb = null;
+		Document doc = null;
+		int cellid, pid = 0;
+		double maxScore = hits[0].score;
+		for(int i=0; i<hits.length; i++) {
+			doc = indexSearcher.doc(hits[i].doc);
+			bb = ByteBuffer.wrap(doc.getBinaryValue(fieldId).bytes);
+			cellid = bb.getInt();
+			if(cellid == signRtreeNode)	continue;
+			pid = bb.getInt();
+			if(null == (nList = cellid2Node.get(cellid))) {
+				nList = new ArrayList<>();
+				cellid2Node.put(cellid, nList);
+			}
+			pot = allLocations[pid];
+			nList.add(new Node(pid, pot, 0, 1 - hits[i].score/maxScore));
+//			System.out.println(String.valueOf(id) + " " + hits[i].score/queryParams.sWords.size());
+//			resSet.add(Integer.parseInt(doc.get(fieldId)));
+		}
+		if(cellid2Node.isEmpty())	return null;
+		return cellid2Node;
+		
+	}
+	
 	public Map<Integer, List<Node>> searchWords(QueryParams queryParams, Point[] allLocations) throws Exception {
 		Query query = null;
 		query = queryAndWordsParser.parse(StringTools.collection2Str(queryParams.sWords));

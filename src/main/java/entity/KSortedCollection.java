@@ -19,8 +19,7 @@ public class KSortedCollection<T> {
 	
 	public KSortedCollection(int k) {
 		this.k = k;
-		if(k==Integer.MAX_VALUE) nodes = new ArrayList<>();
-		else nodes = new ArrayList<>(k + 1);
+		nodes = new ArrayList<>();
 	}
 	
 	public KSortedCollection(int k, Collection<T> collection) {
@@ -31,8 +30,12 @@ public class KSortedCollection<T> {
 	}
 	
 	public KSortedCollection(int typeCpt, int k, Collection<T> collection) {
-		this(k, collection);
 		this.typeCpt = typeCpt;
+		this.k = k;
+		this.nodes = new ArrayList<>();
+		for(T t : collection) {
+			this.add(t);
+		}
 	}
 	
 	public void add(T t) {

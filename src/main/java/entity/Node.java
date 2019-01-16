@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import entity.fastrange.NgbNodes;
 import spatialindex.spatialindex.Point;
 import utility.Global;
 
@@ -31,6 +32,17 @@ public class Node implements Serializable{
 		this.location = location;
 		this.distance = distance;
 		this.score = score;
+	}
+	
+	public Node copy() {
+		Node nd = new Node(id, location, distance, score);
+		nd.clusterId = clusterId;
+		nd.coreDistance = coreDistance;
+		nd.reachabilityDistance = reachabilityDistance;
+		nd.isProcessed = isProcessed;
+		nd.disToCenter = disToCenter;
+		nd.isUsed = isUsed;
+		return nd;
 	}
 	
 	public Boolean hasInCluster(int clusterId) {
@@ -62,9 +74,16 @@ public class Node implements Serializable{
 	}
 	
 	public void setCoreDistance(QueryParams qParams, List<Node> neighbors) {
-		if(neighbors.size() < qParams.minpts)	this.coreDistance = UNDEFINED;
+		if(neighbors == null || neighbors.size() < qParams.minpts)	this.coreDistance = UNDEFINED;
 		else {
 			this.coreDistance = new KSortedCollection<Node>(KSortedCollection.CPTNODEDISTOCENTER, qParams.minpts, neighbors).getK().disToCenter;
+		}
+	}
+	
+	public void setCoreDistanceBySorted(QueryParams qParams, List<Node> neighbors) {
+		if(neighbors == null || neighbors.size() < qParams.minpts)	this.coreDistance = UNDEFINED;
+		else {
+			this.coreDistance = neighbors.get(qParams.minpts - 1).disToCenter;
 		}
 	}
 	

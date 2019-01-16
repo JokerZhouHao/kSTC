@@ -153,12 +153,12 @@ public class ProcessGenerateFiles {
 					bw.write(Global.delimiterLevel1);
 					bw.write(st);
 					bw.write('\n');
+					allTerms.add(st);
 				}
 			}
-			allTerms.addAll(terms);
 		}
 		bw.close();
-		IOUtility.setFirstLine(pathWidTerms, Global.delimiterPound + String.valueOf(wid + 1));
+		IOUtility.setFirstLine(pathWidTerms, Global.delimiterPound + String.valueOf(wid));
 		System.out.println("> Over.");
 	}
 	

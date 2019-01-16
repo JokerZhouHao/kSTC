@@ -15,7 +15,6 @@ import entity.CellCollection;
 import entity.CellSign;
 import entity.Circle;
 import entity.Cluster;
-import entity.NeighborStack;
 import entity.Node;
 import entity.NodeCollection;
 import entity.NodeNeighbors;
@@ -66,6 +65,11 @@ public class AlgEucDisFastRange {
 	 * @throws Exception
 	 */
 	public SortedClusters excuteQuery(QueryParams qParams) throws Exception{
+		// 采用lucene分词产生的wid_terms.txt([-125.0, 28.0], [15.0, 60]文件全部是小写，故输入的查询关键词得先转化为小写
+		List<String> tWs = new ArrayList<>();
+		for(String w : qParams.sWords)	tWs.add(w.toLowerCase());
+		qParams.sWords = tWs;
+		
 		sCircle.radius = qParams.epsilon;
 		Map<Integer, List<Node>> cellid2Nodes = cellidWIndex.searchWords(qParams, allLocations);
 		if(null == cellid2Nodes)	return null;
@@ -212,7 +216,7 @@ public class AlgEucDisFastRange {
 	 */
 	public NgbNodes fastRange(Map<Integer, List<Node>> cellid2Nodes, Map<Integer, Integer> clusteredCells,
 			QueryParams qParams, int clusterId, Node qNode) throws Exception{
-		/* skipping rule */
+		/* skipping rule， NgbNodes元素是以dis由远及近排序的*/
 		sCircle.center = qNode.location.m_pCoords;
 		List<CellSign> coveredCellids = sgplInfo.cover(sCircle);
 		Boolean sign = Boolean.TRUE;

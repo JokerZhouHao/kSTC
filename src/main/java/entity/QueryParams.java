@@ -34,6 +34,11 @@ public class QueryParams {
 		this.minpts = minpts;
 	}
 	
+	public QueryParams(double epsilon, int minpts) {
+		this.epsilon = epsilon;
+		this.minpts = minpts;
+	}
+	
 	public List<String> getWords(String str, int numWord) throws Exception{
 		List<String> terms = LuceneUtility.getTerms(str);
 //		int num = new Random().nextInt(numWord<terms.size()?numWord:terms.size());

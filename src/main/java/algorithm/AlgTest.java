@@ -17,6 +17,7 @@ public class AlgTest {
 	public static AlgEucDisBase eucBase = null;
 	public static AlgEucDisFastRange eucFast = null;
 	public static AlgEucDisBaseOptics eucBaseOptics = null;
+	public static AlgEucDisAdvancedOptics eucAdvancedOptics = null;
 	
 	/**
 	 * test alg euc
@@ -38,9 +39,13 @@ public class AlgTest {
 			resPath = Global.outPath + "result_ecu_fast.txt";
 		} else if(algName.contains("AlgEucDisBaseOptics")) {
 			System.out.println("----------------------- AlgEucDisBaseOptics ----------------------");
-			sClusters = AlgTest.eucBaseOptics.excuteQuery(qParams, Global.pathOrderObjects);
+			sClusters = AlgTest.eucBaseOptics.excuteQuery(qParams, Global.pathOrderObjects + "_AlgEucDisBaseOptics");
 			resPath = Global.outPath + "result_ecu_base_optics.txt";
-		}
+		} else if(algName.contains("AlgEucDisAdvancedOptics")) {
+			System.out.println("----------------------- AlgEucDisAdvancedOptics ----------------------");
+			sClusters = AlgTest.eucAdvancedOptics.excuteQuery(qParams, Global.pathOrderObjects + "_AlgEucDisAdvancedOptics");
+			resPath = Global.outPath + "result_ecu_advanced_optics.txt";
+		} 
 		System.out.println(sClusters);
 		
 		if(null != sClusters) {
@@ -71,13 +76,16 @@ public class AlgTest {
 		double[] loca = {0.07129198357142852, 0.25200787187500007};
 		qParams.location = new Point(loca);
 		List<String> words = new ArrayList<>();
-//		words.add("91");
-//		words.add("t");
-		words.add("w");
-		words.add("pet");
+//		words.add("w");
+//		words.add("pet");
+		
+		words.add("Coffee".toLowerCase());
+		words.add("Tea".toLowerCase());
+		words.add("Breakfast".toLowerCase());
+		
 		qParams.sWords = words;
 		qParams.k = 5;
-		qParams.epsilon = 0.004;
+		qParams.epsilon = 0.1;
 		qParams.minpts = 3;
 		
 		/* base */
@@ -101,13 +109,14 @@ public class AlgTest {
 		AlgTest.eucBase = new AlgEucDisBase();
 		AlgTest.eucFast = new AlgEucDisFastRange();
 		AlgTest.eucBaseOptics = new AlgEucDisBaseOptics();
+		AlgTest.eucAdvancedOptics = new AlgEucDisAdvancedOptics();
 		
 		QueryParams qParams = AlgTest.getQParams();
 		
-//		AlgTest.testAlgEuc("fast", qParams);
 //		AlgTest.testAlgEuc("base", qParams);
+		AlgTest.testAlgEuc("fast", qParams);
 		AlgTest.testAlgEuc("AlgEucDisBaseOptics", qParams);
-		
+//		AlgTest.testAlgEuc("AlgEucDisAdvancedOptics", qParams);
 	}
 
 }

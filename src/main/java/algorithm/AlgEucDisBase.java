@@ -56,7 +56,13 @@ public class AlgEucDisBase {
 	 * @throws Exception
 	 */
 	public SortedClusters excuteQuery(QueryParams qParams) throws Exception{
+		// 采用lucene分词产生的wid_terms.txt([-125.0, 28.0], [15.0, 60]文件全部是小写，故输入的查询关键词得先转化为小写
+		List<String> tWs = new ArrayList<>();
+		for(String w : qParams.sWords)	tWs.add(w.toLowerCase());
+		qParams.sWords = tWs;
+		
 //		NodeCollection nodeCol = idWordsIndex.searchWords(qParams, allLocations);
+		
 		NodeCollection nodeCol = cellidIndex.searchWordsReNodeCol(qParams, allLocations);
 		
 		PNodeCollection disPNodeCol = nodeCol.getPNodeCollection().sortByDistance();

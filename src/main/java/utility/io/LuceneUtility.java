@@ -25,7 +25,7 @@ public class LuceneUtility {
 	}
 	
 	public static void main(String[] args) throws Exception{
-		System.out.println(LuceneUtility.getTerms("b c"));
+		System.out.println(LuceneUtility.getTerms("ERC c"));
 		System.out.println(LuceneUtility.getTerms("w e r"));
 	}
 	

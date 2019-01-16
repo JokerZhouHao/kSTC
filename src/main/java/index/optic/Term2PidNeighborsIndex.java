@@ -41,53 +41,66 @@ public class Term2PidNeighborsIndex extends AbstractLuceneIndex{
 		queryParser = new QueryParser(fieldTerm, analyzer);
 	}
 	
-	private byte[] pidNeighborsToBytes(Map<Integer, List<Integer>> pidNeighbors) {
-		int numInt = 0;
-		numInt++;
-		for(Entry<Integer, List<Integer>> en : pidNeighbors.entrySet()) {
-			numInt += 2;
-			numInt += en.getValue().size();
-		}
-		ByteBuffer bb = ByteBuffer.allocate(numInt * 4);
+	public byte[] pidNeighborsToBytes(Map<Integer, List<Node>> pidNeighbors, int numByte) throws Exception{
+		ByteBuffer bb = ByteBuffer.allocate(numByte);
 		bb.putInt(pidNeighbors.size());
-		for(Entry<Integer, List<Integer>> en : pidNeighbors.entrySet()) {
+		for(Entry<Integer, List<Node>> en : pidNeighbors.entrySet()) {
 			bb.putInt(en.getKey());
 			bb.putInt(en.getValue().size());
-			for(Integer inn : en.getValue()) {
-				bb.putInt(inn);
+			for(Node inn : en.getValue()) {
+				bb.putInt(inn.id);
+				bb.putDouble(inn.disToCenter);
 			}
 		}
 		return bb.array();
 	}
 	
-	private Map<Integer, List<Integer>> bytesToPidNeighbors(byte[] bytes) {
+	public byte[] pidNeighborsToBytes(Map<Integer, List<Node>> pidNeighbors) throws Exception{
+		int numInt = 0;
+		numInt++; // pidNeighbors.size
+		for(Entry<Integer, List<Node>> en : pidNeighbors.entrySet()) {
+			numInt += 2; // en.key + en.value.size
+			numInt += en.getValue().size() * 3; // node's id + disToCenter
+			if(numInt > Global.maxPidNeighbors4Bytes) {
+				return null;
+//				throw new Exception("pidNeighbors转化为byte后的数量超出了int最大值");
+			}
+		}
+		return pidNeighborsToBytes(pidNeighbors, numInt * 4);
+	}
+	
+	private Map<Integer, List<NeighborsNode>> bytesToPidNeighbors(byte[] bytes) {
 		int numInt = 0;
 		ByteBuffer bb = ByteBuffer.wrap(bytes);
-		Map<Integer, List<Integer>> map = new HashMap<>();
+		Map<Integer, List<NeighborsNode>> map = new HashMap<>();
 		numInt = bb.getInt();
 		int pid = 0;
-		List<Integer> neighbors = null;
+		List<NeighborsNode> neighbors = null;
 		int numNeighbor = 0;
 		for(int i=0; i<numInt; i++) {
 			pid = bb.getInt();
 			numNeighbor = bb.getInt();
 			neighbors = new ArrayList<>();
 			for(int j=0; j<numNeighbor; j++) {
-				neighbors.add(bb.getInt());
+				neighbors.add(new NeighborsNode(bb.getInt(), bb.getDouble()));
 			}
 			map.put(pid, neighbors);
 		}
 		return map;
 	}
 	
-	public void addDoc(String term, Map<Integer, List<Integer>> pidNeighbors) throws Exception{
+	public void addDoc(String term, byte[] pidNeighbors) throws Exception{
 		Document doc = new Document();
 		doc.add(new StringField(fieldTerm, term, Store.NO));
-		doc.add(new StoredField(fieldPidNeighbors, new BytesRef(pidNeighborsToBytes(pidNeighbors))));
+		doc.add(new StoredField(fieldPidNeighbors, new BytesRef(pidNeighbors)));
 		indexWriter.addDocument(doc);
 	}
 	
-	public Map<Integer, List<Integer>> searchTerm(String term) throws Exception{
+	public void addDoc(String term, Map<Integer, List<Node>> pidNeighbors) throws Exception{
+		this.addDoc(term, pidNeighborsToBytes(pidNeighbors));
+	}
+	
+	public Map<Integer, List<NeighborsNode>> searchTerm(String term) throws Exception{
 		TopDocs results = indexSearcher.search(queryParser.parse(term), 1);
 		ScoreDoc[] hits = results.scoreDocs;
 		if(0 == hits.length)	return null;
@@ -95,30 +108,33 @@ public class Term2PidNeighborsIndex extends AbstractLuceneIndex{
 	}
 	
 	public static void main(String[] args) throws Exception{
-		Term2PidNeighborsIndex index = new Term2PidNeighborsIndex(Global.pathTestIndex);
-		
-		index.openIndexWriter();
-		String term = "ab";
-		Map<Integer, List<Integer>> pidNeighbors = new HashMap<>();
-		List<Integer> neighbors = new ArrayList<>();
-		neighbors.add(1);
-		neighbors.add(2);
-		pidNeighbors.put(1, neighbors);
-		index.addDoc(term, pidNeighbors);
-		
-		term = "abc";
-		pidNeighbors = new HashMap<>();
-		neighbors = new ArrayList<>();
-		neighbors.add(2);
-		neighbors.add(3);
-		pidNeighbors.put(2, neighbors);
-		index.addDoc(term, pidNeighbors);
-		index.close();
-		
+		Term2PidNeighborsIndex index = new Term2PidNeighborsIndex(Global.pathTerm2PidNeighborsIndex);
 		index.openIndexReader();
-		pidNeighbors = index.searchTerm("ab");
-		pidNeighbors = index.searchTerm("abc");
-		index.close();
+		Map<Integer, List<NeighborsNode>> pid2Ngb = index.searchTerm("pet");
+		System.out.println(pid2Ngb);
+		
+//		index.openIndexWriter();
+//		String term = "ab";
+//		Map<Integer, List<NeighborsNode>> pidNeighbors = new HashMap<>();
+//		List<NeighborsNode> neighbors = new ArrayList<>();
+//		neighbors.add(new NeighborsNode(1, 1));
+//		neighbors.add(new NeighborsNode(2, 2));
+//		pidNeighbors.put(1, neighbors);
+//		index.addDoc(term, pidNeighbors);
+//		
+//		term = "abc";
+//		pidNeighbors = new HashMap<>();
+//		neighbors = new ArrayList<>();
+//		neighbors.add(new NeighborsNode(2, 2));
+//		neighbors.add(new NeighborsNode(3, 3));
+//		pidNeighbors.put(2, neighbors);
+//		index.addDoc(term, pidNeighbors);
+//		index.close();
+//		
+//		index.openIndexReader();
+//		pidNeighbors = index.searchTerm("ab");
+//		pidNeighbors = index.searchTerm("abc");
+//		index.close();
 		
 	}
 }

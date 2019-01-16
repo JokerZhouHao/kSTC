@@ -221,13 +221,13 @@ pathCoord = Global.pathCoord + '([-125.0, 28.0], [15.0, 60.0])[normalized]'
 ########## draw result data ###############
 # pathResultAlgEucBase = Global.pathOutput + 'result_ecu_base.txt'
 # Scatter.draw_result(pathCoord, pathResultAlgEucBase, s=10, show=True, title=pathResultAlgEucBase)
-# pathResultAlgEucFast = Global.pathOutput + 'result_ecu_fast.txt'
-# Scatter.draw_result(pathCoord, pathResultAlgEucFast, s=10, show=True, title=pathResultAlgEucFast)
+pathResultAlgEucFast = Global.pathOutput + 'result_ecu_fast.txt'
+Scatter.draw_result(pathCoord, pathResultAlgEucFast, s=10, show=True, title=pathResultAlgEucFast)
 pathResultAlgEucBaseOptics = Global.pathOutput + 'result_ecu_base_optics.txt'
 Scatter.draw_result(pathCoord, pathResultAlgEucBaseOptics, s=10, show=True, title=pathResultAlgEucBaseOptics)
 
 ########## draw k nearest distance ########
-path_k_nearest = Global.pathOutput + '3_neighbor_dis.txt'
+# path_k_nearest = Global.pathOutput + '3_neighbor_dis.txt'
 # Scatter.draw_k_nearest_distance(path_k_nearest, s=1, title=path_k_nearest)
 # path_k_nearest = Global.pathOutput + '4_neighbor_dis.txt'
 # Scatter.draw_k_nearest_distance(path_k_nearest, s=1, title=path_k_nearest)
@@ -238,7 +238,7 @@ path_k_nearest = Global.pathOutput + '3_neighbor_dis.txt'
 
 
 ########## draw_reachability_dis ########
-path_reach_dis = Global.pathOutput + 'order_objects.obj([-125.0, 28.0], [15.0, 60.0])'
+path_reach_dis = Global.pathOutput + 'order_objects.obj([-125.0, 28.0], [15.0, 60.0])_AlgEucDisBaseOptics'
 Line.draw_reachability_dis(path_reach_dis, s=1, title=path_reach_dis, max_y=0.004)
 
 plt.pause(1200)

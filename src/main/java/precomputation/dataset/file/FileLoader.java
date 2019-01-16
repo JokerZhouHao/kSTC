@@ -5,8 +5,10 @@ import java.io.EOFException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -207,6 +209,23 @@ public class FileLoader {
 		else return nodes;
 	}
 	
+	public static Map<String, Integer> loadPidNgbLens(String fp) throws Exception{
+		BufferedReader br = IOUtility.getBR(fp);
+		String line = br.readLine();
+		Map<String, Integer> lens = new HashMap<>();
+		String[] arr = null;
+		while(null != (line = br.readLine())) {
+			arr = line.split(Global.delimiterLevel1);
+			if(lens.containsKey(arr[0].trim())) {
+				System.out.println(line);
+				System.exit(0);
+			}
+			lens.put(arr[0].trim(), Integer.parseInt(arr[1]));
+		}
+		br.close();
+		return lens;
+	}
+	
 	public static void main(String[] args) throws Exception{
 //		String str = "#123";
 //		System.out.println(str.split("#")[1]);
@@ -217,7 +236,8 @@ public class FileLoader {
 //		FileLoader.loadIdWids(Global.pathIdWids);
 //		FileLoader.loadWords(Global.pathWidWord);
 //		FileLoader.loadTerms(Global.pathIdTerms);
-		String[] allTerms = FileLoader.loadAllTerms(Global.pathWidTerms);
+//		String[] allTerms = FileLoader.loadAllTerms(Global.pathWidTerms);
+		Map<String, Integer> lens = FileLoader.loadPidNgbLens(Global.pathPidNeighborLen);
 		
 		
 		ObjectOutputStream oos = IOUtility.getOOS(Global.pathTestFile);
