@@ -36,10 +36,14 @@ class Scatter:
             self.ax = self.fig.add_subplot(111)
 
 
-    def draw_scatter(self, points, s=1, marker='o', c='r'):
+    def draw_scatter(self, points, s=1, marker='o', c=None):
         # self.ax.scatter(points[0], points[1], s=s, marker=marker, c=(random.uniform(0, 1), random.uniform(0, 1), random.uniform(0, 1)))
         Scatter.index_colors = Scatter.index_colors + 1
-        self.ax.scatter(points[0], points[1], s=s, marker=marker, c = Scatter.colors[Scatter.index_colors])
+        # self.ax.scatter(points[0], points[1], s=s, marker=marker, c = Scatter.colors[Scatter.index_colors])
+        if c is None:
+            self.ax.scatter(points[0], points[1], s=s, marker=marker)
+        else:
+            self.ax.scatter(points[0], points[1], s=s, marker=marker, c=c)
 
     def show(self):
         # self.ax.set_xlim(self.xs[0], self.xs[len(self.xs)-1])
@@ -62,7 +66,7 @@ class Scatter:
             allCoords[0].append(float(coords[0]))
             allCoords[1].append(float(coords[1]))
             i = i + 1
-        scatter.draw_scatter(allCoords, s=s, marker=marker)
+        scatter.draw_scatter(allCoords, s=s, marker=marker, c='#AFEEEE')
         if show:
             scatter.show()
         return scatter
@@ -211,20 +215,24 @@ class Line:
 
 
 
-########## draw orginal data ##############
+########## draw coordinate data ##############
 # pathCoord = Global.pathCoord
 # pathCoord = Global.pathCoord + '([-125.0, 28.0], [15.0, 60.0])'
+# Scatter.draw_orginal_coord(pathCoord, s=20, show=False)
 pathCoord = Global.pathCoord + '([-125.0, 28.0], [15.0, 60.0])[normalized]'
 # Scatter.draw_orginal_coord(pathCoord, s=20, show=False)
-
 
 ########## draw result data ###############
 # pathResultAlgEucBase = Global.pathOutput + 'result_ecu_base.txt'
 # Scatter.draw_result(pathCoord, pathResultAlgEucBase, s=10, show=True, title=pathResultAlgEucBase)
 pathResultAlgEucFast = Global.pathOutput + 'result_ecu_fast.txt'
 Scatter.draw_result(pathCoord, pathResultAlgEucFast, s=10, show=True, title=pathResultAlgEucFast)
-pathResultAlgEucBaseOptics = Global.pathOutput + 'result_ecu_base_optics.txt'
-Scatter.draw_result(pathCoord, pathResultAlgEucBaseOptics, s=10, show=True, title=pathResultAlgEucBaseOptics)
+# pathResultAlgEucBaseOptics = Global.pathOutput + 'result_ecu_base_optics.txt'
+# Scatter.draw_result(pathCoord, pathResultAlgEucBaseOptics, s=10, show=True, title=pathResultAlgEucBaseOptics)
+pathResultAlgEucAdvancedOptics = Global.pathOutput + 'result_ecu_advanced_optics.txt'
+Scatter.draw_result(pathCoord, pathResultAlgEucAdvancedOptics, s=10, show=True, title=pathResultAlgEucAdvancedOptics)
+pathResultAlgEucAdvancedOpticsWu = Global.pathOutput + 'result_ecu_advanced_optics_wu.txt'
+Scatter.draw_result(pathCoord, pathResultAlgEucAdvancedOpticsWu, s=10, show=True, title=pathResultAlgEucAdvancedOpticsWu)
 
 ########## draw k nearest distance ########
 # path_k_nearest = Global.pathOutput + '3_neighbor_dis.txt'
@@ -238,7 +246,7 @@ Scatter.draw_result(pathCoord, pathResultAlgEucBaseOptics, s=10, show=True, titl
 
 
 ########## draw_reachability_dis ########
-path_reach_dis = Global.pathOutput + 'order_objects.obj([-125.0, 28.0], [15.0, 60.0])_AlgEucDisBaseOptics'
-Line.draw_reachability_dis(path_reach_dis, s=1, title=path_reach_dis, max_y=0.004)
+# path_reach_dis = Global.pathOutput + 'order_objects.obj([-125.0, 28.0], [15.0, 60.0])_AlgEucDisBaseOptics'
+# Line.draw_reachability_dis(path_reach_dis, s=1, title=path_reach_dis, max_y=0.004)
 
 plt.pause(1200)

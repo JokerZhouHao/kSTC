@@ -165,13 +165,16 @@ public class Global {
 		pathIdTerms = inputPath + (String)configProps.get("fileIdTerms") + suffixFile;
 		pathWidTerms = inputPath + (String)configProps.get("fileWidTerms") + suffixFile;
 		pathWidWord = inputPath + (String)configProps.get("fileWidWord") + suffixFile;
-		pathPidNeighborLen = inputPath + (String)configProps.get("filePidNeighborLen") + suffixFile;
+		pathPidNeighborLen = inputPath + (String)configProps.get("filePidNeighborLen") + suffixFile + 
+							",opticMinpts=" + String.valueOf(opticQParams.minpts) + ",opticEpsilon=" + String.valueOf(opticQParams.epsilon) + 
+							", maxPidNeighborsBytes=" + String.valueOf(maxPidNeighbors4Bytes * 4);
 		pathOrderObjects = outPath + (String)configProps.get("fileOrderObjects") + suffixFile;
 		
 		// set index path
 		pathPidAndRtreeIdWordsIndex = outPath + (String)configProps.get("pathPidAndRtreeIdWordsIndex") + suffixFile + File.separator;
 		pathCellidPidWordsIndex = outPath + (String)configProps.get("pathCellidPidWordsIndex") + suffixFile + signNormalized + File.separator;
-		pathTerm2PidNeighborsIndex = outPath + (String)configProps.get("pathTerm2PidNeighborsIndex") + suffixFile + signNormalized + File.separator;
+		pathTerm2PidNeighborsIndex = outPath + (String)configProps.get("pathTerm2PidNeighborsIndex") + suffixFile + signNormalized +
+				",opticMinpts=" + String.valueOf(opticQParams.minpts) + ",opticEpsilon=" + String.valueOf(opticQParams.epsilon) + File.separator;
 		pathCellidRtreeidOrPidWordsIndex = outPath + (String)configProps.get("pathCellidRtreeidOrPidWordsIndex") + suffixFile + signNormalized + File.separator;
 		pathTestIndex = outPath + "test" + File.separator;
 		

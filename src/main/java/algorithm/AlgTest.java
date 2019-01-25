@@ -18,6 +18,7 @@ public class AlgTest {
 	public static AlgEucDisFastRange eucFast = null;
 	public static AlgEucDisBaseOptics eucBaseOptics = null;
 	public static AlgEucDisAdvancedOptics eucAdvancedOptics = null;
+	public static AlgEucDisAdvancedOpticsWu eucAdvancedOpticsWu = null;
 	
 	/**
 	 * test alg euc
@@ -29,23 +30,27 @@ public class AlgTest {
 		SortedClusters sClusters = null;
 		String resPath = null;
 		
-		if(algName.contains("base")) {
+		if(algName.equals("base")) {
 			System.out.println("----------------------- AlgEucDisBase ----------------------");
 			sClusters = AlgTest.eucBase.excuteQuery(qParams);
 			resPath = Global.outPath + "result_ecu_base.txt";
-		} else if(algName.contains("fast")) {
+		} else if(algName.equals("fast")) {
 			System.out.println("----------------------- AlgEucDisFastRange ----------------------");
 			sClusters = AlgTest.eucFast.excuteQuery(qParams);
 			resPath = Global.outPath + "result_ecu_fast.txt";
-		} else if(algName.contains("AlgEucDisBaseOptics")) {
+		} else if(algName.equals("AlgEucDisBaseOptics")) {
 			System.out.println("----------------------- AlgEucDisBaseOptics ----------------------");
 			sClusters = AlgTest.eucBaseOptics.excuteQuery(qParams, Global.pathOrderObjects + "_AlgEucDisBaseOptics");
 			resPath = Global.outPath + "result_ecu_base_optics.txt";
-		} else if(algName.contains("AlgEucDisAdvancedOptics")) {
+		} else if(algName.equals("AlgEucDisAdvancedOptics")) {
 			System.out.println("----------------------- AlgEucDisAdvancedOptics ----------------------");
 			sClusters = AlgTest.eucAdvancedOptics.excuteQuery(qParams, Global.pathOrderObjects + "_AlgEucDisAdvancedOptics");
 			resPath = Global.outPath + "result_ecu_advanced_optics.txt";
-		} 
+		} else if(algName.equals("AlgEucDisAdvancedOpticsWu")) {
+			System.out.println("----------------------- AlgEucDisAdvancedOpticsWu ----------------------");
+			sClusters = AlgTest.eucAdvancedOpticsWu.excuteQuery(qParams, Global.pathOrderObjects + "_AlgEucDisAdvancedOpticsWu");
+			resPath = Global.outPath + "result_ecu_advanced_optics_wu.txt";
+		}
 		System.out.println(sClusters);
 		
 		if(null != sClusters) {
@@ -84,8 +89,8 @@ public class AlgTest {
 		words.add("Breakfast".toLowerCase());
 		
 		qParams.sWords = words;
-		qParams.k = 5;
-		qParams.epsilon = 0.1;
+		qParams.k = 20;
+		qParams.epsilon = 0.0005;
 		qParams.minpts = 3;
 		
 		/* base */
@@ -110,13 +115,15 @@ public class AlgTest {
 		AlgTest.eucFast = new AlgEucDisFastRange();
 		AlgTest.eucBaseOptics = new AlgEucDisBaseOptics();
 		AlgTest.eucAdvancedOptics = new AlgEucDisAdvancedOptics();
+		AlgTest.eucAdvancedOpticsWu = new AlgEucDisAdvancedOpticsWu();
 		
 		QueryParams qParams = AlgTest.getQParams();
 		
 //		AlgTest.testAlgEuc("base", qParams);
 		AlgTest.testAlgEuc("fast", qParams);
-		AlgTest.testAlgEuc("AlgEucDisBaseOptics", qParams);
-//		AlgTest.testAlgEuc("AlgEucDisAdvancedOptics", qParams);
+//		AlgTest.testAlgEuc("AlgEucDisBaseOptics", qParams);
+		AlgTest.testAlgEuc("AlgEucDisAdvancedOptics", qParams);
+		AlgTest.testAlgEuc("AlgEucDisAdvancedOpticsWu", qParams);
 	}
 
 }

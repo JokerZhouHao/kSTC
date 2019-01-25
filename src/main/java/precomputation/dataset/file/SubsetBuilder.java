@@ -110,8 +110,8 @@ public class SubsetBuilder {
 		String pText = Global.pathIdText + rec.toString();
 		SubsetBuilder.buildSubTextFile(pText, ids);
 		
-		String pIdWids = Global.pathIdWids + rec.toString();
-		SubsetBuilder.buildSubIdWidsFile(pIdWids, ids);
+//		String pIdWids = Global.pathIdWids + rec.toString();
+//		SubsetBuilder.buildSubIdWidsFile(pIdWids, ids);
 		
 		System.out.println("> Over, spend time : " + TimeUtility.getGlobalSpendTime());
 	}

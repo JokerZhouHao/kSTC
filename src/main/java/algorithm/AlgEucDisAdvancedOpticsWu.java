@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 
 import entity.Node;
 import entity.QueryParams;
+import entity.SortedClusters;
 import entity.optics.OrderSeeds;
 import index.optic.NeighborsNode;
 import index.optic.Term2PidNeighborsIndex;
@@ -20,11 +21,11 @@ import utility.Global;
  * @author ZhouHao
  * @since 2018年12月16日
  */
-public class AlgEucDisAdvancedOptics extends AlgEucDisBaseOptics{
+public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics{
 	private Term2PidNeighborsIndex term2PNgb = null;
 	private Map<String, Integer> ngbLens = null;
 	
-	public AlgEucDisAdvancedOptics() throws Exception{
+	public AlgEucDisAdvancedOpticsWu() throws Exception{
 		super();
 		term2PNgb = new Term2PidNeighborsIndex(Global.pathTerm2PidNeighborsIndex);
 		term2PNgb.openIndexReader();
@@ -147,4 +148,12 @@ public class AlgEucDisAdvancedOptics extends AlgEucDisBaseOptics{
 		}
 		return res;
 	}
+
+	@Override
+	public SortedClusters excuteQuery(QueryParams qParams, String pathOrderedFile,
+			Map<Integer, List<Node>> cellid2Nodes, List<Node> sortedNodes) throws Exception {
+		// TODO Auto-generated method stub
+		return super.excuteQueryByWu(qParams, pathOrderedFile, cellid2Nodes, sortedNodes);
+	}
+	
 }

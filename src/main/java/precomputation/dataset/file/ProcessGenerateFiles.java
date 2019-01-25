@@ -421,6 +421,7 @@ public class ProcessGenerateFiles {
 		/* generateIdWidsFile */
 //		ProcessGenerateFiles.generateIdWidsFile(Global.pathIdText, Global.pathIdWids, Global.pathWidWord);
 		
+		/* used		对子集坐标正则化处理	*/
 //		String pathCoords = Global.pathIdCoord + Global.subYelpBus1.toString();
 //		ProcessGenerateFiles.normalizedCoordFile(pathCoords, Global.subYelpBus1);
 		
@@ -428,11 +429,7 @@ public class ProcessGenerateFiles {
 //		String pathIdTerms = Global.pathIdTerms;
 //		ProcessGenerateFiles.generateIdTermsFile(pathIdTerms);
 		
-		/* generate wid_terms file */
-		String pathWidTerms = Global.pathWidTerms;
-		ProcessGenerateFiles.generateWidTermsFile(pathWidTerms);
-		
-		/* generate rtree */
+		/* used 	generate rtree */
 //		String placeFile = Global.pathIdCoord + Global.signNormalized;
 ////		String placeFile = Global.pathIdCoord;
 //		String treeFile = Global.rtreePath;
@@ -453,9 +450,9 @@ public class ProcessGenerateFiles {
 //		String pathCellidpidWordsIndex = Global.pathCellidPidWordsIndex;
 //		ProcessGenerateFiles.buildCellidPidWordsIndex(pathCellidpidWordsIndex);
 		
-		/* building cellid rtreeid pid words index */
-//		String pathCellidRtreeidOrPidWordsIndex = Global.pathCellidRtreeidOrPidWordsIndex;
-//		ProcessGenerateFiles.buildCellidRtreeidOrPidWordsIndex(pathCellidRtreeidOrPidWordsIndex);
+		/* used		 building cellid rtreeid pid words index */
+		String pathCellidRtreeidOrPidWordsIndex = Global.pathCellidRtreeidOrPidWordsIndex;
+		ProcessGenerateFiles.buildCellidRtreeidOrPidWordsIndex(pathCellidRtreeidOrPidWordsIndex);
 		
 		/* building term_cellCol_index */
 //		String pathTerm2CellCIndex = Global.pathTerm2CellColIndex;
@@ -465,6 +462,12 @@ public class ProcessGenerateFiles {
 //		System.out.println(t2CIndex.searchTerm("f"));
 //		t2CIndex.close();
 		/*********************  alg ecu dis dbscan ending *******************************/ 
+		
+		
+		/*********************	alg optic ******************/
+		/* used		generate wid_terms file, 供后面并行生成索引使用 */
+//		String pathWidTerms = Global.pathWidTerms;
+//		ProcessGenerateFiles.generateWidTermsFile(pathWidTerms);
 		
 		/* building k neighbor dis file */
 //		int k = 20;
