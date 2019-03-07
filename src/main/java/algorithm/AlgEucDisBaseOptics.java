@@ -286,16 +286,16 @@ public class AlgEucDisBaseOptics {
 			int i = 0;
 			if(sortedNodes.get(downArea.start).reachabilityDistance * Global.steepOppositeDegree >= tDou) {
 				for(i=downArea.start + 1; i <= downArea.end; i++) {
-					if(sortedNodes.get(i).reachabilityDistance < tDou)	break;
+					if(sortedNodes.get(i).reachabilityDistance <= tDou)	break;
 				}
-				i--;
-				if(upArea.end - i + 1 < qParams.minpts) {
+				if(i > downArea.end || upArea.end - i + 1 < qParams.minpts) {
 					downArea.mib = Math.max(downArea.mib, sortedNodes.get(upArea.end).reachabilityDistance);
 					return null;
 				}
 				List<Node> nds = new ArrayList<>();
-				for(; i < upArea.end; i++) {
+				for(; i <= upArea.end; i++) {
 					sortedNodes.get(i).isUsed = Boolean.TRUE;
+					sortedNodes.get(i).orderId = i;
 					nds.add(sortedNodes.get(i));
 				}
 				return new Cluster(clusterId, nds);
@@ -304,24 +304,27 @@ public class AlgEucDisBaseOptics {
 			tDou = sortedNodes.get(downArea.start).reachabilityDistance;
 			if(sortedNodes.get(upArea.end + 1).reachabilityDistance * Global.steepOppositeDegree >= tDou) {
 				for(i=upArea.end; i>= upArea.start; i--) {
-					if(sortedNodes.get(i).reachabilityDistance < tDou)	break;
+					if(sortedNodes.get(i).reachabilityDistance <= tDou)	break;
 				}
-				if(i < upArea.start)	i = upArea.start;
-				if(i - downArea.start + 1 < qParams.minpts) {
+				if(i < upArea.start || i - downArea.start + 1 < qParams.minpts) {
 					downArea.mib = Math.max(downArea.mib, sortedNodes.get(upArea.end).reachabilityDistance);
 					return null;
 				}
 				int end = i;
 				List<Node> nds = new ArrayList<>();
-				for(i = downArea.start; i < end; i++) {
+				for(i = downArea.start; i <= end; i++) {
 					sortedNodes.get(i).isUsed = Boolean.TRUE;
+					sortedNodes.get(i).orderId = i;
 					nds.add(sortedNodes.get(i));
 				}
 				return new Cluster(clusterId, nds);
 			}
 			List<Node> nds = new ArrayList<>();
-			for(i=downArea.start; i <= upArea.end; i++) {
+			if(sortedNodes.get(downArea.start).reachabilityDistance == Node.UNDEFINED)	i = downArea.start + 1;
+			else i = downArea.start;
+			for(; i <= upArea.end; i++) {
 				sortedNodes.get(i).isUsed = Boolean.TRUE;
+				sortedNodes.get(i).orderId = i;
 				nds.add(sortedNodes.get(i));
 			}
 			return new Cluster(clusterId, nds);
@@ -449,6 +452,7 @@ public class AlgEucDisBaseOptics {
 			List<Node> nds = new ArrayList<>();
 			for(i=start; i <= end; i++) {
 				sortedNodes.get(i).isUsed = Boolean.TRUE;
+				sortedNodes.get(i).orderId = i;
 				nds.add(sortedNodes.get(i));
 			}
 			return new Cluster(clusterId, nds);

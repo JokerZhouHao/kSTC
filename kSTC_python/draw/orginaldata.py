@@ -89,7 +89,7 @@ class Scatter:
                 allCoords[0].clear()
                 allCoords[1].clear()
             else:
-                coords = line.split(Global.delimiterLevel1)[1].split(Global.delimiterSpace)
+                coords = line.split(Global.delimiterLevel1)[2].split(Global.delimiterSpace)
                 allCoords[0].append(float(coords[0]))
                 allCoords[1].append(float(coords[1]))
         scatter.draw_scatter(allCoords, s=s, marker='v')
@@ -174,13 +174,13 @@ class Line:
             self.ax = self.fig.add_subplot(111)
 
 
-    def draw_line(self, points, s=1, marker='o', c='b'):
+    def draw_line(self, points, s=1, marker='o', c='#6b8ba4'):
         # self.ax.scatter(points[0], points[1], s=s, marker=marker, c=(random.uniform(0, 1), random.uniform(0, 1), random.uniform(0, 1)))
         # self.ax.plot(points[0], points[1], linewidth=s, c=c)
         y0 = []
         for i in range(0, len(points[0])):
             y0.append(0)
-        self.ax.vlines(points[0], y0, points[1], linewidth=s)
+        self.ax.vlines(points[0], y0, points[1], linewidth=s, colors=c)
 
     def show(self):
         # self.ax.set_xlim(self.xs[0], self.xs[len(self.xs)-1])
@@ -213,26 +213,61 @@ class Line:
         Scatter.index_colors = -1
         return lines
 
+    @staticmethod
+    def draw_reachability_dis_cluster(dis_path, result_path, s=1, show=True, title='title', max_y=None):
+        lines = Line(title=title, max_y=max_y)
+
+        # 画所有的dis
+        allCoords = [[], []]
+        reader = IterableReader(dis_path)
+        i = 0
+        for line in reader:
+                allCoords[0].append(i)
+                coords = line.split(Global.delimiterLevel1)[1].split(Global.delimiterSpace)
+                allCoords[1].append(float(coords[1]))
+                i = i + 1
+        lines.draw_line(allCoords, s=s)
+
+        # 画聚类出的dis
+        clusterCoords = [[], []]
+        reader = IterableReader(result_path)
+
+        for line in reader:
+            if line.startswith('qParams'):
+                continue
+            elif line.startswith('Cluster'):
+                if len(clusterCoords) != 0:
+                    lines.draw_line(clusterCoords, s=s+1, c='red')
+                clusterCoords = [[], []]
+            else:
+                orderId = int(line.split(Global.delimiterLevel1)[0])
+                clusterCoords[0].append(allCoords[0][orderId])
+                clusterCoords[1].append(allCoords[1][orderId])
+        lines.draw_line(allCoords, s=s)
+        if show:
+            lines.show()
+        return lines
+
 
 
 ########## draw coordinate data ##############
 # pathCoord = Global.pathCoord
 # pathCoord = Global.pathCoord + '([-125.0, 28.0], [15.0, 60.0])'
 # Scatter.draw_orginal_coord(pathCoord, s=20, show=False)
-pathCoord = Global.pathCoord + '([-125.0, 28.0], [15.0, 60.0])[normalized]'
+# pathCoord = Global.pathCoord + '([-125.0, 28.0], [15.0, 60.0])[normalized]'
 # Scatter.draw_orginal_coord(pathCoord, s=20, show=False)
 
 ########## draw result data ###############
 # pathResultAlgEucBase = Global.pathOutput + 'result_ecu_base.txt'
 # Scatter.draw_result(pathCoord, pathResultAlgEucBase, s=10, show=True, title=pathResultAlgEucBase)
-pathResultAlgEucFast = Global.pathOutput + 'result_ecu_fast.txt'
-Scatter.draw_result(pathCoord, pathResultAlgEucFast, s=10, show=True, title=pathResultAlgEucFast)
+# pathResultAlgEucFast = Global.pathOutput + 'result_ecu_fast.txt'
+# Scatter.draw_result(pathCoord, pathResultAlgEucFast, s=10, show=True, title=pathResultAlgEucFast)
 # pathResultAlgEucBaseOptics = Global.pathOutput + 'result_ecu_base_optics.txt'
 # Scatter.draw_result(pathCoord, pathResultAlgEucBaseOptics, s=10, show=True, title=pathResultAlgEucBaseOptics)
-pathResultAlgEucAdvancedOptics = Global.pathOutput + 'result_ecu_advanced_optics.txt'
-Scatter.draw_result(pathCoord, pathResultAlgEucAdvancedOptics, s=10, show=True, title=pathResultAlgEucAdvancedOptics)
-pathResultAlgEucAdvancedOpticsWu = Global.pathOutput + 'result_ecu_advanced_optics_wu.txt'
-Scatter.draw_result(pathCoord, pathResultAlgEucAdvancedOpticsWu, s=10, show=True, title=pathResultAlgEucAdvancedOpticsWu)
+# pathResultAlgEucAdvancedOptics = Global.pathOutput + 'result_ecu_advanced_optics.txt'
+# Scatter.draw_result(pathCoord, pathResultAlgEucAdvancedOptics, s=10, show=True, title=pathResultAlgEucAdvancedOptics)
+# pathResultAlgEucAdvancedOpticsWu = Global.pathOutput + 'result_ecu_advanced_optics_wu.txt'
+# Scatter.draw_result(pathCoord, pathResultAlgEucAdvancedOpticsWu, s=10, show=True, title=pathResultAlgEucAdvancedOpticsWu)
 
 ########## draw k nearest distance ########
 # path_k_nearest = Global.pathOutput + '3_neighbor_dis.txt'
@@ -244,9 +279,20 @@ Scatter.draw_result(pathCoord, pathResultAlgEucAdvancedOpticsWu, s=10, show=True
 # path_k_nearest = Global.pathOutput + '20_neighbor_dis.txt'
 # Scatter.draw_k_nearest_distance(path_k_nearest, s=1, title=path_k_nearest)
 
-
 ########## draw_reachability_dis ########
 # path_reach_dis = Global.pathOutput + 'order_objects.obj([-125.0, 28.0], [15.0, 60.0])_AlgEucDisBaseOptics'
 # Line.draw_reachability_dis(path_reach_dis, s=1, title=path_reach_dis, max_y=0.004)
+
+########## draw_reachability_dis_cluster ########
+
+# path_reach_dis = Global.pathOutput + 'order_objects.obj([-125.0, 28.0], [15.0, 60.0])_AlgEucDisAdvancedOptics'
+# pathResultAlgEucAdvancedOptics = Global.pathOutput + 'result_ecu_advanced_optics.txt'
+# Line.draw_reachability_dis_cluster(path_reach_dis, pathResultAlgEucAdvancedOptics, s=1, title=path_reach_dis, max_y=0.004)
+
+path_reach_dis = Global.pathOutput + 'order_objects.obj([-125.0, 28.0], [15.0, 60.0])_AlgEucDisAdvancedOpticsWu'
+pathResultAlgEucAdvancedOpticsWu = Global.pathOutput + 'result_ecu_advanced_optics_wu.txt'
+Line.draw_reachability_dis_cluster(path_reach_dis, pathResultAlgEucAdvancedOpticsWu, s=1, title=path_reach_dis, max_y=0.004)
+
+
 
 plt.pause(1200)

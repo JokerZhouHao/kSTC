@@ -89,7 +89,7 @@ public class AlgTest {
 		words.add("Breakfast".toLowerCase());
 		
 		qParams.sWords = words;
-		qParams.k = 20;
+		qParams.k = 40;
 		qParams.epsilon = 0.0005;
 		qParams.minpts = 3;
 		
@@ -120,9 +120,9 @@ public class AlgTest {
 		QueryParams qParams = AlgTest.getQParams();
 		
 //		AlgTest.testAlgEuc("base", qParams);
-		AlgTest.testAlgEuc("fast", qParams);
+//		AlgTest.testAlgEuc("fast", qParams);
 //		AlgTest.testAlgEuc("AlgEucDisBaseOptics", qParams);
-		AlgTest.testAlgEuc("AlgEucDisAdvancedOptics", qParams);
+//		AlgTest.testAlgEuc("AlgEucDisAdvancedOptics", qParams);
 		AlgTest.testAlgEuc("AlgEucDisAdvancedOpticsWu", qParams);
 	}
 

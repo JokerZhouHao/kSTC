@@ -34,7 +34,7 @@ public class Global {
 	}
 	
 	// query parameters
-	public static double steepDegree = 0.0;
+	public static double steepDegree = 0.1;
 	public static double steepOppositeDegree = 1 - steepDegree;
 	public static QueryParams opticQParams = null;
 	public static int maxPidNeighbors4Bytes = 0;

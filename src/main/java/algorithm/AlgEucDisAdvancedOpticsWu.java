@@ -120,8 +120,6 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics{
 //				if(centerNode.id == 59048) {
 //					System.out.println(centerNode);
 //				}
-					
-					
 				neighbors = fastIndexRange(pid2Ngb, pid2Node, centerNode);
 				centerNode.isProcessed = Boolean.TRUE;
 				centerNode.setCoreDistanceBySorted(qParams, neighbors);

@@ -12,6 +12,7 @@ import utility.Global;
 
 public class Node implements Serializable{
 	public Integer id = 0;	// >=0 is pid, <0 is rtree node
+	public int orderId = -1;
 	public Point location = null;
 	public double distance = 0;	// the distance of the node to searched location
 	public double score = 0;	// 1 - the relation of the node to searched words
@@ -100,7 +101,7 @@ public class Node implements Serializable{
 	
 	@Override
 	public String toString() {
-		return id + Global.delimiterLevel1 + location.getCoord(0) + Global.delimiterSpace + location.getCoord(1);
+		return orderId + Global.delimiterLevel1 + id + Global.delimiterLevel1 + location.getCoord(0) + Global.delimiterSpace + location.getCoord(1);
 //		return "SearchedNode [id=" + id + ", distance=" + distance + ", score=" + score + ", clusterId=" + clusterId
 //				+ "][" + String.valueOf(location.getCoord(0)) + ", " + String.valueOf(location.getCoord(1) + "]");
 	}
