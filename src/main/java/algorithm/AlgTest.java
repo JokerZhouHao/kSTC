@@ -78,20 +78,12 @@ public class AlgTest {
 		/* fast range */
 //		#QueryParams [location=[0.07129198357142852, 0.25200787187500007], sWords=[w, pet], k=5, epsilon=0.08, minpts=2]
 		QueryParams qParams = new QueryParams();
-		double[] loca = {0.07129198357142852, 0.25200787187500007};
+//		double[] loca = {0.07129198357142852, 0.25200787187500007};
+		double[] loca = {0.7, 0.7};
 		qParams.location = new Point(loca);
 		List<String> words = new ArrayList<>();
 //		words.add("w");
 //		words.add("pet");
-		
-		words.add("Coffee".toLowerCase());
-		words.add("Tea".toLowerCase());
-		words.add("Breakfast".toLowerCase());
-		
-		qParams.sWords = words;
-		qParams.k = 40;
-		qParams.epsilon = 0.0005;
-		qParams.minpts = 3;
 		
 		/* base */
 //		QueryParams qParams = new QueryParams();
@@ -107,23 +99,35 @@ public class AlgTest {
 //		qParams.epsilon = 0.2;
 //		qParams.minpts = 1;
 		
+//		words.add("Coffee".toLowerCase());
+//		words.add("Tea".toLowerCase());
+//		words.add("Breakfast".toLowerCase());
+//		words.add("Sandwiches".toLowerCase());
+		words.add("Good".toLowerCase());
+		
+		qParams.sWords = words;
+		qParams.k = 3;
+		qParams.epsilon = 0.005;	//  用于AlgEucDisBase
+		qParams.minpts = 10;
+		Global.xi = 0.0005;		// 用于AlgEucDisBaseOptics
+		
 		return qParams;
 	}
 	
 	public static void main(String[] args) throws Exception{
 		AlgTest.eucBase = new AlgEucDisBase();
 		AlgTest.eucFast = new AlgEucDisFastRange();
-		AlgTest.eucBaseOptics = new AlgEucDisBaseOptics();
-		AlgTest.eucAdvancedOptics = new AlgEucDisAdvancedOptics();
-		AlgTest.eucAdvancedOpticsWu = new AlgEucDisAdvancedOpticsWu();
+//		AlgTest.eucBaseOptics = new AlgEucDisBaseOptics();
+//		AlgTest.eucAdvancedOptics = new AlgEucDisAdvancedOptics();
+//		AlgTest.eucAdvancedOpticsWu = new AlgEucDisAdvancedOpticsWu();
 		
 		QueryParams qParams = AlgTest.getQParams();
 		
-//		AlgTest.testAlgEuc("base", qParams);
+		AlgTest.testAlgEuc("base", qParams);
 //		AlgTest.testAlgEuc("fast", qParams);
 //		AlgTest.testAlgEuc("AlgEucDisBaseOptics", qParams);
 //		AlgTest.testAlgEuc("AlgEucDisAdvancedOptics", qParams);
-		AlgTest.testAlgEuc("AlgEucDisAdvancedOpticsWu", qParams);
+//		AlgTest.testAlgEuc("AlgEucDisAdvancedOpticsWu", qParams);
 	}
 
 }

@@ -65,7 +65,8 @@ public class AlgEucDisBaseOptics {
 		for(String w : qParams.sWords)	tWs.add(w.toLowerCase());
 		qParams.sWords = tWs;
 		
-		sCircle.radius = qParams.epsilon;
+//		sCircle.radius = qParams.epsilon;
+		sCircle.radius = Global.xi;
 		Map<Integer, List<Node>> cellid2Nodes = cellidWIndex.searchWords(qParams, allLocations);
 		if(null == cellid2Nodes)	return null;
 		
@@ -437,7 +438,7 @@ public class AlgEucDisBaseOptics {
 		if(upArea.end - downArea.start + 1 < qParams.minpts) {
 			return null;
 		} else {
-			double tDou = Math.min(sortedNodes.get(downArea.start).reachabilityDistance, sortedNodes.get(upArea.end).reachabilityDistance) 
+			double tDou = Math.min(sortedNodes.get(downArea.start).reachabilityDistance, sortedNodes.get(upArea.end + 1).reachabilityDistance) 
 							* Global.steepOppositeDegree;
 			int i = 0;
 			for(i=downArea.start; i <= upArea.end; i++) {

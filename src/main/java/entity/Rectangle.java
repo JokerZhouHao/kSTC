@@ -39,8 +39,8 @@ public class Rectangle {
 	}
 	
 	public String toString() {
-		return "([" + String.valueOf(westSouthLont) + ", " + String.valueOf(westSouthLat) + "], " +
-				"[" + String.valueOf(eastNorthLont) + ", " + String.valueOf(eastNorthLat) + "])";
+		return "([" + String.valueOf(westSouthLont) + "," + String.valueOf(westSouthLat) + "]," +
+				"[" + String.valueOf(eastNorthLont) + "," + String.valueOf(eastNorthLat) + "])";
 	}
 	
 	public static void main(String[] args) throws Exception{

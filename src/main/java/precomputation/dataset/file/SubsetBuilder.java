@@ -118,6 +118,6 @@ public class SubsetBuilder {
 	
 	public static void main(String[] args) throws Exception{
 		TimeUtility.init();
-		SubsetBuilder.buildingSubset(new Rectangle(-125, 28, 15, 60));
+		SubsetBuilder.buildingSubset(new Rectangle(-112.41,33.46, -111.90,33.68));
 	}
 }

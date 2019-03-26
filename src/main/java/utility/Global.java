@@ -34,6 +34,7 @@ public class Global {
 	}
 	
 	// query parameters
+	public static double xi = 0.05;
 	public static double steepDegree = 0.1;
 	public static double steepOppositeDegree = 1 - steepDegree;
 	public static QueryParams opticQParams = null;
@@ -92,7 +93,8 @@ public class Global {
 	public static int numNode = 0;
 	
 	/* sub dataset */
-	public static Rectangle subYelpBus1 = new Rectangle(-125, 28, 15, 60);
+//	public static Rectangle subYelpBus1 = new Rectangle(-125, 28, 15, 60);
+	public static Rectangle subYelpBus1 = new Rectangle(-112.41,33.46,-111.90,33.68);
 	
 //	public static String suffixFile = "";
 	public static String suffixFile = null;

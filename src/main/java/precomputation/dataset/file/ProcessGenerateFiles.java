@@ -431,7 +431,6 @@ public class ProcessGenerateFiles {
 		
 		/* used 	generate rtree */
 //		String placeFile = Global.pathIdCoord + Global.signNormalized;
-////		String placeFile = Global.pathIdCoord;
 //		String treeFile = Global.rtreePath;
 //		ProcessGenerateFiles.buildRTree(placeFile, treeFile, Global.rtreeFanout, Global.rtreeBufferSize, Global.rtreePageSize);
 //		MRTree rtree = MRTree.getInstanceInDisk();
@@ -451,8 +450,8 @@ public class ProcessGenerateFiles {
 //		ProcessGenerateFiles.buildCellidPidWordsIndex(pathCellidpidWordsIndex);
 		
 		/* used		 building cellid rtreeid pid words index */
-		String pathCellidRtreeidOrPidWordsIndex = Global.pathCellidRtreeidOrPidWordsIndex;
-		ProcessGenerateFiles.buildCellidRtreeidOrPidWordsIndex(pathCellidRtreeidOrPidWordsIndex);
+//		String pathCellidRtreeidOrPidWordsIndex = Global.pathCellidRtreeidOrPidWordsIndex;
+//		ProcessGenerateFiles.buildCellidRtreeidOrPidWordsIndex(pathCellidRtreeidOrPidWordsIndex);
 		
 		/* building term_cellCol_index */
 //		String pathTerm2CellCIndex = Global.pathTerm2CellColIndex;

@@ -237,19 +237,93 @@ class Line:
                 continue
             elif line.startswith('Cluster'):
                 if len(clusterCoords) != 0:
-                    lines.draw_line(clusterCoords, s=s+1, c='red')
+                    lines.draw_line(clusterCoords, s=s, c='red')
                 clusterCoords = [[], []]
             else:
                 orderId = int(line.split(Global.delimiterLevel1)[0])
                 clusterCoords[0].append(allCoords[0][orderId])
                 clusterCoords[1].append(allCoords[1][orderId])
+        lines.draw_line(clusterCoords, s=s, c='red')
+        if show:
+            lines.show()
+        return lines
+
+    @staticmethod
+    def draw_reachability_dis_base(dis_path, base_result_path, s=1, show=True, title='title', max_y=None):
+        lines = Line(title=title, max_y=max_y)
+
+        # 画所有的dis
+        allCoords = [[], []]
+        reader = IterableReader(dis_path)
+        i = 0
+        id_2_index = {}
+        for line in reader:
+                allCoords[0].append(i)
+                coords = line.split(Global.delimiterLevel1)[1].split(Global.delimiterSpace)
+                allCoords[1].append(float(coords[1]))
+                id_2_index[line.split(Global.delimiterLevel1)[0]] = i
+                i = i + 1
         lines.draw_line(allCoords, s=s)
+
+        # 画base_result对于的dis
+        clusterCoords = [[], []]
+        reader = IterableReader(base_result_path)
+        for line in reader:
+            if line.startswith('-1'):
+                orderId = id_2_index[line.split(Global.delimiterLevel1)[1]]
+                clusterCoords[0].append(allCoords[0][orderId])
+                clusterCoords[1].append(allCoords[1][orderId])
+        lines.draw_line(clusterCoords, s=s, c='red')
         if show:
             lines.show()
         return lines
 
 
+#######################  经纬suffixFile = ([-112.41,33.46], [-111.90,33.68]) 的测试code  ###########################
+########## draw coordinate data ##############
+# pathCoord = Global.pathCoord
+# Scatter.draw_orginal_coord(pathCoord, s=20, show=False)
+# pathCoord = Global.pathCoord + '([-112.41,33.46],[-111.9,33.68])'
+# Scatter.draw_orginal_coord(pathCoord, s=20, show=False)
+pathCoord = Global.pathCoord + '([-112.41,33.46],[-111.9,33.68])[normalized]'
+# Scatter.draw_orginal_coord(pathCoord, s=20, show=False)
 
+########## draw result data ###############
+pathResultAlgEucBase = Global.pathOutput + 'result_ecu_base.txt'
+Scatter.draw_result(pathCoord, pathResultAlgEucBase, s=10, show=True, title=pathResultAlgEucBase)
+# pathResultAlgEucFast = Global.pathOutput + 'result_ecu_fast.txt'
+# Scatter.draw_result(pathCoord, pathResultAlgEucFast, s=10, show=True, title=pathResultAlgEucFast)
+# pathResultAlgEucBaseOptics = Global.pathOutput + 'result_ecu_base_optics.txt'
+# Scatter.draw_result(pathCoord, pathResultAlgEucBaseOptics, s=10, show=True, title=pathResultAlgEucBaseOptics)
+# pathResultAlgEucAdvancedOptics = Global.pathOutput + 'result_ecu_advanced_optics.txt'
+# Scatter.draw_result(pathCoord, pathResultAlgEucAdvancedOptics, s=10, show=True, title=pathResultAlgEucAdvancedOptics)
+# pathResultAlgEucAdvancedOpticsWu = Global.pathOutput + 'result_ecu_advanced_optics_wu.txt'
+# Scatter.draw_result(pathCoord, pathResultAlgEucAdvancedOpticsWu, s=10, show=True, title=pathResultAlgEucAdvancedOpticsWu)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#######################  经纬suffixFile = ([-125.0, 28.0], [15.0, 60.0]) 的测试code  ###########################
 ########## draw coordinate data ##############
 # pathCoord = Global.pathCoord
 # pathCoord = Global.pathCoord + '([-125.0, 28.0], [15.0, 60.0])'
@@ -284,15 +358,17 @@ class Line:
 # Line.draw_reachability_dis(path_reach_dis, s=1, title=path_reach_dis, max_y=0.004)
 
 ########## draw_reachability_dis_cluster ########
+# path_reach_dis = Global.pathOutput + 'order_objects.obj([-125.0, 28.0], [15.0, 60.0])_AlgEucDisAdvancedOpticsWu'
+# pathResultAlgEucFast = Global.pathOutput + 'result_ecu_fast.txt'
+# Line.draw_reachability_dis_base(path_reach_dis, pathResultAlgEucFast, s=1, title=pathResultAlgEucFast, max_y=0.004)
 
 # path_reach_dis = Global.pathOutput + 'order_objects.obj([-125.0, 28.0], [15.0, 60.0])_AlgEucDisAdvancedOptics'
 # pathResultAlgEucAdvancedOptics = Global.pathOutput + 'result_ecu_advanced_optics.txt'
 # Line.draw_reachability_dis_cluster(path_reach_dis, pathResultAlgEucAdvancedOptics, s=1, title=path_reach_dis, max_y=0.004)
 
-path_reach_dis = Global.pathOutput + 'order_objects.obj([-125.0, 28.0], [15.0, 60.0])_AlgEucDisAdvancedOpticsWu'
-pathResultAlgEucAdvancedOpticsWu = Global.pathOutput + 'result_ecu_advanced_optics_wu.txt'
-Line.draw_reachability_dis_cluster(path_reach_dis, pathResultAlgEucAdvancedOpticsWu, s=1, title=path_reach_dis, max_y=0.004)
+# path_reach_dis = Global.pathOutput + 'order_objects.obj([-125.0, 28.0], [15.0, 60.0])_AlgEucDisAdvancedOpticsWu'
+# pathResultAlgEucAdvancedOpticsWu = Global.pathOutput + 'result_ecu_advanced_optics_wu.txt'
+# Line.draw_reachability_dis_cluster(path_reach_dis, pathResultAlgEucAdvancedOpticsWu, s=1, title=pathResultAlgEucAdvancedOpticsWu, max_y=0.004)
 
 
-
-plt.pause(1200)
+plt.pause(40000)
