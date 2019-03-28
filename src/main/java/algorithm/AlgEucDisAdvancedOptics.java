@@ -140,6 +140,7 @@ public class AlgEucDisAdvancedOptics extends AlgEucDisBaseOptics{
 		if(ngb==null)	return res;
 		Node nd = null;
 		for(NeighborsNode nn : ngb) {
+			if(nd.disToCenter > sCircle.radius)	break;	// disToCenter is bigger than xi
 			if(null != (nd = pid2Node.get(nn.id))) {
 				nd.disToCenter = nn.disToCenter;
 				res.add(nd);

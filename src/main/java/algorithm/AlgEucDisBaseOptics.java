@@ -67,6 +67,7 @@ public class AlgEucDisBaseOptics {
 		
 //		sCircle.radius = qParams.epsilon;
 		sCircle.radius = Global.xi;
+		qParams.epsilon = Global.xi;
 		Map<Integer, List<Node>> cellid2Nodes = cellidWIndex.searchWords(qParams, allLocations);
 		if(null == cellid2Nodes)	return null;
 		
@@ -229,7 +230,7 @@ public class AlgEucDisBaseOptics {
 			if(null == (cellNodes = cellid2Nodes.get(cs.getId())))	continue;
 			for(Node nd : cellNodes) {
 				dis = centerNode.location.getMinimumDistance(nd.location);
-				if(dis <= qParams.epsilon) {
+				if(dis <= sCircle.radius) {
 					nd.disToCenter = dis;
 					result.add(nd);
 				}
