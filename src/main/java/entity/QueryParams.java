@@ -12,30 +12,34 @@ public class QueryParams {
 	public List<String> sWords = new ArrayList<>();
 	public int k = 1;
 	public double epsilon = 0;
+	public double xi = 0;
 	public int minpts = 0;
 	
 	public QueryParams() {}
 
-	public QueryParams(Point location, List<String> sWords, int k, double epsilon, int minpts) {
+	public QueryParams(Point location, List<String> sWords, int k, double epsilonOrXi, int minpts) {
 		super();
 		this.location = location;
 		this.sWords = sWords;
 		this.k = k;
-		this.epsilon = epsilon;
+		this.epsilon = epsilonOrXi;
+		this.xi = epsilonOrXi;
 		this.minpts = minpts;
 	}
 	
-	public QueryParams(Point location, String words, int numWord, int k, double epsilon, int minpts) throws Exception{
+	public QueryParams(Point location, String words, int numWord, int k, double epsilonOrXi, int minpts) throws Exception{
 		super();
 		this.location = location;
 		this.sWords = this.getWords(words, numWord);
 		this.k = k;
-		this.epsilon = epsilon;
+		this.epsilon = epsilonOrXi;
+		this.xi = epsilonOrXi;
 		this.minpts = minpts;
 	}
 	
-	public QueryParams(double epsilon, int minpts) {
-		this.epsilon = epsilon;
+	public QueryParams(double epsilonOrXi, int minpts) {
+		this.epsilon = epsilonOrXi;
+		this.xi = epsilonOrXi;
 		this.minpts = minpts;
 	}
 	
@@ -56,7 +60,7 @@ public class QueryParams {
 	
 	@Override
 	public String toString() {
-		return "QueryParams [location=[" + String.valueOf(location.getCoord(0)) + ", " + String.valueOf(location.getCoord(1)) + "], sWords=" + sWords + ", k=" + k + ", epsilon=" + epsilon
+		return "QueryParams [location=[" + String.valueOf(location.getCoord(0)) + ", " + String.valueOf(location.getCoord(1)) + "], sWords=" + sWords + ", k=" + k + ", epsilonOrXi=" + epsilon
 				+ ", minpts=" + minpts + "]";
 	}
 	

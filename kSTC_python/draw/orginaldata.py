@@ -5,12 +5,19 @@ from utility import myplt
 from matplotlib import interactive
 import numpy as np
 import random
+import matplotlib.image as img
+
+import matplotlib.cm as cm
+import matplotlib.mlab as mlab
 
 class Scatter:
     colors = ['#6b8ba4', 'b', '#7f2b0a', '#e50000', '#ffcfdc', '#06470c', '#15b01a', '#c7fdb5', '#516572', '#6b8ba4', '#a2cffe', '#e6daa6']
+    markers = ['4', 's', '^', '+', '.']
+
+    index_marker = 0
     index_colors = -1
 
-    def __init__(self, fig=None, xs=None, ys=None, title='title'):
+    def __init__(self, fig=None, xs=None, ys=None, xlim=None, ylim=None, title='title', pathBgImg = None):
         if fig is None:
             self.fig = plt.figure(random.randint(1, 10000), figsize=(10.1023, 6.5), tight_layout=True)
         else:
@@ -31,6 +38,10 @@ class Scatter:
         else:
             self.ys = ys;
 
+        self.xlim = xlim
+        self.ylim = ylim
+        self.pathBgImg = pathBgImg
+
         plt.rcParams['font.size'] = 20
         if fig is None:
             self.ax = self.fig.add_subplot(111)
@@ -46,18 +57,45 @@ class Scatter:
             self.ax.scatter(points[0], points[1], s=s, marker=marker, c=c)
 
     def show(self):
+        if self.xlim != None:
+            self.ax.set_xlim(self.xlim)
+        if self.ylim != None:
+            self.ax.set_ylim(self.ylim)
+
         # self.ax.set_xlim(self.xs[0], self.xs[len(self.xs)-1])
         # self.ax.set_xticks(self.xs)
         # self.ax.set_ylim(self.ys[0], self.ys[len(self.ys)-1])
         # self.ax.set_yticks(self.ys)
         # self.ax.set_yscale('log')
         # self.ax.set_xscale('log')
+
+        if self.pathBgImg != None:
+            imgBg = plt.imread(pathBgImg)
+            # self.ax.imshow(imgBg)
+            # imshow(img, zorder=0, extent=[left, right, bottom, top])
+            # plt.imshow(imgBg, zorder=0, extent=[0, 1, 0, 1])
+            # plt.imshow(imgBg, interpolation='bilinear', cmap=cm.gray,
+            #     origin='lower', extent=[0, 1, 0, 1])
+            plt.imshow(imgBg, aspect='auto', extent=[0, 1, 0, 1])
+            # plt.imshow(imgBg)
+            # self.ax.figimage(imgBg)
+            # self.ax.imshow(imgBg)
+
         interactive(True)
         plt.show()
 
     @staticmethod
-    def draw_orginal_coord(path, s=1, marker='o', show=True, title='title'):
-        scatter = Scatter(title=title)
+    def marker():
+        if Scatter.index_marker == len(Scatter.markers):
+            Scatter.index_marker = 0
+        marker = Scatter.markers[Scatter.index_marker]
+        Scatter.index_marker += 1
+        return marker
+
+    @staticmethod
+    def draw_orginal_coord(path, s=1, marker='o', show=True, title='title', pathBgImg = None, xlim=None, ylim=None):
+        scatter = Scatter(title=title, xlim=xlim, ylim=ylim, pathBgImg = pathBgImg)
+
         allCoords = [[], []]
         reader = IterableReader(path)
         i = 0
@@ -72,8 +110,12 @@ class Scatter:
         return scatter
 
     @staticmethod
-    def draw_result(all_coord_path, result_path, s=10, show=True, title='title'):
-        scatter = Scatter.draw_orginal_coord(all_coord_path, s=s, show=False, title=title)
+    def draw_result(all_coord_path, result_path, s=10, show=True, title='title', pathBgImg = None, xlim=None, ylim=None):
+        # scatter = Scatter.draw_orginal_coord(all_coord_path, s=s, show=False, title=title, pathBgImg=pathBgImg, xlim=xlim, ylim=ylim)
+
+        Scatter.index_marker = 0
+        scatter = Scatter(title=title, xlim=xlim, ylim=ylim, pathBgImg = pathBgImg)
+
 
         allCoords = [[], []]
         centerCoords = [[], []]
@@ -85,14 +127,18 @@ class Scatter:
                 centerCoords[0].append(float(coords[0]))
                 centerCoords[1].append(float(coords[1]))
             elif line.startswith('Cluster'):
-                scatter.draw_scatter(allCoords, s=s, marker='v')
+                scatter.draw_scatter(allCoords, s=s, marker=Scatter.marker())
+                # scatter.draw_scatter(allCoords, s=s)
                 allCoords[0].clear()
                 allCoords[1].clear()
+            elif line.startswith("cluster_num"):
+                continue
             else:
                 coords = line.split(Global.delimiterLevel1)[2].split(Global.delimiterSpace)
                 allCoords[0].append(float(coords[0]))
                 allCoords[1].append(float(coords[1]))
-        scatter.draw_scatter(allCoords, s=s, marker='v')
+        scatter.draw_scatter(allCoords, s=s, marker=Scatter.marker())
+        # scatter.draw_scatter(allCoords, s=s)
 
         scatter.draw_scatter(centerCoords, s=s, marker='*')
 
@@ -213,6 +259,7 @@ class Line:
         Scatter.index_colors = -1
         return lines
 
+    # 将optic的结果显示在distance图上
     @staticmethod
     def draw_reachability_dis_cluster(dis_path, result_path, s=1, show=True, title='title', max_y=None):
         lines = Line(title=title, max_y=max_y)
@@ -239,6 +286,8 @@ class Line:
                 if len(clusterCoords) != 0:
                     lines.draw_line(clusterCoords, s=s, c='red')
                 clusterCoords = [[], []]
+            elif line.startswith('cluster_num'):
+                continue
             else:
                 orderId = int(line.split(Global.delimiterLevel1)[0])
                 clusterCoords[0].append(allCoords[0][orderId])
@@ -248,6 +297,7 @@ class Line:
             lines.show()
         return lines
 
+    # 将base的结果显示在optic的distance图上
     @staticmethod
     def draw_reachability_dis_base(dis_path, base_result_path, s=1, show=True, title='title', max_y=None):
         lines = Line(title=title, max_y=max_y)
@@ -285,23 +335,59 @@ class Line:
 # Scatter.draw_orginal_coord(pathCoord, s=20, show=False)
 # pathCoord = Global.pathCoord + '([-112.41,33.46],[-111.9,33.68])'
 # Scatter.draw_orginal_coord(pathCoord, s=20, show=False)
+pathBgImg = Global.pathImgs + 'LonLat^-112.41,33.46 -111.90,33.68.png'
+pathBgImg = Global.pathImgs + 'LonLat^-112.41,33.46 -111.90,33.68[gray].png'
+# pathBgImg = Global.pathImgs + 'test.png'
 pathCoord = Global.pathCoord + '([-112.41,33.46],[-111.9,33.68])[normalized]'
 # Scatter.draw_orginal_coord(pathCoord, s=20, show=False)
 
 ########## draw result data ###############
-pathResultAlgEucBase = Global.pathOutput + 'result_ecu_base.txt'
-Scatter.draw_result(pathCoord, pathResultAlgEucBase, s=10, show=True, title=pathResultAlgEucBase)
+##############   dbscan #############
+# pathResultAlgEucBase = Global.pathOutput + 'result_ecu_base.txt'
+# Scatter.draw_result(pathCoord, pathResultAlgEucBase, s=10, show=True, title=pathResultAlgEucBase, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
+
 # pathResultAlgEucFast = Global.pathOutput + 'result_ecu_fast.txt'
-# Scatter.draw_result(pathCoord, pathResultAlgEucFast, s=10, show=True, title=pathResultAlgEucFast)
+# Scatter.draw_result(pathCoord, pathResultAlgEucFast, s=50, show=True, title=pathResultAlgEucFast, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
+
+##############   optic wu #############
+pathResultAlgEucBaseOpticsWu = Global.pathOutput + 'result_ecu_base_optics_wu.txt'
+Scatter.draw_result(pathCoord, pathResultAlgEucBaseOpticsWu, s=50, show=True, title=pathResultAlgEucBaseOpticsWu, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
+
+pathResultAlgEucAdvancedOpticsWu = Global.pathOutput + 'result_ecu_advanced_optics_wu.txt'
+Scatter.draw_result(pathCoord, pathResultAlgEucAdvancedOpticsWu, s=50, show=True, title=pathResultAlgEucAdvancedOpticsWu, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
+
+##############   optic #############
 # pathResultAlgEucBaseOptics = Global.pathOutput + 'result_ecu_base_optics.txt'
-# Scatter.draw_result(pathCoord, pathResultAlgEucBaseOptics, s=10, show=True, title=pathResultAlgEucBaseOptics)
+# Scatter.draw_result(pathCoord, pathResultAlgEucBaseOptics, s=50, show=True, title=pathResultAlgEucBaseOptics, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
+
 # pathResultAlgEucAdvancedOptics = Global.pathOutput + 'result_ecu_advanced_optics.txt'
 # Scatter.draw_result(pathCoord, pathResultAlgEucAdvancedOptics, s=10, show=True, title=pathResultAlgEucAdvancedOptics)
+
+
+
+
+########## draw_reachability_dis ########
+# path_reach_dis = Global.pathOutput + 'order_objects.obj([-125.0, 28.0], [15.0, 60.0])_AlgEucDisBaseOptics'
+# Line.draw_reachability_dis(path_reach_dis, s=1, title=path_reach_dis, max_y=0.004)
+
+# path_reach_dis = Global.pathOutput + 'order_objects.obj([-112.41,33.46],[-111.9,33.68])_AlgEucDisBaseOpticsWu'
+# Line.draw_reachability_dis(path_reach_dis, s=1, title=path_reach_dis, max_y=0.01)
+#
+# path_reach_dis = Global.pathOutput + 'order_objects.obj([-112.41,33.46],[-111.9,33.68])_AlgEucDisAdvancedOpticsWu'
+# Line.draw_reachability_dis(path_reach_dis, s=1, title=path_reach_dis, max_y=0.01)
+
+
+########## draw_reachability_dis_cluster ########
+# path_reach_dis = Global.pathOutput + 'order_objects.obj([-112.41,33.46],[-111.9,33.68])_AlgEucDisAdvancedOpticsWu'
+# pathResultAlgEucFast = Global.pathOutput + 'result_ecu_fast.txt'
+# # 将base的结果显示在optic的distance图上
+# Line.draw_reachability_dis_base(path_reach_dis, pathResultAlgEucFast, s=1, title=pathResultAlgEucFast, max_y=0.01)
+
+
+# path_reach_dis = Global.pathOutput + 'order_objects.obj([-112.41,33.46],[-111.9,33.68])_AlgEucDisAdvancedOpticsWu'
 # pathResultAlgEucAdvancedOpticsWu = Global.pathOutput + 'result_ecu_advanced_optics_wu.txt'
-# Scatter.draw_result(pathCoord, pathResultAlgEucAdvancedOpticsWu, s=10, show=True, title=pathResultAlgEucAdvancedOpticsWu)
-
-
-
+# # 将optic的结果显示在distance图上
+# Line.draw_reachability_dis_cluster(path_reach_dis, pathResultAlgEucAdvancedOpticsWu, s=1, title=pathResultAlgEucAdvancedOpticsWu, max_y=0.01)
 
 
 

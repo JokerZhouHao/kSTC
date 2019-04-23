@@ -22,13 +22,24 @@ public class T1 {
 //		ts.add(3);
 //		System.out.println(ts.pollFirst());
 		
-		HashSet<Integer> hs = new HashSet<>();
-		hs.iterator().next();
+//		HashSet<Integer> hs = new HashSet<>();
+//		hs.iterator().next();
+//		
+//		TreeSet<Node> ts = new TreeSet<>(new MComparator<>(3));
+//		ts.add(new Node(5, null, 6, 4));
+//		ts.add(new Node(1, null, 3, 5));
+//		ts.add(new Node(3, null, 1, 3));
+//		System.out.println("zhou");
+//		System.out.println((int)(1.7/1));
 		
-		TreeSet<Node> ts = new TreeSet<>(new MComparator<>(3));
-		ts.add(new Node(5, null, 6, 4));
-		ts.add(new Node(1, null, 3, 5));
-		ts.add(new Node(3, null, 1, 3));
-		System.out.println("zhou");
+		Node n1 = new Node(1, null, 1, 0);
+		Node n2 = new Node(2, null, 2, 2);
+		TreeMap<Double, Node> tm = new TreeMap<>();
+		tm.put(1.0, n1);
+		tm.put(2.0, n2);
+		
+		System.out.println(tm.firstEntry().getValue());
+		tm.pollFirstEntry();
+		System.out.println(tm.firstEntry().getValue());
 	}
 }

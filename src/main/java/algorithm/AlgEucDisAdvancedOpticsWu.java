@@ -42,12 +42,21 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics{
 			ofw = new OrginalFileWriter(pathOrderedFile);
 		}
 		
+//		查交集
+//		int minLen = Integer.MAX_VALUE;
+//		String minTerm = null;
+//		for(String tm : qParams.sWords) {
+//			if(ngbLens.get(tm) <= minLen) {
+//				minLen = ngbLens.get(tm);
+//				minTerm = tm;
+//			}
+//		}
+		
+//		 改为查并集
 		int minLen = Integer.MAX_VALUE;
-		String minTerm = null;
 		for(String tm : qParams.sWords) {
 			if(ngbLens.get(tm) <= minLen) {
 				minLen = ngbLens.get(tm);
-				minTerm = tm;
 			}
 		}
 		
@@ -72,7 +81,15 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics{
 				}
 			}
 		} else {	// the term ngb in index
-			Map<Integer, List<NeighborsNode>> pid2Ngb = term2PNgb.searchTerm(minTerm);
+//			查交集
+//			Map<Integer, List<NeighborsNode>> pid2Ngb = term2PNgb.searchTerm(minTerm);
+			
+//			查并集
+			Map<Integer, List<NeighborsNode>> pid2Ngb = new HashMap<>();
+			for(String tm : qParams.sWords) {
+				pid2Ngb.putAll(term2PNgb.searchTerm(tm));
+			}
+			
 			Map<Integer, Node> pid2Node = new HashMap<>();
 			for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
 				for(Node nd : en.getValue()) {
@@ -97,13 +114,6 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics{
 	public void expandClusterOrder(Map<Integer, List<Node>> cellid2Nodes, Node centerNode, QueryParams qParams,
 			List<Node> orderedNodes, OrginalFileWriter ofw, Map<Integer, List<NeighborsNode>> pid2Ngb,
 			Map<Integer, Node> pid2Node) throws Exception {
-
-		
-//		if(centerNode.id == 59048) {
-//			System.out.println(centerNode);
-//		}
-			
-		
 		List<Node> neighbors = fastIndexRange(pid2Ngb, pid2Node, centerNode);
 		centerNode.isProcessed = Boolean.TRUE;
 		centerNode.reachabilityDistance = Node.UNDEFINED;
@@ -139,7 +149,7 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics{
 		if(ngb==null)	return res;
 		Node nd = null;
 		for(NeighborsNode nn : ngb) {
-			if(nd.disToCenter > sCircle.radius)	break;	// disToCenter is bigger than xi
+			if(nn.disToCenter > sCircle.radius)	break;	// disToCenter is bigger than xi
 			if(null != (nd = pid2Node.get(nn.id))) {
 				nd.disToCenter = nn.disToCenter;
 				res.add(nd);

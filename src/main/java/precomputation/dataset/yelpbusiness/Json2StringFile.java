@@ -182,9 +182,9 @@ public class Json2StringFile {
 	public void transToFile() throws Exception{
 		System.out.println("> start transfer json file to three files . . . ");
 		
-		OrginalFileWriter idNameWriter = new OrginalFileWriter(Global.pathIdName);
-		OrginalFileWriter idCoordWriter = new OrginalFileWriter(Global.pathIdCoord);
-		OrginalFileWriter idTextWriter = new OrginalFileWriter(Global.pathIdText);
+		OrginalFileWriter idNameWriter = new OrginalFileWriter(Global.pathOrgId2Name);
+		OrginalFileWriter idCoordWriter = new OrginalFileWriter(Global.pathOrgId2Coord);
+		OrginalFileWriter idTextWriter = new OrginalFileWriter(Global.pathOrgId2Text);
 		idNameWriter.writeLine("               ");
 		idCoordWriter.writeLine("               ");
 		idTextWriter.writeLine("               ");
@@ -209,16 +209,16 @@ public class Json2StringFile {
 		idTextWriter.close();
 		
 		String line = Global.delimiterPound + String.valueOf(counter);
-		IOUtility.setFirstLine(Global.pathIdName, line);
-		IOUtility.setFirstLine(Global.pathIdCoord, line);
-		IOUtility.setFirstLine(Global.pathIdText, line);
+		IOUtility.setFirstLine(Global.pathOrgId2Name, line);
+		IOUtility.setFirstLine(Global.pathOrgId2Coord, line);
+		IOUtility.setFirstLine(Global.pathOrgId2Text, line);
 		
 		System.out.println("> Over, spend time : " + TimeUtility.getGlobalSpendTime());
 	}
 	
 	public static void main(String[] args) throws Exception{
 		TimeUtility.init();
-		String path = Global.inputPath + "yelp_academic_dataset_business.json";
+		String path = Global.datasetPath + "yelp_academic_dataset_business.json";
 //		String path = Global.inputPath + "sample.json";
 //		System.out.println(new Json2StringFile(path).getNumLine());
 //		IterableBufferReader<String> ibr = IOUtility.getIBW(path);

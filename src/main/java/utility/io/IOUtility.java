@@ -90,7 +90,7 @@ public class IOUtility {
 	
 	public static boolean existsOrThrowsException(String path) throws Exception{
 		if(!exists(path)) {
-			throw new Exception("path : " + path + " no exists");
+			throw new Exception("file : " + path + " no exists");
 		} else return true;
 	}
 	
@@ -110,6 +110,7 @@ public class IOUtility {
 	
 	public static void writeSortedClusters(String path, QueryParams qParams, SortedClusters sClu) throws Exception{
 		BufferedWriter bw = IOUtility.getBW(path);
+		bw.write("cluster_num" + Global.delimiterLevel1 + String.valueOf(sClu.getSize()) + "\n");
 		bw.write("qParams" + Global.delimiterLevel1 + String.valueOf(qParams.location.getCoord(0))
 				+ " " + String.valueOf(qParams.location.getCoord(1)));
 		bw.write('\n');

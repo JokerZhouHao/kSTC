@@ -1,8 +1,9 @@
 class Global:
     datasetType = 'yelp_academic_dataset_business'
     # datasetType = 'test'
-    pathInput = 'D:\\kSTC\\Dataset\\' + datasetType + '\\input\\'
-    pathOutput = 'D:\\kSTC\\Dataset\\' + datasetType + '\\output\\'
+    pathInput = 'D:\\kSTC\\Dataset\\' + datasetType + '\\([-112.41,33.46],[-111.9,33.68])\\input\\'
+    pathOutput = 'D:\\kSTC\\Dataset\\' + datasetType + '\\([-112.41,33.46],[-111.9,33.68])\\output\\'
+    pathImgs = pathInput + 'imgs\\'
 
     pathName = pathInput + 'id_name.txt'
     pathCoord = pathInput + 'id_coord_longtitude_latitude.txt'

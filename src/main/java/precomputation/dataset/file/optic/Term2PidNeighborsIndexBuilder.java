@@ -85,6 +85,14 @@ public class Term2PidNeighborsIndexBuilder implements Runnable{
 		}
 	}
 	
+	public void addDoc(String term, Map<Integer, List<Node>> pidNeighbors) throws Exception{
+		synchronized (term2PidNeiIndex) {
+			for(Entry<Integer, List<Node>> en : pidNeighbors.entrySet()) {
+				term2PidNeiIndex.addDoc(term, term2PidNeiIndex.pidNeighborsToBytes(en));
+			}
+		}
+	}
+	
 	public void writePidNeighborLen(String term, int numBytes) throws Exception{
 		synchronized (pidNeighborLenBW) {
 			pidNeighborLenBW.write(term);
@@ -118,7 +126,9 @@ public class Term2PidNeighborsIndexBuilder implements Runnable{
 		cellidWIndex.close();
 	}
 	
-	@Override
+	/**
+	 * 该run将包含term的所有pid及其附近的neighbors数据拼接在一起，然后放到索引里面去
+	 */
 	public void run() {
 		try {
 			String term = null;
@@ -191,6 +201,81 @@ public class Term2PidNeighborsIndexBuilder implements Runnable{
 		}
 	}
 	
+	/**
+	 * 该run将包含term的所有pid及其附近的neighbors数据不拼接在一起，而是一个节点一个节点依次放入
+	 */
+	public void run1() {
+		try {
+			String term = null;
+			List<String> sTerms = new ArrayList<>();
+			int numCur4Bytes = 0;
+			List<Node> tList = null, ndList = null;
+			for(int termIndex = start; termIndex < end; termIndex++) {
+				term = allTerms[termIndex];
+				sTerms.clear();
+				synchronized (numDealedTerm) {
+//					System.out.print("> 正处理第" + String.valueOf(termIndex) + "个term，");
+					if((++numDealedTerm.x) % 10000 == 0) {
+						System.out.println("> 已处理" + String.valueOf(numDealedTerm) + "term， 总用时：" + TimeUtility.getGlobalSpendTime());
+					}
+				}
+				sTerms.add(term);
+				Map<Integer, List<Node>> cellid2Nodes = cellidWIndex.searchWords(sTerms, allLocations);
+				if(null == cellid2Nodes) {
+					this.writePidNeighborLen(term, -1);
+					continue;
+				}
+				
+//				int nn = 0;
+//				for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
+//					nn += en.getValue().size();
+//				}
+//				System.out.println("nn = " + String.valueOf(nn));
+				
+				numCur4Bytes = 0;
+				Map<Integer, List<Node>> pidNeighbors = new HashMap<>();
+				numCur4Bytes++;
+				for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
+					ndList = en.getValue();
+					for(Node centerNode : ndList) {
+						NgbNodes ngbNodes = fastRange(cellid2Nodes, qParams, centerNode);
+						if(null==ngbNodes || ngbNodes.size() < qParams.minpts)	continue;
+						tList = ngbNodes.toList();
+						
+						if(tList.get(0).disToCenter != 0) {
+							System.out.println(termIndex + " " + term);
+							System.exit(0);
+						}
+						
+						pidNeighbors.put(centerNode.id, tList);
+						numCur4Bytes += 2;
+						numCur4Bytes += 3 * tList.size();
+						if(numCur4Bytes > Global.maxPidNeighbors4Bytes)	break;
+					}
+					if(numCur4Bytes > Global.maxPidNeighbors4Bytes)	break;
+				}
+				if(numCur4Bytes > Global.maxPidNeighbors4Bytes) {
+					synchronized (numNgbTooLong) {
+						numNgbTooLong.x++;
+					}
+					this.writePidNeighborLen(term, Integer.MAX_VALUE);
+					continue;
+				}
+				if(pidNeighbors.isEmpty()) {
+					this.writePidNeighborLen(term, 0);
+					continue;
+				}
+//				byte[] pidNeighborsBytes = term2PidNeiIndex.pidNeighborsToBytes(pidNeighbors, numCur4Bytes * 4);
+				this.writePidNeighborLen(term, numCur4Bytes * 4);
+				this.addDoc(term, pidNeighbors);
+			}
+			this.reduceThread();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(0);
+		}
+	}
+	
 	public NgbNodes fastRange(Map<Integer, List<Node>> cellid2Nodes, QueryParams qParams, Node qNode) throws Exception{
 		sCircle.center = qNode.location.m_pCoords;
 		List<CellSign> coveredCellids = sgplInfo.cover(sCircle);
@@ -231,8 +316,6 @@ public class Term2PidNeighborsIndexBuilder implements Runnable{
 //			return;
 //		}
 //		
-		
-		
 		int numThread = 10;
 		int start = 0;
 		int end = 750;

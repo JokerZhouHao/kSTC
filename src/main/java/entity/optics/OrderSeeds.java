@@ -63,7 +63,8 @@ public class OrderSeeds {
 		double tDist = 0.0;
 		for(Node nd : neighbors) {
 			if(!nd.isProcessed) {
-				newRDist = Math.max(cDist, centerNode.location.getMinimumDistance(nd.location));
+//				newRDist = Math.max(cDist, centerNode.location.getMinimumDistance(nd.location));
+				newRDist = Math.max(cDist, nd.disToCenter);
 				if(nd.reachabilityDistance == Node.UNDEFINED) {
 					nd.reachabilityDistance = newRDist;
 					this.add(nd);

@@ -38,7 +38,7 @@ public class AlgEucDisBase {
 	private NoiseRecoder noiseRecoder = new NoiseRecoder();
 	
 	public AlgEucDisBase() throws Exception{
-		allLocations = FileLoader.loadPoints(Global.pathIdCoord + Global.signNormalized);
+		allLocations = FileLoader.loadPoints(Global.pathIdNormCoord);
 //		allLocations = FileLoader.loadPoints(Global.pathIdCoord);
 //		idWordsIndex = new IdWordsIndex(Global.pathPidAndRtreeIdWordsIndex);
 //		idWordsIndex.openIndexReader();

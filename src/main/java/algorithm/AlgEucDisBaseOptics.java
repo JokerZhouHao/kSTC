@@ -20,6 +20,7 @@ import entity.PNodeCollection;
 import entity.QueryParams;
 import entity.SGPLInfo;
 import entity.SortedClusters;
+import entity.fastrange.NgbNodes;
 import entity.optics.OrderSeeds;
 import entity.optics.SteepArea;
 import index.CellidPidWordsIndex;
@@ -44,7 +45,7 @@ public class AlgEucDisBaseOptics {
 	protected SteepArea tSteepArea = new SteepArea();
 	
 	public AlgEucDisBaseOptics() throws Exception{
-		allLocations = FileLoader.loadPoints(Global.pathIdCoord + Global.signNormalized);
+		allLocations = FileLoader.loadPoints(Global.pathIdNormCoord);
 //		allLocations = FileLoader.loadPoints(Global.pathIdCoord);
 //		cellidWIndex = new CellidPidWordsIndex(Global.pathCellidPidWordsIndex);
 		
@@ -65,9 +66,8 @@ public class AlgEucDisBaseOptics {
 		for(String w : qParams.sWords)	tWs.add(w.toLowerCase());
 		qParams.sWords = tWs;
 		
-//		sCircle.radius = qParams.epsilon;
-		sCircle.radius = Global.xi;
-		qParams.epsilon = Global.xi;
+		sCircle.radius = qParams.xi;
+		
 		Map<Integer, List<Node>> cellid2Nodes = cellidWIndex.searchWords(qParams, allLocations);
 		if(null == cellid2Nodes)	return null;
 		
@@ -184,11 +184,6 @@ public class AlgEucDisBaseOptics {
 	}
 	
 	public void expandClusterOrder(Map<Integer, List<Node>> cellid2Nodes, Node centerNode, QueryParams qParams, List<Node> orderedNodes, OrginalFileWriter ofw) throws Exception{
-		
-//		if(centerNode.id == 59048) {
-//			System.out.println(centerNode);
-//		}
-			
 		List<Node> neighbors = fastRange(cellid2Nodes, qParams, centerNode);
 		centerNode.isProcessed = Boolean.TRUE;
 		centerNode.reachabilityDistance = Node.UNDEFINED;
@@ -200,13 +195,6 @@ public class AlgEucDisBaseOptics {
 			orderSeeds.update(neighbors, centerNode);
 			while(!orderSeeds.isEmpty()) {
 				centerNode = orderSeeds.pollFirst();
-				
-				
-//				if(centerNode.id == 59048) {
-//					System.out.println(centerNode);
-//				}
-					
-					
 				neighbors = fastRange(cellid2Nodes, qParams, centerNode);
 				centerNode.isProcessed = Boolean.TRUE;
 				centerNode.setCoreDistance(qParams, neighbors);
@@ -224,19 +212,20 @@ public class AlgEucDisBaseOptics {
 		sCircle.center = centerNode.location.m_pCoords;
 		List<CellSign> coveredCellids = sgplInfo.cover(sCircle);
 		List<Node> cellNodes = null;
-		List<Node> result = new ArrayList<>();
+		NgbNodes ngb = new NgbNodes(Boolean.TRUE);
 		double dis = 0.0;
+		
 		for(CellSign cs : coveredCellids) {
 			if(null == (cellNodes = cellid2Nodes.get(cs.getId())))	continue;
 			for(Node nd : cellNodes) {
 				dis = centerNode.location.getMinimumDistance(nd.location);
 				if(dis <= sCircle.radius) {
 					nd.disToCenter = dis;
-					result.add(nd);
+					ngb.add(dis, nd);
 				}
 			}
 		}
-		return result;
+		return ngb.toList();
 	}
 	
 	public List<Node> fastRange(Map<Integer, List<Node>> cellid2Nodes,QueryParams qParams, 
@@ -461,20 +450,5 @@ public class AlgEucDisBaseOptics {
 		}
 		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 }

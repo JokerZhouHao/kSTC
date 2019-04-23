@@ -86,25 +86,29 @@ public class SGPLInfo implements Serializable{
 	
 	public int nearestBelowCellY(double yCoord) {
 		if(yCoord<=0.0)	return 0;
-		return (int)((yCoord+Global.minPositiveDouble)/latStep);
+//		return (int)((yCoord+Global.minPositiveDouble)/latStep);
+		return (int)((yCoord)/latStep);
 	}
 	
 	public int nearestAboveCellY(double yCoord) {
 		if(yCoord >= Global.zorderHeight * latStep)	return Global.zorderHeight;
-		int y = (int)((yCoord+Global.minPositiveDouble)/latStep);
+//		int y = (int)((yCoord+Global.minPositiveDouble)/latStep);
+		int y = (int)((yCoord)/latStep);
 		if(Global.isZero(y*latStep - yCoord)) return y;
 		else return y+1;
 	}
 	
 	public int nearestLeftCellX(double xCoord) {
 		if(Global.compareDouble(xCoord, Global.minPositiveDouble) <= 0) return 0;
-		return (int)((xCoord+Global.minPositiveDouble)/lngStep);
+//		return (int)((xCoord+Global.minPositiveDouble)/lngStep);
+		return (int)((xCoord)/lngStep);
 	}
 	
 	public int nearestRightCellX(double xCoord) {
 		if(Global.compareDouble(xCoord, Global.minPositiveDouble) <= 0) return 0;
 		if(xCoord >= Global.zorderWidth * lngStep) { return Global.zorderWidth;}
-		int x = (int)((xCoord+Global.minPositiveDouble)/lngStep);
+//		int x = (int)((xCoord+Global.minPositiveDouble)/lngStep);
+		int x = (int)((xCoord)/lngStep);
 		if(Global.isZero(x*lngStep - xCoord))	return x;
 		else return x+1;
 	}
@@ -153,14 +157,37 @@ public class SGPLInfo implements Serializable{
 			}
 			
 			for(X1 = minX, X2 = X1+1; X2 <= maxX; X1 = X2, X2++) {
-				if(X1 >= leftX && X2 <= rightX) {
+				if(X1 >= leftX && X2 < rightX) {
 					zids.add(new CellSign(getZOrderId(X1, Y), Boolean.TRUE));
-					
 				} else zids.add(new CellSign(getZOrderId(X1, Y), Boolean.FALSE));
+//				zids.add(new CellSign(getZOrderId(X1, Y), Boolean.FALSE));
 			}
 		}
 		if(zids.isEmpty())	return null;
 		else return zids;
+	}
+	
+	/**
+	 * 完全计算
+	 * @param circle
+	 * @return
+	 */
+	public List<CellSign> coverTest(Circle circle){
+		int maxY = nearestAboveCellY(circle.center[1] + circle.radius);
+		int minY = nearestBelowCellY(circle.center[1] - circle.radius);
+		int minX, maxX;
+		
+		minX =  nearestLeftCellX(circle.center[0] - circle.radius);
+		maxX = nearestRightCellX(circle.center[0] + circle.radius);
+		
+		List<CellSign> zids = new ArrayList<>();
+		
+		for(int x=minX; x < maxX; x++) {
+			for(int y=minY; y < maxY; y++) {
+				zids.add(new CellSign(getZOrderId(x, y), Boolean.FALSE));
+			}
+		}
+		return zids;
 	}
 	
 	

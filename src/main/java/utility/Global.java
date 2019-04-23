@@ -34,7 +34,7 @@ public class Global {
 	}
 	
 	// query parameters
-	public static double xi = 0.05;
+//	public static double xi = 0.05;
 	public static double steepDegree = 0.1;
 	public static double steepOppositeDegree = 1 - steepDegree;
 	public static QueryParams opticQParams = null;
@@ -51,13 +51,21 @@ public class Global {
 	// set the paths for dealed dataset
 	public static DatasetType datasetType = null;
 	public static String datasetPath = null;
+	public static String subDataSetPath = null;
+	
+	public static String pathOrgId2Name = null;
+	public static String pathOrgId2Text = null;
+	public static String pathOrgId2Coord = null;
+	
 	public static String inputPath = null;
 	public static String outPath = null;
+	public static String samplePath = null;
 	public static String configPath = null;
 	
 	public static String pathIdName = null;
 	public static String pathIdText = null;
 	public static String pathIdCoord = null;
+	public static String pathIdNormCoord = null;
 	public static String pathIdWids = null;
 	public static String pathWidWord = null;
 	public static String pathIdTerms = null;
@@ -76,6 +84,7 @@ public class Global {
 	// SGPL
 	public static int zorderWidth = 0;
 	public static int zorderHeight = 0;
+	public static double zorderOffset = 0; // 处理圆刚好压线的问题
 	public static SGPLInfo sgplInfo = null;
 	public static String pathTerm2CellColIndex = null;
 	
@@ -106,6 +115,20 @@ public class Global {
 		
 		baseDatasetPath = getBaseDatasetPath();
 		IOUtility.existsOrThrowsException(baseDatasetPath);
+		
+		String path = baseDatasetPath + "global.properties";
+		if(!new File(path).exists())	throw new Exception("配置文件" + path + "不存在");
+		
+		Properties props = new Properties();
+		props.load(new FileInputStream(path));
+		if(null == props.getProperty("curDataset")) {
+			throw new Exception("配置文件" + path + "缺少参数curDataset");
+		}
+		datasetPath = baseDatasetPath + props.getProperty("curDataset") + File.separator;
+		
+		pathOrgId2Name = datasetPath + "id_name.txt";
+		pathOrgId2Text = datasetPath + "id_text.txt";
+		pathOrgId2Coord = datasetPath + "id_coord_longtitude_latitude.txt";
 	}
 	
 	// getBasePath
@@ -127,19 +150,37 @@ public class Global {
 	}
 	
 	// setAllPathsForDataset
-	public static void setAllPaths(DatasetType datasetType) throws Exception{
-		Global.datasetType = datasetType;
-		switch(datasetType) {
-		case yelp_academic_dataset_business:
-			datasetType = DatasetType.yelp_academic_dataset_business;
-		}
-		datasetPath = baseDatasetPath + datasetType.toString() + File.separator;
-		IOUtility.existsOrThrowsException(datasetPath);
+	public static void setAllPaths() throws Exception{
+//		Global.datasetType = datasetType;
+//		switch(datasetType) {
+//		case yelp_academic_dataset_business:
+//			datasetType = DatasetType.yelp_academic_dataset_business;
+//		}
+//		datasetPath = baseDatasetPath + datasetType.toString() + File.separator;
+//		IOUtility.existsOrThrowsException(datasetPath);
 		
-		inputPath = datasetPath + "input" + File.separator;
+		// loading global config
+		Properties props = new Properties();
+		String path = datasetPath + "dataset.properties";
+		if(!new File(path).exists()) {
+			throw new Exception("配置文件" + path + "不存在");
+		}
+		props.load(new FileInputStream(path));
+		
+		if(null == props.getProperty("subDataset")) {
+			throw new Exception("配置文件" + path + "不存在缺少参数subDataset");
+		}
+		
+		subDataSetPath = datasetPath + props.getProperty("subDataset") + File.separator;
+		
+		System.out.println("subDataSetPath : " + subDataSetPath);
+		
+		inputPath = subDataSetPath + "input" + File.separator;
 		IOUtility.existsOrThrowsException(inputPath);
 		
-		outPath = datasetPath + "output" + File.separator;
+		samplePath = inputPath + "sample" + File.separator;
+		
+		outPath = subDataSetPath + "output" + File.separator;
 		IOUtility.existsOrThrowsException(outPath);
 		
 		configPath = inputPath + "config.properties";
@@ -150,6 +191,7 @@ public class Global {
 		configProps.load(new FileInputStream(Global.configPath));
 		
 		suffixFile = (String)configProps.get("suffixFile");
+		if(null == suffixFile)	suffixFile = "";
 		
 		// query parameters
 		steepDegree =  Double.parseDouble((String)configProps.get("steepDegree"));
@@ -163,6 +205,7 @@ public class Global {
 		pathIdName = inputPath + (String)configProps.get("fileIdName") + suffixFile;
 		pathIdText = inputPath + (String)configProps.get("fileIdText") + suffixFile;
 		pathIdCoord = inputPath + (String)configProps.get("fileCoord") + suffixFile;
+		pathIdNormCoord = pathIdCoord + signNormalized;
 		pathIdWids = inputPath + (String)configProps.get("fileIdWids") + suffixFile;
 		pathIdTerms = inputPath + (String)configProps.get("fileIdTerms") + suffixFile;
 		pathWidTerms = inputPath + (String)configProps.get("fileWidTerms") + suffixFile;
@@ -186,6 +229,7 @@ public class Global {
 		// SGPL
 		zorderWidth = Integer.parseInt((String)configProps.get("zorderWidth"));
 		zorderHeight = Integer.parseInt((String)configProps.get("zorderHeight"));
+		zorderOffset = 1.0 / zorderHeight / 10000;
 		sgplInfo = SGPLInfo.getGlobalInstance();
 		pathTerm2CellColIndex =outPath + (String)configProps.get("pathTerm2CellColIndex") + suffixFile + signNormalized + File.separator;
 	}
@@ -268,7 +312,8 @@ public class Global {
 			// set paths
 			initBasePath();
 //			setAllPaths(DatasetType.values()[0]);
-			setAllPaths(DatasetType.values()[1]);
+//			setAllPaths(DatasetType.values()[1]);
+			setAllPaths();
 			
 			// set rtree parameters
 			Global.initRTreeParameters();

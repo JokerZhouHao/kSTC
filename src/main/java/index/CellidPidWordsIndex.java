@@ -33,12 +33,16 @@ public class CellidPidWordsIndex extends AbstractLuceneIndex{
 	private static final String fieldId = "cellidpid";
 	private static final String fieldWords = "words";
 	private static QueryParser queryAndWordsParser = null;
+	private static QueryParser queryOrWordsParser = null;
 	public static final int signRtreeNode = Integer.MIN_VALUE; 
 	
 	public CellidPidWordsIndex(String indexPath) throws Exception{
 		super(indexPath);
 		queryAndWordsParser = new QueryParser(fieldWords, analyzer);
 		queryAndWordsParser.setDefaultOperator(queryAndWordsParser.AND_OPERATOR);
+		
+		queryOrWordsParser = new QueryParser(fieldWords, analyzer);
+		queryOrWordsParser.setDefaultOperator(queryOrWordsParser.OR_OPERATOR);
 	}
 	
 	@Override
@@ -98,7 +102,9 @@ public class CellidPidWordsIndex extends AbstractLuceneIndex{
 	
 	public Map<Integer, List<Node>> searchWords(QueryParams queryParams, Point[] allLocations) throws Exception {
 		Query query = null;
-		query = queryAndWordsParser.parse(StringTools.collection2Str(queryParams.sWords));
+//		query = queryAndWordsParser.parse(StringTools.collection2Str(queryParams.sWords));
+		query = queryOrWordsParser.parse(StringTools.collection2Str(queryParams.sWords));
+		
 		TopDocs results = indexSearcher.search(query, Integer.MAX_VALUE);
 		ScoreDoc[] hits = results.scoreDocs;
 		
@@ -133,7 +139,9 @@ public class CellidPidWordsIndex extends AbstractLuceneIndex{
 	
 	public NodeCollection searchWordsReNodeCol(QueryParams queryParams, Point[] allLocations) throws Exception {
 		Query query = null;
-		query = queryAndWordsParser.parse(StringTools.collection2Str(queryParams.sWords));
+//		query = queryAndWordsParser.parse(StringTools.collection2Str(queryParams.sWords));
+		query = queryOrWordsParser.parse(StringTools.collection2Str(queryParams.sWords));
+		
 		TopDocs results = indexSearcher.search(query, Integer.MAX_VALUE);
 		ScoreDoc[] hits = results.scoreDocs;
 		

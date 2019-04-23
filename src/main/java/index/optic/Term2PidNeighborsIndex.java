@@ -55,6 +55,19 @@ public class Term2PidNeighborsIndex extends AbstractLuceneIndex{
 		return bb.array();
 	}
 	
+	public byte[] pidNeighborsToBytes(Entry<Integer, List<Node>> pidNeighbors) throws Exception{
+		int numByte = 4 * (1 + 1 + pidNeighbors.getValue().size() * 3);
+		ByteBuffer bb = ByteBuffer.allocate(numByte);
+		bb.putInt(pidNeighbors.getKey());
+		List<Node> nds = pidNeighbors.getValue();
+		bb.putInt(nds.size());
+		for(Node nd : nds) {
+			bb.putInt(nd.id);
+			bb.putDouble(nd.disToCenter);
+		}
+		return bb.array();
+	}
+	
 	public byte[] pidNeighborsToBytes(Map<Integer, List<Node>> pidNeighbors) throws Exception{
 		int numInt = 0;
 		numInt++; // pidNeighbors.size
@@ -105,6 +118,30 @@ public class Term2PidNeighborsIndex extends AbstractLuceneIndex{
 		ScoreDoc[] hits = results.scoreDocs;
 		if(0 == hits.length)	return null;
 		return bytesToPidNeighbors(indexSearcher.doc(hits[0].doc).getBinaryValue(fieldPidNeighbors).bytes);
+	}
+	
+	public Map<Integer, List<NeighborsNode>> searchTerm1(String term) throws Exception{
+		TopDocs results = indexSearcher.search(queryParser.parse(term), Integer.MAX_VALUE);
+		ScoreDoc[] hits = results.scoreDocs;
+		if(0 == hits.length)	return null;
+		
+		Map<Integer, List<NeighborsNode>> pidNeis = new HashMap<>();
+		int pid = 0;
+		List<NeighborsNode> neis = null;
+		ByteBuffer bb = null;
+		int i, j, size;
+		for(i=0; i<hits.length; i++) {
+			bb = ByteBuffer.wrap(indexSearcher.doc(hits[i].doc).getBinaryValue(fieldPidNeighbors).bytes);
+			pid = bb.getInt();
+			size = bb.getInt();
+			neis = new ArrayList<>();
+			for(j=0; j<size; j++) {
+				neis.add(new NeighborsNode(bb.getInt(), bb.getDouble()));
+			}
+			pidNeis.put(pid, neis);
+		}
+		
+		return pidNeis;
 	}
 	
 	public static void main(String[] args) throws Exception{

@@ -48,8 +48,10 @@ public class AlgEucDisFastRange {
 	private SGPLInfo sgplInfo = Global.sgplInfo;
 	private Circle sCircle = new Circle(0.0, new double[2]);
 	
+	private Map<Integer, Integer> tempClusteredCells = new HashMap<>();
+	
 	public AlgEucDisFastRange() throws Exception{
-		allLocations = FileLoader.loadPoints(Global.pathIdCoord + Global.signNormalized);
+		allLocations = FileLoader.loadPoints(Global.pathIdNormCoord);
 //		allLocations = FileLoader.loadPoints(Global.pathIdCoord);
 //		cellidWIndex = new CellidPidWordsIndex(Global.pathCellidPidWordsIndex);
 		
@@ -70,6 +72,7 @@ public class AlgEucDisFastRange {
 		for(String w : qParams.sWords)	tWs.add(w.toLowerCase());
 		qParams.sWords = tWs;
 		
+//		sCircle.radius = qParams.epsilon + Global.zorderOffset;	// 处理圆刚好压线的问题
 		sCircle.radius = qParams.epsilon;
 		Map<Integer, List<Node>> cellid2Nodes = cellidWIndex.searchWords(qParams, allLocations);
 		if(null == cellid2Nodes)	return null;
@@ -165,6 +168,8 @@ public class AlgEucDisFastRange {
 			else noiseRecoder.addScoNoise(new NodeNeighbors(qNode, ngbNodes));
 			return null;
 		} else {
+			clusteredCells.putAll(tempClusteredCells);
+			
 			qNode.clusterId = clusterId;
 			addedNodes.add(qNode);
 			ngbNodes = ngb.toList();
@@ -185,6 +190,8 @@ public class AlgEucDisFastRange {
 				if(ngb == null || ngb.size() < qParams.minpts) {
 					continue;
 				} else {
+					clusteredCells.putAll(tempClusteredCells);
+					
 					ngbNodes = ngb.toList();
 					for(Node nd : ngbNodes) {
 						if(nd.isNoise()) {
@@ -221,35 +228,36 @@ public class AlgEucDisFastRange {
 		List<CellSign> coveredCellids = sgplInfo.cover(sCircle);
 		Boolean sign = Boolean.TRUE;
 		
-		for(CellSign cs : coveredCellids) {
-			if(!clusteredCells.containsKey(cs.getId())) {
-				sign = Boolean.FALSE;
-				break;
-			}
-		}
-		if(sign)	return null;
-		
 		/* fast range */
 		sCircle.center = qNode.location.m_pCoords;
-		NgbNodes ngb = new NgbNodes();
+		NgbNodes ngb = new NgbNodes();	// 有序neighbors，skipping role
 		List<Node> cellNodes = null;
 		double dis = 0.0;
 		Integer tIn = 0;
 		
+		// clear tempClusteredCells
+		tempClusteredCells.clear();	// 获得的点不一定能够构成簇
+		
 		for(CellSign cs : coveredCellids) {
 			if(null == (cellNodes = cellid2Nodes.get(cs.getId())))	continue;
 			if(null != (tIn = clusteredCells.get(cs.getId())) && tIn!=clusterId) continue;
+			
 			sign = Boolean.TRUE;
 			for(Node nd : cellNodes) {
-				if(nd.hasInCluster(clusterId)) {
-					ngb.add(NgbNodes.signUsedKey, nd);
-				} else if(!nd.isClassified()) {
-					if(!cs.getSign())	sign = Boolean.FALSE;
-					dis = nd.location.getMinimumDistance(qNode.location);
-					if(dis <= qParams.epsilon)	ngb.add(dis, nd);
+				if(nd.isClassified() && !nd.hasInCluster(clusterId)) {
+					sign = Boolean.FALSE;
+					continue;
 				}
+				dis = nd.location.getMinimumDistance(qNode.location);
+				if(dis <= qParams.epsilon) {
+					if(nd.hasInCluster(clusterId)) {
+						ngb.add(NgbNodes.signUsedKey, nd);
+					} else if(!nd.isClassified()) {
+						ngb.add(dis, nd);
+					}
+				} else sign = Boolean.FALSE;
 			}
-			if(sign)	clusteredCells.put(cs.getId(), clusterId);
+			if(sign)	tempClusteredCells.put(cs.getId(), clusterId);
 		}
 		if(0==ngb.size())	return null;
 		return ngb;

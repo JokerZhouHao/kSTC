@@ -24,7 +24,7 @@ public class SubsetBuilder {
 	 * @throws Exception
 	 */
 	public static void buildingSubNameFile(String path, List<Integer> ids) throws Exception{
-		String[] names = FileLoader.loadNames(Global.pathIdName);
+		String[] names = FileLoader.loadNames(Global.pathOrgId2Name);
 		
 		OrginalFileWriter ofw = new OrginalFileWriter(path);
 		ofw.writeLine(Global.delimiterPound + String.valueOf(ids.size()));
@@ -41,7 +41,7 @@ public class SubsetBuilder {
 	 * @throws Exception
 	 */
 	public static void buildingSubCoordFile(String path, List<Integer> ids) throws Exception{
-		double[][] coords = FileLoader.loadCoords(Global.pathIdCoord);
+		double[][] coords = FileLoader.loadCoords(Global.pathOrgId2Coord);
 		
 		OrginalFileWriter ofw = new OrginalFileWriter(path);
 		ofw.writeLine(Global.delimiterPound + String.valueOf(ids.size()));
@@ -58,7 +58,7 @@ public class SubsetBuilder {
 	 * @throws Exception
 	 */
 	public static void buildSubTextFile(String path, List<Integer> ids) throws Exception{
-		String[] texts = FileLoader.loadText(Global.pathIdText);
+		String[] texts = FileLoader.loadText(Global.pathOrgId2Text);
 		
 		OrginalFileWriter ofw = new OrginalFileWriter(path);
 		ofw.writeLine(Global.delimiterPound + String.valueOf(ids.size()));
@@ -91,8 +91,9 @@ public class SubsetBuilder {
 	 * @throws Exception
 	 */
 	public static void  buildingSubset(Rectangle rec) throws Exception{
+		TimeUtility.init();
 		System.out.println("> start building subset in " + rec.toString());
-		double[][] coords = FileLoader.loadCoords(Global.pathIdCoord);
+		double[][] coords = FileLoader.loadCoords(Global.pathOrgId2Coord);
 		
 		List<Integer> ids = new ArrayList<>();
 		int i = 0;
@@ -101,13 +102,13 @@ public class SubsetBuilder {
 			i++;
 		}
 		
-		String pName = Global.pathIdName + rec.toString();
+		String pName = Global.pathIdName;
 		SubsetBuilder.buildingSubNameFile(pName, ids);
 		
-		String pCoords = Global.pathIdCoord + rec.toString();
+		String pCoords = Global.pathIdCoord;
 		SubsetBuilder.buildingSubCoordFile(pCoords, ids);
 		
-		String pText = Global.pathIdText + rec.toString();
+		String pText = Global.pathIdText;
 		SubsetBuilder.buildSubTextFile(pText, ids);
 		
 //		String pIdWids = Global.pathIdWids + rec.toString();

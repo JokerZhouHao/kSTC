@@ -422,8 +422,8 @@ public class ProcessGenerateFiles {
 //		ProcessGenerateFiles.generateIdWidsFile(Global.pathIdText, Global.pathIdWids, Global.pathWidWord);
 		
 		/* used		对子集坐标正则化处理	*/
-//		String pathCoords = Global.pathIdCoord + Global.subYelpBus1.toString();
-//		ProcessGenerateFiles.normalizedCoordFile(pathCoords, Global.subYelpBus1);
+		String pathCoords = Global.pathIdCoord + Global.subYelpBus1.toString();
+		ProcessGenerateFiles.normalizedCoordFile(pathCoords, Global.subYelpBus1);
 		
 		/* generate id_terms file */
 //		String pathIdTerms = Global.pathIdTerms;
@@ -465,8 +465,8 @@ public class ProcessGenerateFiles {
 		
 		/*********************	alg optic ******************/
 		/* used		generate wid_terms file, 供后面并行生成索引使用 */
-//		String pathWidTerms = Global.pathWidTerms;
-//		ProcessGenerateFiles.generateWidTermsFile(pathWidTerms);
+		String pathWidTerms = Global.pathWidTerms;
+		ProcessGenerateFiles.generateWidTermsFile(pathWidTerms);
 		
 		/* building k neighbor dis file */
 //		int k = 20;

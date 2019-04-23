@@ -61,7 +61,6 @@ import spatialindex.storagemanager.InvalidPageException;
 import spatialindex.storagemanager.PropertySet;
 import spatialindex.storagemanager.TreeLRUBuffer;
 import utility.Global;
-import utility.Utility;
 
 public class RTree implements ISpatialIndex
 {

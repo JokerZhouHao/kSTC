@@ -19,6 +19,10 @@ public class TimeUtility {
 		
 	}
 	
+	public static void reset() {
+		globalStartTime = System.currentTimeMillis();
+	}
+	
 	public static String getTime() {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
 		return df.format(new Date());
@@ -108,6 +112,10 @@ public class TimeUtility {
 	
 	public static String getGlobalSpendTime() {
 		return getSpendTimeStr(globalStartTime, System.currentTimeMillis());
+	}
+	
+	public static String getGlobalSpendMilTime() {
+		return String.valueOf(System.currentTimeMillis() - globalStartTime);
 	}
 	
 	public static void main(String[] args) {
