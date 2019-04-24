@@ -9,6 +9,7 @@ import java.util.Properties;
 import entity.QueryParams;
 import entity.Rectangle;
 import entity.SGPLInfo;
+import services.RunTimeRecordor;
 import utility.io.IOUtility;
 import utility.io.TimeUtility;
 
@@ -32,6 +33,9 @@ public class Global {
 		if(d >= -minPositiveDouble && d < minPositiveDouble)	return Boolean.TRUE;
 		else return Boolean.FALSE;
 	}
+	
+	// run time recoder
+	public static RunTimeRecordor runTimeRec = new RunTimeRecordor();
 	
 	// query parameters
 //	public static double xi = 0.05;
