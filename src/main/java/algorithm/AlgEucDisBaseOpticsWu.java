@@ -7,7 +7,7 @@ import entity.Node;
 import entity.QueryParams;
 import entity.SortedClusters;
 
-public class AlgEucDisBaseOpticsWu extends AlgEucDisBaseOptics {
+public class AlgEucDisBaseOpticsWu extends AlgEucDisBaseOptics{
 	public AlgEucDisBaseOpticsWu() throws Exception{
 		super();
 	}

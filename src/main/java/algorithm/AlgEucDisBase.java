@@ -29,7 +29,7 @@ import utility.io.TimeUtility;
  * @author ZhouHao
  * @since 2018年11月16日
  */
-public class AlgEucDisBase {
+public class AlgEucDisBase implements AlgInterface{
 	
 	private Point[] allLocations = null;
 //	private IdWordsIndex idWordsIndex = null;
@@ -56,6 +56,9 @@ public class AlgEucDisBase {
 	 * @throws Exception
 	 */
 	public SortedClusters excuteQuery(QueryParams qParams) throws Exception{
+		Global.runTimeRec.timeTotal = System.nanoTime();
+		Global.runTimeRec.timeTotalPrepareData = System.nanoTime();
+		
 		// 采用lucene分词产生的wid_terms.txt([-125.0, 28.0], [15.0, 60]文件全部是小写，故输入的查询关键词得先转化为小写
 		List<String> tWs = new ArrayList<>();
 		for(String w : qParams.sWords)	tWs.add(w.toLowerCase());
@@ -63,10 +66,21 @@ public class AlgEucDisBase {
 		
 //		NodeCollection nodeCol = idWordsIndex.searchWords(qParams, allLocations);
 		
+		Global.runTimeRec.setFrontTime();
 		NodeCollection nodeCol = cellidIndex.searchWordsReNodeCol(qParams, allLocations);
+		Global.runTimeRec.timeSearchTerms = Global.runTimeRec.getTimeSpan();
 		
+		Global.runTimeRec.setFrontTime();
 		PNodeCollection disPNodeCol = nodeCol.getPNodeCollection().sortByDistance();
+		Global.runTimeRec.timeSortByDistance = Global.runTimeRec.getTimeSpan();
+		
+		Global.runTimeRec.setFrontTime();
 		PNodeCollection scorePNodeCol = nodeCol.getPNodeCollection().copy().sortByScore();
+		Global.runTimeRec.timeSortByScore = Global.runTimeRec.getTimeSpan();
+		
+		Global.runTimeRec.timeTotalPrepareData = System.nanoTime() - Global.runTimeRec.timeTotalPrepareData;
+		
+		Global.runTimeRec.timeTotalGetCluster = System.nanoTime();
 		
 		SortedClusters sClusters = new SortedClusters(qParams);
 		Cluster cluster = null;
@@ -93,6 +107,7 @@ public class AlgEucDisBase {
 				continue;
 			}
 			cluster = getCluster(qParams, curClusterId, curNode, nodeCol, signAccessDis);
+			Global.runTimeRec.numGetCluster++;
 			if(null != cluster) {
 				sClusters.add(cluster);
 				curClusterId++;
@@ -113,9 +128,11 @@ public class AlgEucDisBase {
 			if(signAccessDis) signAccessDis = Boolean.FALSE;
 			else signAccessDis = Boolean.TRUE;
 		} while(bound <= topKScore);
-		
 		noiseRecoder.clear();
 		
+		Global.runTimeRec.numCluster = sClusters.getSize();
+		Global.runTimeRec.timeTotalGetCluster = System.nanoTime() - Global.runTimeRec.timeTotalGetCluster;
+		Global.runTimeRec.timeTotal = System.nanoTime() - Global.runTimeRec.timeTotal;
 		return sClusters;
 	}
 	
@@ -133,7 +150,12 @@ public class AlgEucDisBase {
 		LinkedList<Node> neighbors = new LinkedList<>();
 		LinkedList<Node> ngb = null;
 		Node centerNode = null;
+		
+		Global.runTimeRec.setFrontTime();
 		ngb = rtree.rangeQuery(qParams, clusterId, qNode, nodeCol, allLocations);
+		Global.runTimeRec.numRangeRtree++;
+		Global.runTimeRec.timeRangeRtree += Global.runTimeRec.getTimeSpan();
+		
 		if(null == ngb) {
 			return null;
 		} else if(ngb.size() < qParams.minpts) {
@@ -157,7 +179,12 @@ public class AlgEucDisBase {
 			
 			while(!neighbors.isEmpty()) {
 				centerNode = neighbors.pollFirst();
+				
+				Global.runTimeRec.setFrontTime();
 				ngb = rtree.rangeQuery(qParams, clusterId, centerNode, nodeCol, allLocations);
+				Global.runTimeRec.numRangeRtree++;
+				Global.runTimeRec.timeRangeRtree += Global.runTimeRec.getTimeSpan();
+				
                 if(ngb == null || ngb.size() < qParams.minpts) {
                     continue;
                 } else {

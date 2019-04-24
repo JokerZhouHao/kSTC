@@ -25,17 +25,23 @@ public class RunTimeRecordor {
 	/****************  base 参数 ******************/
 	public int numGetCluster = 0;
 	
+	public int numRangeRtree = 0;
 	public long timeRangeRtree = 0;
+	public int numRangeZCurve = 0;
 	public long timeRangeZCurve = 0;
 	
 	/**************** optic 参数 ******************/
-	public long timeOpticFunc = 0;
+	public int numExpandClusterOrder = 0;
+	public long timeReadTermPNgb = 0;
 	public long timeSearchTermPNgb = 0;
+	public long numOpticRange = 0;
 	public long timeOpticRange = 0;
+	public long timeOpticFunc = 0;
 	public long timeExcuteQueryFunc = 0;
 	
 	/**************** 总时间 *********************/
-	public long timeTotalPrepareData = 0;
+	public int numCluster = 0;
+	public long timeTotalPrepareData = 0;	// timeSearchTerms + timeSortByDistance + timeSortByScore
 	public long timeTotalGetCluster = 0;
 	public long timeTotal = 0;
 	

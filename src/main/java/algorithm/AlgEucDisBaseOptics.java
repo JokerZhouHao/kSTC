@@ -35,7 +35,7 @@ import utility.io.IOUtility;
  * @author ZhouHao
  * @since 2018年12月4日
  */
-public class AlgEucDisBaseOptics {
+public class AlgEucDisBaseOptics implements AlgInterface{
 	
 	protected Point[] allLocations = null;
 	protected CellidPidWordsIndex cellidWIndex = null;
@@ -54,6 +54,11 @@ public class AlgEucDisBaseOptics {
 		cellidWIndex.openIndexReader();
 	}
 	
+	@Override
+	public SortedClusters excuteQuery(QueryParams qParams) throws Exception{
+		return excuteQuery(qParams, null);
+	}
+	
 	/**
 	 * excute query
 	 * @param qParams
@@ -61,6 +66,8 @@ public class AlgEucDisBaseOptics {
 	 * @throws Exception
 	 */
 	public SortedClusters excuteQuery(QueryParams qParams, String pathOrderedFile) throws Exception{
+		Global.runTimeRec.timeTotal = System.nanoTime();
+		
 		// 采用lucene分词产生的wid_terms.txt([-125.0, 28.0], [15.0, 60]文件全部是小写，故输入的查询关键词得先转化为小写
 		List<String> tWs = new ArrayList<>();
 		for(String w : qParams.sWords)	tWs.add(w.toLowerCase());
@@ -68,12 +75,22 @@ public class AlgEucDisBaseOptics {
 		
 		sCircle.radius = qParams.xi;
 		
+		Global.runTimeRec.setFrontTime();
 		Map<Integer, List<Node>> cellid2Nodes = cellidWIndex.searchWords(qParams, allLocations);
 		if(null == cellid2Nodes)	return null;
+		Global.runTimeRec.timeSearchTerms = Global.runTimeRec.getTimeSpan();
 		
+		Global.runTimeRec.timeOpticFunc = System.nanoTime();
 		List<Node> sortedNodes = optics(cellid2Nodes, qParams, pathOrderedFile);
+		Global.runTimeRec.timeOpticFunc = System.nanoTime() - Global.runTimeRec.timeOpticFunc;
 		
-		return excuteQuery(qParams, pathOrderedFile, cellid2Nodes, sortedNodes);
+		Global.runTimeRec.timeExcuteQueryFunc = System.nanoTime();
+		SortedClusters sc = excuteQuery(qParams, pathOrderedFile, cellid2Nodes, sortedNodes);
+		Global.runTimeRec.timeExcuteQueryFunc = System.nanoTime() - Global.runTimeRec.timeExcuteQueryFunc;
+		
+		Global.runTimeRec.timeTotal = System.nanoTime() - Global.runTimeRec.timeTotal;
+		
+		return sc;
 	}
 	
 	/**
@@ -92,8 +109,14 @@ public class AlgEucDisBaseOptics {
 		for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
 			nodes.addAll(en.getValue());
 		}
+		
+		Global.runTimeRec.setFrontTime();
 		PNodeCollection disPNodeCol = new PNodeCollection(nodes).sortByDistance();
+		Global.runTimeRec.timeSortByDistance = Global.runTimeRec.getTimeSpan();
+		
+		Global.runTimeRec.setFrontTime();
 		PNodeCollection scorePNodeCol = new PNodeCollection(nodes).sortByScore();
+		Global.runTimeRec.timeSortByScore = Global.runTimeRec.getTimeSpan();
 
 		SortedClusters sClusters = new SortedClusters(qParams);
 		Cluster cluster = null;
@@ -174,6 +197,7 @@ public class AlgEucDisBaseOptics {
 			for(Node nd : en.getValue()) {
 				if(!nd.isProcessed) {
 					expandClusterOrder(cellid2Nodes, nd, qParams, orderedNodes, ofw);
+					Global.runTimeRec.numExpandClusterOrder++;
 				}
 			}
 		}
@@ -184,7 +208,11 @@ public class AlgEucDisBaseOptics {
 	}
 	
 	public void expandClusterOrder(Map<Integer, List<Node>> cellid2Nodes, Node centerNode, QueryParams qParams, List<Node> orderedNodes, OrginalFileWriter ofw) throws Exception{
+		Global.runTimeRec.setFrontTime();
 		List<Node> neighbors = fastRange(cellid2Nodes, qParams, centerNode);
+		Global.runTimeRec.numOpticRange++;
+		Global.runTimeRec.timeOpticRange += Global.runTimeRec.getTimeSpan();
+		
 		centerNode.isProcessed = Boolean.TRUE;
 		centerNode.reachabilityDistance = Node.UNDEFINED;
 		centerNode.setCoreDistance(qParams, neighbors);
@@ -195,7 +223,12 @@ public class AlgEucDisBaseOptics {
 			orderSeeds.update(neighbors, centerNode);
 			while(!orderSeeds.isEmpty()) {
 				centerNode = orderSeeds.pollFirst();
+				
+				Global.runTimeRec.setFrontTime();
 				neighbors = fastRange(cellid2Nodes, qParams, centerNode);
+				Global.runTimeRec.numOpticRange++;
+				Global.runTimeRec.timeOpticRange += Global.runTimeRec.getTimeSpan();
+				
 				centerNode.isProcessed = Boolean.TRUE;
 				centerNode.setCoreDistance(qParams, neighbors);
 				if(null != ofw)	ofw.writeIdCoreAndDirectDis(centerNode.id, centerNode.coreDistance, centerNode.reachabilityDistance);

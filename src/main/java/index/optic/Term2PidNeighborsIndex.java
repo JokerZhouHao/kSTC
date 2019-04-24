@@ -117,7 +117,12 @@ public class Term2PidNeighborsIndex extends AbstractLuceneIndex{
 		TopDocs results = indexSearcher.search(queryParser.parse(term), 1);
 		ScoreDoc[] hits = results.scoreDocs;
 		if(0 == hits.length)	return null;
-		return bytesToPidNeighbors(indexSearcher.doc(hits[0].doc).getBinaryValue(fieldPidNeighbors).bytes);
+		
+		Global.runTimeRec.setFrontTime();
+		byte[] bs = indexSearcher.doc(hits[0].doc).getBinaryValue(fieldPidNeighbors).bytes;
+		Global.runTimeRec.timeReadTermPNgb += Global.runTimeRec.getTimeSpan();
+		
+		return bytesToPidNeighbors(bs);
 	}
 	
 	public Map<Integer, List<NeighborsNode>> searchTerm1(String term) throws Exception{

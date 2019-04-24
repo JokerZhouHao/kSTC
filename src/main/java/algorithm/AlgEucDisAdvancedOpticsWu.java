@@ -21,7 +21,7 @@ import utility.Global;
  * @author ZhouHao
  * @since 2018年12月16日
  */
-public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics{
+public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics {
 	private Term2PidNeighborsIndex term2PNgb = null;
 	private Map<String, Integer> ngbLens = null;
 	
@@ -84,11 +84,13 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics{
 //			查交集
 //			Map<Integer, List<NeighborsNode>> pid2Ngb = term2PNgb.searchTerm(minTerm);
 			
+			Global.runTimeRec.timeSearchTermPNgb = System.nanoTime();
 //			查并集
 			Map<Integer, List<NeighborsNode>> pid2Ngb = new HashMap<>();
 			for(String tm : qParams.sWords) {
 				pid2Ngb.putAll(term2PNgb.searchTerm(tm));
 			}
+			Global.runTimeRec.timeSearchTermPNgb = System.nanoTime() - Global.runTimeRec.timeSearchTermPNgb; 
 			
 			Map<Integer, Node> pid2Node = new HashMap<>();
 			for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
@@ -101,6 +103,7 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics{
 				for(Node nd : en.getValue()) {
 					if(!nd.isProcessed) {
 						expandClusterOrder(cellid2Nodes, nd, qParams, orderedNodes, ofw, pid2Ngb, pid2Node);
+						Global.runTimeRec.numExpandClusterOrder++;
 					}
 				}
 			}
@@ -114,7 +117,12 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics{
 	public void expandClusterOrder(Map<Integer, List<Node>> cellid2Nodes, Node centerNode, QueryParams qParams,
 			List<Node> orderedNodes, OrginalFileWriter ofw, Map<Integer, List<NeighborsNode>> pid2Ngb,
 			Map<Integer, Node> pid2Node) throws Exception {
+		
+		Global.runTimeRec.setFrontTime();
 		List<Node> neighbors = fastIndexRange(pid2Ngb, pid2Node, centerNode);
+		Global.runTimeRec.numOpticRange++;
+		Global.runTimeRec.timeOpticRange += Global.runTimeRec.getTimeSpan();
+		
 		centerNode.isProcessed = Boolean.TRUE;
 		centerNode.reachabilityDistance = Node.UNDEFINED;
 		centerNode.setCoreDistanceBySorted(qParams, neighbors);
@@ -130,7 +138,11 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics{
 //				if(centerNode.id == 59048) {
 //					System.out.println(centerNode);
 //				}
+				Global.runTimeRec.setFrontTime();
 				neighbors = fastIndexRange(pid2Ngb, pid2Node, centerNode);
+				Global.runTimeRec.numOpticRange++;
+				Global.runTimeRec.timeOpticRange += Global.runTimeRec.getTimeSpan();
+				
 				centerNode.isProcessed = Boolean.TRUE;
 				centerNode.setCoreDistanceBySorted(qParams, neighbors);
 				if(null != ofw)	ofw.writeIdCoreAndDirectDis(centerNode.id, centerNode.coreDistance, centerNode.reachabilityDistance);
