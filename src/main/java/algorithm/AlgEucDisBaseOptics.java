@@ -88,7 +88,15 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 		SortedClusters sc = excuteQuery(qParams, pathOrderedFile, cellid2Nodes, sortedNodes);
 		Global.runTimeRec.timeExcuteQueryFunc = System.nanoTime() - Global.runTimeRec.timeExcuteQueryFunc;
 		
+		Global.runTimeRec.timeTotalPrepareData = Global.runTimeRec.timeSearchTerms + Global.runTimeRec.timeSortByDistance + 
+											     Global.runTimeRec.timeSortByScore;
+		
 		Global.runTimeRec.timeTotal = System.nanoTime() - Global.runTimeRec.timeTotal;
+		
+		Global.runTimeRec.numCluster = sc.getSize();
+		
+		if(null==sc)	Global.runTimeRec.topKScore = 0;
+		else Global.runTimeRec.topKScore = sc.getLastScore();
 		
 		return sc;
 	}
@@ -387,9 +395,15 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 		for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
 			nodes.addAll(en.getValue());
 		}
+		
+		Global.runTimeRec.setFrontTime();
 		PNodeCollection disPNodeCol = new PNodeCollection(nodes).sortByDistance();
+		Global.runTimeRec.timeSortByDistance = Global.runTimeRec.getTimeSpan();
+		
+		Global.runTimeRec.setFrontTime();
 		PNodeCollection scorePNodeCol = new PNodeCollection(nodes).sortByScore();
-
+		Global.runTimeRec.timeSortByScore = Global.runTimeRec.getTimeSpan();
+		
 		SortedClusters sClusters = new SortedClusters(qParams);
 		Cluster cluster = null;
 		int curClusterId = 1;

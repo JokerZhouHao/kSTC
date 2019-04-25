@@ -23,6 +23,8 @@ public class Global {
 	
 	public static final double minPositiveDouble = 0.000000000001;
 	
+	public static final long globalStartTime = System.currentTimeMillis();
+	
 	public static int compareDouble(double d1, double d2) {
 		if(d1 - d2 >= minPositiveDouble)	return 1;
 		else if(d1 - d2 >= -minPositiveDouble) return 0;
@@ -64,6 +66,7 @@ public class Global {
 	public static String inputPath = null;
 	public static String outPath = null;
 	public static String samplePath = null;
+	public static String sampleResultPath = null;
 	public static String configPath = null;
 	
 	public static String pathIdName = null;
@@ -183,6 +186,7 @@ public class Global {
 		IOUtility.existsOrThrowsException(inputPath);
 		
 		samplePath = inputPath + "sample" + File.separator;
+		sampleResultPath = samplePath + "result" + File.separator;
 		
 		outPath = subDataSetPath + "output" + File.separator;
 		IOUtility.existsOrThrowsException(outPath);

@@ -4,10 +4,11 @@ import algorithm.AlgEucDisAdvancedOpticsWu;
 import algorithm.AlgEucDisBase;
 import algorithm.AlgEucDisBaseOpticsWu;
 import algorithm.AlgEucDisFastRange;
+import algorithm.AlgInterface;
 import entity.AlgType;
 
 public class AlgFactory {
-	public static Object getAlgInstance(AlgType type) throws Exception{
+	public static AlgInterface getAlgInstance(AlgType type) throws Exception{
 		switch (type) {
 		case AlgEucDisBase:
 			return new AlgEucDisBase();

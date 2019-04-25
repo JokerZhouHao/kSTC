@@ -154,7 +154,9 @@ public class AlgEucDisFastRange implements AlgInterface{
 		
 		Global.runTimeRec.numCluster = sClusters.getSize();
 		Global.runTimeRec.timeTotalGetCluster = System.nanoTime() - Global.runTimeRec.timeTotalGetCluster;
-		Global.runTimeRec.timeTotal = Global.runTimeRec.timeTotal - System.nanoTime();
+		Global.runTimeRec.timeTotal = System.nanoTime() - Global.runTimeRec.timeTotal;
+		if(null==sClusters)	Global.runTimeRec.topKScore = Integer.MIN_VALUE;
+		else Global.runTimeRec.topKScore = sClusters.getLastScore();
 		return sClusters;
 	}
 	

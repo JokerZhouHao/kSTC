@@ -120,6 +120,7 @@ public class Term2PidNeighborsIndex extends AbstractLuceneIndex{
 		
 		Global.runTimeRec.setFrontTime();
 		byte[] bs = indexSearcher.doc(hits[0].doc).getBinaryValue(fieldPidNeighbors).bytes;
+		Global.runTimeRec.numByteOfTermPNgb += bs.length;
 		Global.runTimeRec.timeReadTermPNgb += Global.runTimeRec.getTimeSpan();
 		
 		return bytesToPidNeighbors(bs);

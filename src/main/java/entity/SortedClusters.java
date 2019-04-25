@@ -51,6 +51,10 @@ public class SortedClusters {
 		else return clusters.get(qParams.k-1).getScore();
 	}
 	
+	public double getLastScore() {
+		return clusters.get(clusters.size() - 1).getScore();
+	}
+	
 	public Point getqPoint() {
 		return this.qParams.location;
 	}

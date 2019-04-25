@@ -49,8 +49,8 @@ public class AlgTest {
 			resPath = Global.outPath + "result_ecu_base_optics.txt";
 		} else if(algName.equals("AlgEucDisBaseOpticsWu")) {
 			System.out.println("----------------------- AlgEucDisBaseOpticsWu ----------------------");
-//			sClusters = AlgTest.eucBaseOpticsWu.excuteQuery(qParams, Global.pathOrderObjects + "_AlgEucDisBaseOpticsWu");
-			sClusters = AlgTest.eucBaseOpticsWu.excuteQuery(qParams, null);
+			sClusters = AlgTest.eucBaseOpticsWu.excuteQuery(qParams, Global.pathOrderObjects + "_AlgEucDisBaseOpticsWu");
+//			sClusters = AlgTest.eucBaseOpticsWu.excuteQuery(qParams, null);
 			resPath = Global.outPath + "result_ecu_base_optics_wu.txt";
 		} else if(algName.equals("AlgEucDisAdvancedOptics")) {
 			System.out.println("----------------------- AlgEucDisAdvancedOptics ----------------------");
@@ -112,14 +112,16 @@ public class AlgTest {
 		
 //		words.add("Coffee".toLowerCase());
 //		words.add("Tea".toLowerCase());
-		words.add("Breakfast".toLowerCase());
-		words.add("Sandwiches".toLowerCase());
+//		words.add("Breakfast".toLowerCase());
+//		words.add("Sandwiches".toLowerCase());
 //		words.add("Good".toLowerCase());
 //		words.add("Bars".toLowerCase());
+		words.add("boulevard".toLowerCase());
+		words.add("dentistry".toLowerCase());
 		
 		
 		qParams.sWords = words;
-		qParams.k = 5;
+		qParams.k = 5000000;
 		qParams.epsilon = 0.005;	//  用于AlgEucDisBase
 		qParams.minpts = 5;
 		qParams.xi = 0.01;		// 用于AlgEucDisBaseOptics
@@ -140,14 +142,13 @@ public class AlgTest {
 		QueryParams qParams = AlgTest.getQParams();
 		
 //		AlgTest.testAlgEuc("base", qParams);
-		AlgTest.testAlgEuc("fast", qParams);
+//		AlgTest.testAlgEuc("fast", qParams);
 		
-//		AlgTest.testAlgEuc("AlgEucDisBaseOpticsWu", qParams);
-//		AlgTest.testAlgEuc("AlgEucDisAdvancedOpticsWu", qParams);
+		AlgTest.testAlgEuc("AlgEucDisBaseOpticsWu", qParams);
+		AlgTest.testAlgEuc("AlgEucDisAdvancedOpticsWu", qParams);
 		
 //		AlgTest.testAlgEuc("AlgEucDisBaseOptics", qParams);
 //		AlgTest.testAlgEuc("AlgEucDisAdvancedOptics", qParams);
-		
 		
 	}
 

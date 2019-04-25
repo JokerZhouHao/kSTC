@@ -43,8 +43,8 @@ public class FileComparator {
 	}
 	
 	public static void main(String[] args) throws Exception{
-		String orderPath1 = Global.outPath + "order_objects.obj([-112.41,33.46],[-111.9,33.68])_AlgEucDisBaseOpticsWu";
-		String orderPath2 = Global.outPath + "order_objects.obj([-112.41,33.46],[-111.9,33.68])_AlgEucDisAdvancedOpticsWu";
+		String orderPath1 = Global.outPath + "order_objects.obj_AlgEucDisBaseOpticsWu";
+		String orderPath2 = Global.outPath + "order_objects.obj_AlgEucDisAdvancedOpticsWu";
 		FileComparator.comCharFile(orderPath1, orderPath2);
 	}
 }

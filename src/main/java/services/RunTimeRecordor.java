@@ -32,6 +32,7 @@ public class RunTimeRecordor {
 	
 	/**************** optic 参数 ******************/
 	public int numExpandClusterOrder = 0;
+	public long numByteOfTermPNgb = 0;
 	public long timeReadTermPNgb = 0;
 	public long timeSearchTermPNgb = 0;
 	public long numOpticRange = 0;
@@ -40,17 +41,18 @@ public class RunTimeRecordor {
 	public long timeExcuteQueryFunc = 0;
 	
 	/**************** 总时间 *********************/
-	public int numCluster = 0;
 	public long timeTotalPrepareData = 0;	// timeSearchTerms + timeSortByDistance + timeSortByScore
 	public long timeTotalGetCluster = 0;
 	public long timeTotal = 0;
+	public int numCluster = 0;
 	
+	public double topKScore = 0;
 	
 	public static String getHeader() {
 		return "id,timeSearchTerms,timeSortByDistance,timeSortByScore," +
-				"numGetCluster,timeRangeRtree,timeRangeZCurve," +
-				"timeOpticFunc,timeSearchTermPNgb,timeOpticRange,timeExcuteQueryFunc," +
-				"timeTotalPrepareData,timeTotalGetCluster,timeTotal," +
+				"numGetCluster,numRangeRtree,timeRangeRtree,numRangeZCurve,timeRangeZCurve," +
+				"numExpandClusterOrder,numByteOfTermPNgb,timeReadTermPNgb,timeSearchTermPNgb,numOpticRange,timeOpticRange,timeOpticFunc,timeExcuteQueryFunc," +
+				"timeTotalPrepareData,timeTotalGetCluster,timeTotal,numCluster,topKScore," +
 				"\n";
 	}
 	
@@ -63,15 +65,23 @@ public class RunTimeRecordor {
 				String.valueOf(timeSortByDistance/base) + "," + 
 				String.valueOf(timeSortByScore/base) + "," + 
 				String.valueOf(numGetCluster) + "," + 
+				String.valueOf(numRangeRtree) + "," + 
 				String.valueOf(timeRangeRtree/base) + "," + 
+				String.valueOf(numRangeZCurve) + "," + 
 				String.valueOf(timeRangeZCurve/base) + "," + 
-				String.valueOf(timeOpticFunc/base) + "," + 
+				String.valueOf(numExpandClusterOrder) + "," + 
+				String.valueOf(numByteOfTermPNgb) + "," + 
+				String.valueOf(timeReadTermPNgb/base) + "," + 
 				String.valueOf(timeSearchTermPNgb/base) + "," + 
+				String.valueOf(numOpticRange) + "," + 
 				String.valueOf(timeOpticRange/base) + "," + 
+				String.valueOf(timeOpticFunc/base) + "," + 
 				String.valueOf(timeExcuteQueryFunc/base) + "," + 
 				String.valueOf(timeTotalPrepareData/base) + "," + 
 				String.valueOf(timeTotalGetCluster/base) + "," + 
 				String.valueOf(timeTotal/base) + "," + 
+				String.valueOf(numCluster) + "," + 
+				String.valueOf(topKScore) + "," + 
 				"\n";
 	}
 }

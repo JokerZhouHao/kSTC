@@ -54,10 +54,13 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics {
 		
 //		 改为查并集
 		int minLen = Integer.MAX_VALUE;
+		int maxLen = Integer.MIN_VALUE;
 		for(String tm : qParams.sWords) {
 			if(ngbLens.get(tm) <= minLen) {
 				minLen = ngbLens.get(tm);
 			}
+			if(ngbLens.get(tm) >= maxLen)
+				maxLen = ngbLens.get(tm);
 		}
 		
 		if(minLen <= 0) { // the all points of containing the term aren't core points
@@ -72,7 +75,7 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics {
 					}
 				}
 			}
-		} else if (minLen == Integer.MAX_VALUE) { // the term ngb too long
+		} else if (maxLen == Integer.MAX_VALUE) { // the term ngb too long
 			for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
 				for(Node nd : en.getValue()) {
 					if(!nd.isProcessed) {
