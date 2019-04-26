@@ -30,6 +30,10 @@ public class NgbNodes {
 		if(null == (ns = nodes.get(dis))) {
 			ns = new LinkedList<>();
 			nodes.put(dis, ns);
+		} else {
+			for(Node nd : ns) {
+				if(nd.equals(node)) return;
+			}
 		}
 		ns.add(node);
 		size++;

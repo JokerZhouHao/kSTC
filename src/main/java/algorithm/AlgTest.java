@@ -144,7 +144,7 @@ public class AlgTest {
 //		AlgTest.testAlgEuc("base", qParams);
 //		AlgTest.testAlgEuc("fast", qParams);
 		
-		AlgTest.testAlgEuc("AlgEucDisBaseOpticsWu", qParams);
+//		AlgTest.testAlgEuc("AlgEucDisBaseOpticsWu", qParams);
 		AlgTest.testAlgEuc("AlgEucDisAdvancedOpticsWu", qParams);
 		
 //		AlgTest.testAlgEuc("AlgEucDisBaseOptics", qParams);

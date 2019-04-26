@@ -77,6 +77,11 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 		
 		Global.runTimeRec.setFrontTime();
 		Map<Integer, List<Node>> cellid2Nodes = cellidWIndex.searchWords(qParams, allLocations);
+		
+		if(null != cellid2Nodes)	System.out.println(cellid2Nodes.size());
+		else System.out.println(0);
+		
+		
 		if(null == cellid2Nodes)	return null;
 		Global.runTimeRec.timeSearchTerms = Global.runTimeRec.getTimeSpan();
 		
@@ -93,7 +98,8 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 		
 		Global.runTimeRec.timeTotal = System.nanoTime() - Global.runTimeRec.timeTotal;
 		
-		Global.runTimeRec.numCluster = sc.getSize();
+		if(null == sc) Global.runTimeRec.numCluster = 0;
+		else Global.runTimeRec.numCluster = sc.getSize();
 		
 		if(null==sc)	Global.runTimeRec.topKScore = 0;
 		else Global.runTimeRec.topKScore = sc.getLastScore();
@@ -218,12 +224,15 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 	public void expandClusterOrder(Map<Integer, List<Node>> cellid2Nodes, Node centerNode, QueryParams qParams, List<Node> orderedNodes, OrginalFileWriter ofw) throws Exception{
 		Global.runTimeRec.setFrontTime();
 		List<Node> neighbors = fastRange(cellid2Nodes, qParams, centerNode);
-		Global.runTimeRec.numOpticRange++;
-		Global.runTimeRec.timeOpticRange += Global.runTimeRec.getTimeSpan();
+		
+		Global.runTimeRec.numOpticFastRange++;
+		Global.runTimeRec.timeOpticFastRange += Global.runTimeRec.getTimeSpan();
 		
 		centerNode.isProcessed = Boolean.TRUE;
 		centerNode.reachabilityDistance = Node.UNDEFINED;
-		centerNode.setCoreDistance(qParams, neighbors);
+//		centerNode.setCoreDistance(qParams, neighbors);
+		centerNode.setCoreDistanceBySorted(qParams, neighbors);
+		
 		if(null != ofw)	ofw.writeIdCoreAndDirectDis(centerNode.id, centerNode.coreDistance, centerNode.reachabilityDistance); 
 		orderedNodes.add(centerNode);
 		OrderSeeds orderSeeds = new OrderSeeds();
@@ -234,11 +243,15 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 				
 				Global.runTimeRec.setFrontTime();
 				neighbors = fastRange(cellid2Nodes, qParams, centerNode);
-				Global.runTimeRec.numOpticRange++;
-				Global.runTimeRec.timeOpticRange += Global.runTimeRec.getTimeSpan();
+				
+				Global.runTimeRec.numOpticFastRange++;
+				Global.runTimeRec.timeOpticFastRange += Global.runTimeRec.getTimeSpan();
 				
 				centerNode.isProcessed = Boolean.TRUE;
-				centerNode.setCoreDistance(qParams, neighbors);
+//				centerNode.setCoreDistance(qParams, neighbors);
+				centerNode.setCoreDistanceBySorted(qParams, neighbors);
+				
+				
 				if(null != ofw)	ofw.writeIdCoreAndDirectDis(centerNode.id, centerNode.coreDistance, centerNode.reachabilityDistance);
 				orderedNodes.add(centerNode);
 				if(centerNode.coreDistance != Node.UNDEFINED) {
@@ -266,6 +279,13 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 				}
 			}
 		}
+		
+		
+		
+//		System.out.println(centerNode.id + " : " + ngb.toList().size());
+		
+		
+		
 		return ngb.toList();
 	}
 	

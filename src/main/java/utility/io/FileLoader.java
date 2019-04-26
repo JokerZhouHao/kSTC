@@ -42,6 +42,6 @@ public class FileLoader {
 	
 	public static void main(String[] args) throws Exception{
 		String path = Global.inputPath + "term_2_pid_neighbors_len.txt,opticMinpts=1,opticEpsilon=0.1, maxPidNeighborsBytes=50000000";
-		FileLoader.showTerm2Len(path, 20000000);
+		FileLoader.showTerm2Len(path, 2000);
 	}
 }

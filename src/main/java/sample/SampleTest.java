@@ -81,7 +81,7 @@ public class SampleTest {
 			Global.runTimeRec = new RunTimeRecordor();
 			sCluster = alg.excuteQuery(qps.get(i));
 			bw.write(Global.runTimeRec.getTimeStr(i+1));
-			if(null != sCluster && null != pathResultCluster) {
+			if(null != pathResultCluster) {
 				IOUtility.writeSortedClusters(pathResultCluster, qps.get(i), sCluster);
 			}
 		}

@@ -35,8 +35,10 @@ public class RunTimeRecordor {
 	public long numByteOfTermPNgb = 0;
 	public long timeReadTermPNgb = 0;
 	public long timeSearchTermPNgb = 0;
-	public long numOpticRange = 0;
-	public long timeOpticRange = 0;
+	public long numOpticFastRange = 0;
+	public long timeOpticFastRange = 0;
+	public long numOpticLuceneRange = 0;
+	public long timeOpticLuceneRange = 0;
 	public long timeOpticFunc = 0;
 	public long timeExcuteQueryFunc = 0;
 	
@@ -51,7 +53,8 @@ public class RunTimeRecordor {
 	public static String getHeader() {
 		return "id,timeSearchTerms,timeSortByDistance,timeSortByScore," +
 				"numGetCluster,numRangeRtree,timeRangeRtree,numRangeZCurve,timeRangeZCurve," +
-				"numExpandClusterOrder,numByteOfTermPNgb,timeReadTermPNgb,timeSearchTermPNgb,numOpticRange,timeOpticRange,timeOpticFunc,timeExcuteQueryFunc," +
+				"numExpandClusterOrder,numByteOfTermPNgb,timeReadTermPNgb,timeSearchTermPNgb," + 
+				"numOpticFastRange,timeOpticFastRange,numOpticLuceneRange,timeOpticLuceneRange,timeOpticFunc,timeExcuteQueryFunc," +
 				"timeTotalPrepareData,timeTotalGetCluster,timeTotal,numCluster,topKScore," +
 				"\n";
 	}
@@ -73,8 +76,10 @@ public class RunTimeRecordor {
 				String.valueOf(numByteOfTermPNgb) + "," + 
 				String.valueOf(timeReadTermPNgb/base) + "," + 
 				String.valueOf(timeSearchTermPNgb/base) + "," + 
-				String.valueOf(numOpticRange) + "," + 
-				String.valueOf(timeOpticRange/base) + "," + 
+				String.valueOf(numOpticFastRange) + "," + 
+				String.valueOf(timeOpticFastRange/base) + "," + 
+				String.valueOf(numOpticLuceneRange) + "," + 
+				String.valueOf(timeOpticLuceneRange/base) + "," + 
 				String.valueOf(timeOpticFunc/base) + "," + 
 				String.valueOf(timeExcuteQueryFunc/base) + "," + 
 				String.valueOf(timeTotalPrepareData/base) + "," + 

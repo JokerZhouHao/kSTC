@@ -113,7 +113,7 @@ public class SGPLInfo implements Serializable{
 		else return x+1;
 	}
 	
-	public List<CellSign> cover(Circle circle){
+	public List<CellSign> coverT(Circle circle){
 		int maxY = nearestAboveCellY(circle.center[1] + circle.radius);
 		int minY = nearestBelowCellY(circle.center[1] - circle.radius);
 		int Y;
@@ -172,7 +172,7 @@ public class SGPLInfo implements Serializable{
 	 * @param circle
 	 * @return
 	 */
-	public List<CellSign> coverTest(Circle circle){
+	public List<CellSign> cover(Circle circle){
 		int maxY = nearestAboveCellY(circle.center[1] + circle.radius);
 		int minY = nearestBelowCellY(circle.center[1] - circle.radius);
 		int minX, maxX;

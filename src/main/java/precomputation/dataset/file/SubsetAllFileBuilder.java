@@ -18,32 +18,32 @@ public class SubsetAllFileBuilder {
 		
 		/***************** 从原始文件中提取所需数据  ***********************************/
 //		 yelp_academic_dataset_business
-		Json2StringFile.main(null);
+//		Json2StringFile.main(null);
 //		([-125.0,28.0],[15.0,60.0])
 //		Rectangle subRect = new Rectangle(-112.41,33.46, -111.90,33.68);
 		Rectangle subRect = new Rectangle(-125,28, 15,60);
 		/***************** 提取某范围内的数据文件 *************************************/
-		if(!Global.subDataSetPath.contains(subRect.toString())) {
-			throw new Exception("提取出的子集" + subRect.toString() + "所放文件夹" + Global.subDataSetPath + "命名与子集范围不同");
-		}
-		SubsetBuilder.buildingSubset(subRect);
+//		if(!Global.subDataSetPath.contains(subRect.toString())) {
+//			throw new Exception("提取出的子集" + subRect.toString() + "所放文件夹" + Global.subDataSetPath + "命名与子集范围不同");
+//		}
+//		SubsetBuilder.buildingSubset(subRect);
 		
 		
 		/***************** 正则化坐标 *********************************************/
-		ProcessGenerateFiles.normalizedCoordFile(Global.pathIdCoord, subRect);
+//		ProcessGenerateFiles.normalizedCoordFile(Global.pathIdCoord, subRect);
 		
 		
 		/***************** 创建RTree ********************************************/
-		String placeFile = Global.pathIdNormCoord;
-		String treeFile = Global.rtreePath;
-		ProcessGenerateFiles.buildRTree(placeFile, treeFile, Global.rtreeFanout, Global.rtreeBufferSize, Global.rtreePageSize);
-		MRTree rtree = MRTree.getInstanceInDisk();
-		System.out.println("树高" + rtree.getTreeHeight());
+//		String placeFile = Global.pathIdNormCoord;
+//		String treeFile = Global.rtreePath;
+//		ProcessGenerateFiles.buildRTree(placeFile, treeFile, Global.rtreeFanout, Global.rtreeBufferSize, Global.rtreePageSize);
+//		MRTree rtree = MRTree.getInstanceInDisk();
+//		System.out.println("树高" + rtree.getTreeHeight());
 		
 		
 		/***************** 生成  cellid---pidOrRtreeid---words 索引 ****************/
-		String pathCellidRtreeidOrPidWordsIndex = Global.pathCellidRtreeidOrPidWordsIndex;
-		ProcessGenerateFiles.buildCellidRtreeidOrPidWordsIndex(pathCellidRtreeidOrPidWordsIndex);
+//		String pathCellidRtreeidOrPidWordsIndex = Global.pathCellidRtreeidOrPidWordsIndex;
+//		ProcessGenerateFiles.buildCellidRtreeidOrPidWordsIndex(pathCellidRtreeidOrPidWordsIndex);
 		
 		
 		/* ========================= 以下是 AlgEucDisAdvancedOptics 需用到的文件  ==================================== */

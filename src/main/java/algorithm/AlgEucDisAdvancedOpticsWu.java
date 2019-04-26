@@ -1,14 +1,18 @@
 package algorithm;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import entity.Node;
 import entity.QueryParams;
 import entity.SortedClusters;
+import entity.fastrange.NgbNodes;
 import entity.optics.OrderSeeds;
 import index.optic.NeighborsNode;
 import index.optic.Term2PidNeighborsIndex;
@@ -43,25 +47,25 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics {
 		}
 		
 //		查交集
-//		int minLen = Integer.MAX_VALUE;
-//		String minTerm = null;
-//		for(String tm : qParams.sWords) {
-//			if(ngbLens.get(tm) <= minLen) {
-//				minLen = ngbLens.get(tm);
-//				minTerm = tm;
-//			}
-//		}
-		
-//		 改为查并集
 		int minLen = Integer.MAX_VALUE;
-		int maxLen = Integer.MIN_VALUE;
+		String minTerm = null;
 		for(String tm : qParams.sWords) {
 			if(ngbLens.get(tm) <= minLen) {
 				minLen = ngbLens.get(tm);
+				minTerm = tm;
 			}
-			if(ngbLens.get(tm) >= maxLen)
-				maxLen = ngbLens.get(tm);
 		}
+		
+//		 改为查并集
+//		int minLen = Integer.MAX_VALUE;
+//		int maxLen = Integer.MIN_VALUE;
+//		for(String tm : qParams.sWords) {
+//			if(ngbLens.get(tm) <= minLen) {
+//				minLen = ngbLens.get(tm);
+//			}
+//			if(ngbLens.get(tm) >= maxLen)
+//				maxLen = ngbLens.get(tm);
+//		}
 		
 		if(minLen <= 0) { // the all points of containing the term aren't core points
 			for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
@@ -75,7 +79,7 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics {
 					}
 				}
 			}
-		} else if (maxLen == Integer.MAX_VALUE) { // the term ngb too long
+		} else if (minLen == Integer.MAX_VALUE) { // the term ngb too long
 			for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
 				for(Node nd : en.getValue()) {
 					if(!nd.isProcessed) {
@@ -84,15 +88,15 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics {
 				}
 			}
 		} else {	// the term ngb in index
-//			查交集
-//			Map<Integer, List<NeighborsNode>> pid2Ngb = term2PNgb.searchTerm(minTerm);
-			
 			Global.runTimeRec.timeSearchTermPNgb = System.nanoTime();
+//			查交集
+			List<Map<Integer, List<NeighborsNode>>> pid2Ngbs = new ArrayList<>();
+			pid2Ngbs.add(term2PNgb.searchTerm(minTerm));
 //			查并集
-			Map<Integer, List<NeighborsNode>> pid2Ngb = new HashMap<>();
-			for(String tm : qParams.sWords) {
-				pid2Ngb.putAll(term2PNgb.searchTerm(tm));
-			}
+//			List<Map<Integer, List<NeighborsNode>>> pid2Ngbs = new ArrayList<>();
+//			for(String tm : qParams.sWords) {
+//				pid2Ngbs.add(term2PNgb.searchTerm(tm));
+//			}
 			Global.runTimeRec.timeSearchTermPNgb = System.nanoTime() - Global.runTimeRec.timeSearchTermPNgb; 
 			
 			Map<Integer, Node> pid2Node = new HashMap<>();
@@ -105,7 +109,7 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics {
 			for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
 				for(Node nd : en.getValue()) {
 					if(!nd.isProcessed) {
-						expandClusterOrder(cellid2Nodes, nd, qParams, orderedNodes, ofw, pid2Ngb, pid2Node);
+						expandClusterOrder(cellid2Nodes, nd, qParams, orderedNodes, ofw, pid2Ngbs, pid2Node);
 						Global.runTimeRec.numExpandClusterOrder++;
 					}
 				}
@@ -118,13 +122,13 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics {
 	}
 
 	public void expandClusterOrder(Map<Integer, List<Node>> cellid2Nodes, Node centerNode, QueryParams qParams,
-			List<Node> orderedNodes, OrginalFileWriter ofw, Map<Integer, List<NeighborsNode>> pid2Ngb,
+			List<Node> orderedNodes, OrginalFileWriter ofw, List<Map<Integer, List<NeighborsNode>>> pid2Ngbs,
 			Map<Integer, Node> pid2Node) throws Exception {
 		
 		Global.runTimeRec.setFrontTime();
-		List<Node> neighbors = fastIndexRange(pid2Ngb, pid2Node, centerNode);
-		Global.runTimeRec.numOpticRange++;
-		Global.runTimeRec.timeOpticRange += Global.runTimeRec.getTimeSpan();
+		List<Node> neighbors = fastIndexRange(pid2Ngbs, pid2Node, centerNode);
+		Global.runTimeRec.numOpticLuceneRange++;
+		Global.runTimeRec.timeOpticLuceneRange += Global.runTimeRec.getTimeSpan();
 		
 		centerNode.isProcessed = Boolean.TRUE;
 		centerNode.reachabilityDistance = Node.UNDEFINED;
@@ -142,9 +146,9 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics {
 //					System.out.println(centerNode);
 //				}
 				Global.runTimeRec.setFrontTime();
-				neighbors = fastIndexRange(pid2Ngb, pid2Node, centerNode);
-				Global.runTimeRec.numOpticRange++;
-				Global.runTimeRec.timeOpticRange += Global.runTimeRec.getTimeSpan();
+				neighbors = fastIndexRange(pid2Ngbs, pid2Node, centerNode);
+				Global.runTimeRec.numOpticLuceneRange++;
+				Global.runTimeRec.timeOpticLuceneRange += Global.runTimeRec.getTimeSpan();
 				
 				centerNode.isProcessed = Boolean.TRUE;
 				centerNode.setCoreDistanceBySorted(qParams, neighbors);
@@ -158,19 +162,27 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics {
 	}
 	
 	
-	public List<Node> fastIndexRange(Map<Integer, List<NeighborsNode>> pidNeighbors, Map<Integer, Node> pid2Node, Node centerNode){
-		List<Node> res = new ArrayList<>();
-		List<NeighborsNode> ngb = pidNeighbors.get(centerNode.id);
-		if(ngb==null)	return res;
-		Node nd = null;
-		for(NeighborsNode nn : ngb) {
-			if(nn.disToCenter > sCircle.radius)	break;	// disToCenter is bigger than xi
-			if(null != (nd = pid2Node.get(nn.id))) {
-				nd.disToCenter = nn.disToCenter;
-				res.add(nd);
+	public List<Node> fastIndexRange(List<Map<Integer, List<NeighborsNode>>> pid2Ngbs, Map<Integer, Node> pid2Node, Node centerNode){
+		NgbNodes recNgb = new NgbNodes(Boolean.TRUE);
+		for(Map<Integer, List<NeighborsNode>> pidNeighbors : pid2Ngbs) {
+			List<NeighborsNode> ngb = pidNeighbors.get(centerNode.id);
+			if(ngb==null)	continue;
+			Node nd = null;
+			for(NeighborsNode nn : ngb) {
+				if(nn.disToCenter > sCircle.radius)	break;	// disToCenter is bigger than xi
+				if(null != (nd = pid2Node.get(nn.id))) {
+					nd.disToCenter = nn.disToCenter;
+					recNgb.add(nn.disToCenter, nd);
+				}
 			}
 		}
-		return res;
+		
+		
+//		System.out.println(centerNode.id + " : " + recNgb.toList().size());
+		
+		
+		
+		return recNgb.toList();
 	}
 
 	@Override

@@ -102,8 +102,8 @@ public class CellidPidWordsIndex extends AbstractLuceneIndex{
 	
 	public Map<Integer, List<Node>> searchWords(QueryParams queryParams, Point[] allLocations) throws Exception {
 		Query query = null;
-//		query = queryAndWordsParser.parse(StringTools.collection2Str(queryParams.sWords));
-		query = queryOrWordsParser.parse(StringTools.collection2Str(queryParams.sWords));
+		query = queryAndWordsParser.parse(StringTools.collection2Str(queryParams.sWords));
+//		query = queryOrWordsParser.parse(StringTools.collection2Str(queryParams.sWords));
 		
 		TopDocs results = indexSearcher.search(query, Integer.MAX_VALUE);
 		ScoreDoc[] hits = results.scoreDocs;
@@ -139,8 +139,8 @@ public class CellidPidWordsIndex extends AbstractLuceneIndex{
 	
 	public NodeCollection searchWordsReNodeCol(QueryParams queryParams, Point[] allLocations) throws Exception {
 		Query query = null;
-//		query = queryAndWordsParser.parse(StringTools.collection2Str(queryParams.sWords));
-		query = queryOrWordsParser.parse(StringTools.collection2Str(queryParams.sWords));
+		query = queryAndWordsParser.parse(StringTools.collection2Str(queryParams.sWords));
+//		query = queryOrWordsParser.parse(StringTools.collection2Str(queryParams.sWords));
 		
 		TopDocs results = indexSearcher.search(query, Integer.MAX_VALUE);
 		ScoreDoc[] hits = results.scoreDocs;
