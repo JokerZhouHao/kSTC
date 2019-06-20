@@ -42,8 +42,8 @@ public class SubsetAllFileBuilder {
 		
 		
 		/***************** 生成  cellid---pidOrRtreeid---words 索引 ****************/
-//		String pathCellidRtreeidOrPidWordsIndex = Global.pathCellidRtreeidOrPidWordsIndex;
-//		ProcessGenerateFiles.buildCellidRtreeidOrPidWordsIndex(pathCellidRtreeidOrPidWordsIndex);
+		String pathCellidRtreeidOrPidWordsIndex = Global.pathCellidRtreeidOrPidWordsIndex;
+		ProcessGenerateFiles.buildCellidRtreeidOrPidWordsIndex(pathCellidRtreeidOrPidWordsIndex);
 		
 		
 		/* ========================= 以下是 AlgEucDisAdvancedOptics 需用到的文件  ==================================== */

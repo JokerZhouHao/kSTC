@@ -1,10 +1,12 @@
 package test;
 
 import java.util.HashSet;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
 import entity.Node;
+import index.optic.NeighborsNode;
 import utility.DatasetType;
 import utility.MComparator;
 
@@ -32,14 +34,20 @@ public class T1 {
 //		System.out.println("zhou");
 //		System.out.println((int)(1.7/1));
 		
-		Node n1 = new Node(1, null, 1, 0);
-		Node n2 = new Node(2, null, 2, 2);
-		TreeMap<Double, Node> tm = new TreeMap<>();
-		tm.put(1.0, n1);
-		tm.put(2.0, n2);
+//		Node n1 = new Node(1, null, 1, 0);
+//		Node n2 = new Node(2, null, 2, 2);
+//		TreeMap<Double, Node> tm = new TreeMap<>();
+//		tm.put(1.0, n1);
+//		tm.put(2.0, n2);
+//		
+//		System.out.println(tm.firstEntry().getValue());
+//		tm.pollFirstEntry();
+//		System.out.println(tm.firstEntry().getValue());
 		
-		System.out.println(tm.firstEntry().getValue());
-		tm.pollFirstEntry();
-		System.out.println(tm.firstEntry().getValue());
+//		Set<Node> nds = new HashSet<>();
+//		nds.add(new Node(1, null, 0, 0));
+//		System.out.println(nds.contains(new NeighborsNode(-1, 1)));
+		
+		System.out.println();
 	}
 }

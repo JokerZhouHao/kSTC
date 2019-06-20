@@ -113,9 +113,9 @@ public class SampleTest {
 //		samT.test(qps, AlgType.AlgEucDisFastRange, pathRecordRunTime, pathSampleResult);
 		
 		// AlgEucDisBaseOpticsWu
-		pathRecordRunTime = Global.sampleResultPath + "run_time_base_optic_wu.csv";
-		pathSampleResult = Global.sampleResultPath + "res_base_optic_wu.txt";
-		samT.test(qps, AlgType.AlgEucDisBaseOpticsWu, pathRecordRunTime, pathSampleResult);
+//		pathRecordRunTime = Global.sampleResultPath + "run_time_base_optic_wu.csv";
+//		pathSampleResult = Global.sampleResultPath + "res_base_optic_wu.txt";
+//		samT.test(qps, AlgType.AlgEucDisBaseOpticsWu, pathRecordRunTime, pathSampleResult);
 		
 		// AlgEucDisAdvancedOpticsWu
 		pathRecordRunTime = Global.sampleResultPath + "run_time_advanced_optic_wu.csv";

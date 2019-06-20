@@ -70,6 +70,7 @@ public class Global {
 	public static String configPath = null;
 	
 	public static String pathIdName = null;
+	public static String pathCell2Pids = null;
 	public static String pathIdText = null;
 	public static String pathIdCoord = null;
 	public static String pathIdNormCoord = null;
@@ -86,6 +87,7 @@ public class Global {
 	public static String pathCellidPidWordsIndex = null;
 	public static String pathCellidRtreeidOrPidWordsIndex = null;
 	public static String pathTerm2PidNeighborsIndex = null;
+	public static String pathPid2Terms2NeighborsIndex = null;
 	public static String pathTestIndex = null;
 	
 	// SGPL
@@ -210,6 +212,7 @@ public class Global {
 		
 		// set file path
 		pathTestFile = outPath + "test.txt";
+		pathCell2Pids = inputPath + "cellid_pids.txt";
 		pathIdName = inputPath + (String)configProps.get("fileIdName") + suffixFile;
 		pathIdText = inputPath + (String)configProps.get("fileIdText") + suffixFile;
 		pathIdCoord = inputPath + (String)configProps.get("fileCoord") + suffixFile;
@@ -227,6 +230,8 @@ public class Global {
 		pathPidAndRtreeIdWordsIndex = outPath + (String)configProps.get("pathPidAndRtreeIdWordsIndex") + suffixFile + File.separator;
 		pathCellidPidWordsIndex = outPath + (String)configProps.get("pathCellidPidWordsIndex") + suffixFile + signNormalized + File.separator;
 		pathTerm2PidNeighborsIndex = outPath + (String)configProps.get("pathTerm2PidNeighborsIndex") + suffixFile + signNormalized +
+				",opticMinpts=" + String.valueOf(opticQParams.minpts) + ",opticEpsilon=" + String.valueOf(opticQParams.epsilon) + File.separator;
+		pathPid2Terms2NeighborsIndex = outPath + (String)configProps.get("pathPid2Terms2NeighborsIndex") + suffixFile + signNormalized +
 				",opticMinpts=" + String.valueOf(opticQParams.minpts) + ",opticEpsilon=" + String.valueOf(opticQParams.epsilon) + File.separator;
 		pathCellidRtreeidOrPidWordsIndex = outPath + (String)configProps.get("pathCellidRtreeidOrPidWordsIndex") + suffixFile + signNormalized + File.separator;
 		pathTestIndex = outPath + "test" + File.separator;

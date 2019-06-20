@@ -36,40 +36,52 @@ public class MRTree extends RTree{
 		super(ps, sm);
 	}
 	
+	public static MRTree getInstanceInDisk(Boolean isSingle) throws Exception{
+		if(isSingle && rtree != null) return rtree;
+		MRTree tTree = null;
+		PropertySet psRTree = new PropertySet();
+		String indexRTree = Global.rtreePath;
+		psRTree.setProperty("FileName", indexRTree);
+		psRTree.setProperty("PageSize", Global.rtreePageSize);
+		psRTree.setProperty("BufferSize", Global.rtreeBufferSize);
+		psRTree.setProperty("fanout", Global.rtreeFanout);
+		
+		IStorageManager diskfile = new DiskStorageManager(psRTree);
+		IBuffer file = new TreeLRUBuffer(diskfile, Global.rtreeBufferSize, false);
+		
+		Integer i = new Integer(1); 
+		psRTree.setProperty("IndexIdentifier", i);
+		tTree = new MRTree(psRTree, file);
+		
+		if(isSingle) rtree = tTree;
+		return tTree;
+	}
+	
 	public static MRTree getInstanceInDisk() throws Exception{
-		if(null == rtree) {
-			PropertySet psRTree = new PropertySet();
-			String indexRTree = Global.rtreePath;
-			psRTree.setProperty("FileName", indexRTree);
-			psRTree.setProperty("PageSize", Global.rtreePageSize);
-			psRTree.setProperty("BufferSize", Global.rtreeBufferSize);
-			psRTree.setProperty("fanout", Global.rtreeFanout);
-			
-			IStorageManager diskfile = new DiskStorageManager(psRTree);
-			IBuffer file = new TreeLRUBuffer(diskfile, Global.rtreeBufferSize, false);
-			
-			Integer i = new Integer(1); 
-			psRTree.setProperty("IndexIdentifier", i);
-			rtree = new MRTree(psRTree, file);
-		}
-		return rtree;
+		return getInstanceInDisk(Boolean.TRUE);
+	}
+	
+	public static MRTree getInstanceInMemory(String placeFile, Boolean isSingle) throws Exception{
+		if(isSingle && rtree != null) return rtree;
+		MRTree tTree = null;
+		PropertySet psRTree = new PropertySet();
+		Double f = new Double(0.7);
+		psRTree.setProperty("FillFactor", f);
+		psRTree.setProperty("IndexCapacity", Global.rtreeFanout);
+		psRTree.setProperty("LeafCapacity", Global.rtreeFanout);
+		psRTree.setProperty("Dimension", new Integer(2));
+		psRTree.setProperty("fanout", Global.rtreeFanout);
+		IStorageManager rtreeMem = new MemoryStorageManager();
+		
+		tTree = new MRTree(psRTree, rtreeMem);
+		buildRTreeInMemory(rtree, placeFile);
+		
+		if(isSingle) rtree = tTree;
+		return tTree;
 	}
 	
 	public static MRTree getInstanceInMemory(String placeFile) throws Exception{
-		if(null == rtree) {
-			PropertySet psRTree = new PropertySet();
-			Double f = new Double(0.7);
-			psRTree.setProperty("FillFactor", f);
-			psRTree.setProperty("IndexCapacity", Global.rtreeFanout);
-			psRTree.setProperty("LeafCapacity", Global.rtreeFanout);
-			psRTree.setProperty("Dimension", new Integer(2));
-			psRTree.setProperty("fanout", Global.rtreeFanout);
-			IStorageManager rtreeMem = new MemoryStorageManager();
-			
-			rtree = new MRTree(psRTree, rtreeMem);
-			buildRTreeInMemory(rtree, placeFile);
-		}
-		return rtree;
+		return getInstanceInMemory(placeFile, Boolean.TRUE);
 	}
 	
 	public static void buildRTree(String placefile, String treefile, int fanout, int buffersize, int pagesize)throws Exception{
@@ -176,8 +188,8 @@ public class MRTree extends RTree{
 			Region r = new Region(f1, f2);
 			rtree.insertData(null, r, id);
 
-			if (cntLines % 10000 == 0)
-				System.out.println(cntLines + " places inserted");
+//			if (cntLines % 10000 == 0)
+//				System.out.println(cntLines + " places inserted");
 		}
 
 		long end = System.currentTimeMillis();

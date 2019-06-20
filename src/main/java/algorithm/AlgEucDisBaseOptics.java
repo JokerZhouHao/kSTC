@@ -415,7 +415,12 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 		for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
 			nodes.addAll(en.getValue());
 		}
-		
+		return excuteQueryByWu(qParams, pathOrderedFile, nodes, sortedNodes);
+	}
+	
+	public SortedClusters excuteQueryByWu(QueryParams qParams, String pathOrderedFile, List<Node> nodes,
+			List<Node> sortedNodes) throws Exception{
+	
 		Global.runTimeRec.setFrontTime();
 		PNodeCollection disPNodeCol = new PNodeCollection(nodes).sortByDistance();
 		Global.runTimeRec.timeSortByDistance = Global.runTimeRec.getTimeSpan();

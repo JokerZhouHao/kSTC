@@ -22,6 +22,11 @@ import utility.Global;
 import utility.io.IOUtility;
 import utility.io.TimeUtility;
 
+/**
+ * 创建计算<term, <<pid, neighbors><pid, neighbors><pid, neighbors> . . . >索引
+ * @author ZhouHao
+ * @since 2019年4月27日
+ */
 public class Term2PidNeighborsIndexBuilder implements Runnable{
 	// because synchronized can't use Integer as a synchron object, so i create a new int class
 	static public class TInt{

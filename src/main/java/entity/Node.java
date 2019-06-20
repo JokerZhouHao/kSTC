@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import entity.fastrange.NgbNodes;
+import index.optic.NeighborsNode;
 import spatialindex.spatialindex.Point;
 import utility.Global;
 
@@ -95,8 +96,13 @@ public class Node implements Serializable{
 
 	@Override
 	public boolean equals(Object obj) {
-		if(id == ((Node)obj).id)	return Boolean.TRUE;
-		else return Boolean.FALSE;
+		if(obj instanceof Node) {
+			if(id == ((Node)obj).id)	return Boolean.TRUE;
+			else return Boolean.FALSE;
+		} else if(obj instanceof NeighborsNode) {
+			if(id == ((NeighborsNode)obj).id)	return Boolean.TRUE;
+			else return Boolean.FALSE;
+		} else return false;
 	}
 	
 	@Override
