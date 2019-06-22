@@ -1,8 +1,17 @@
 class Global:
-    datasetType = 'yelp_academic_dataset_business'
     # datasetType = 'test'
-    pathInput = 'D:\\kSTC\\Dataset\\' + datasetType + '\\([-112.41,33.46],[-111.9,33.68])\\input\\'
-    pathOutput = 'D:\\kSTC\\Dataset\\' + datasetType + '\\([-112.41,33.46],[-111.9,33.68])\\output\\'
+
+    #### ([-112.41,33.46],[-111.9,33.68])
+    # datasetType = 'yelp_academic_dataset_business'
+    # pathInput = 'D:\\kSTC\\Dataset\\' + datasetType + '\\([-112.41,33.46],[-111.9,33.68])\\input\\'
+    # pathOutput = 'D:\\kSTC\\Dataset\\' + datasetType + '\\([-112.41,33.46],[-111.9,33.68])\\output\\'
+
+
+    #### ([-125.0,28.0],[15.0,60.0])
+    datasetType = 'yelp_academic_dataset_business'
+    pathInput = 'D:\\kSTC\\Dataset\\' + datasetType + '\\([-125.0,28.0],[15.0,60.0])\\input\\'
+    pathOutput = 'D:\\kSTC\\Dataset\\' + datasetType + '\\([-125.0,28.0],[15.0,60.0])\\output\\'
+
     pathImgs = pathInput + 'imgs\\'
 
     pathName = pathInput + 'id_name.txt'

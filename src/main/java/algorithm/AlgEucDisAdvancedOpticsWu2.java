@@ -46,6 +46,8 @@ public class AlgEucDisAdvancedOpticsWu2 extends AlgEucDisBaseOptics {
 	 * @throws Exception
 	 */
 	public SortedClusters excuteQuery(QueryParams qParams, String pathOrderedFile) throws Exception{
+		if(qParams.sWords.isEmpty())	return null;
+		
 		Global.runTimeRec.timeTotal = System.nanoTime();
 		
 		// 采用lucene分词产生的wid_terms.txt([-125.0, 28.0], [15.0, 60]文件全部是小写，故输入的查询关键词得先转化为小写

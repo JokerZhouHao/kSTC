@@ -67,6 +67,8 @@ public class AlgEucDisFastRange implements AlgInterface{
 	 * @throws Exception
 	 */
 	public SortedClusters excuteQuery(QueryParams qParams) throws Exception{
+		if(qParams.sWords.isEmpty())	return null;
+		
 		Global.runTimeRec.timeTotal = System.nanoTime();
 		Global.runTimeRec.timeTotalPrepareData = System.nanoTime();
 		
@@ -136,14 +138,9 @@ public class AlgEucDisFastRange implements AlgInterface{
 			topKScore = sClusters.getTopKScore();
 			
 			disAndSco = noiseRecoder.getMinDisAndSco();
+			disAndSco[0] = disAndSco[0] <= disPNodeCol.first(1).distance ? disAndSco[0]:disPNodeCol.first(1).distance;
+			disAndSco[1] = disAndSco[1] <= scorePNodeCol.first(1).score ? disAndSco[1]:scorePNodeCol.first(1).score;
 			
-			if(signAccessDis) {
-				disAndSco[0] = disAndSco[0] <= disPNodeCol.first(0).distance ? disAndSco[0]:disPNodeCol.first(0).distance;
-				disAndSco[1] = disAndSco[1] <= scorePNodeCol.first(1).score ? disAndSco[1]:scorePNodeCol.first(1).score;
-			} else {
-				disAndSco[0] = disAndSco[0] <= disPNodeCol.first(1).distance ? disAndSco[0]:disPNodeCol.first(1).distance;
-				disAndSco[1] = disAndSco[1] <= scorePNodeCol.first(0).score ? disAndSco[1]:scorePNodeCol.first(0).score;
-			}
 			bound = Global.alpha * disAndSco[0] + (1 - Global.alpha) * disAndSco[1];
 			
 			if(signAccessDis) signAccessDis = Boolean.FALSE;
@@ -155,7 +152,7 @@ public class AlgEucDisFastRange implements AlgInterface{
 		Global.runTimeRec.numCluster = sClusters.getSize();
 		Global.runTimeRec.timeTotalGetCluster = System.nanoTime() - Global.runTimeRec.timeTotalGetCluster;
 		Global.runTimeRec.timeTotal = System.nanoTime() - Global.runTimeRec.timeTotal;
-		if(null==sClusters)	Global.runTimeRec.topKScore = Integer.MIN_VALUE;
+		if(0==sClusters.getSize())	Global.runTimeRec.topKScore = Integer.MIN_VALUE;
 		else Global.runTimeRec.topKScore = sClusters.getLastScore();
 		return sClusters;
 	}
