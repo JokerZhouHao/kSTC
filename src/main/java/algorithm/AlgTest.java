@@ -115,18 +115,18 @@ public class AlgTest {
 //		qParams.epsilon = 0.2;
 //		qParams.minpts = 1;
 		
-//		words.add("Coffee".toLowerCase());
+		words.add("Coffee".toLowerCase());
 //		words.add("Tea".toLowerCase());
 //		words.add("Breakfast".toLowerCase());
 //		words.add("Sandwiches".toLowerCase());
 //		words.add("Good".toLowerCase());
-		words.add("Bars".toLowerCase());
+//		words.add("Bars".toLowerCase());
 //		words.add("university".toLowerCase());
 		
 		
 		qParams.sWords = words;
 		qParams.k = 5000000;
-		qParams.epsilon = 0.01;	//  用于AlgEucDisBase
+		qParams.epsilon = 0.001;	//  用于AlgEucDisBase
 		qParams.minpts = 5;
 		qParams.xi = 0.01;		// 用于AlgEucDisBaseOptics
 		
@@ -146,11 +146,11 @@ public class AlgTest {
 		
 		QueryParams qParams = AlgTest.getQParams();
 		
-//		AlgTest.testAlgEuc("base", qParams);
-//		AlgTest.testAlgEuc("fast", qParams);
+		AlgTest.testAlgEuc("base", qParams);
+		AlgTest.testAlgEuc("fast", qParams);
 		
-		AlgTest.testAlgEuc("AlgEucDisBaseOpticsWu", qParams);
-		AlgTest.testAlgEuc("AlgEucDisAdvancedOpticsWu", qParams);
+//		AlgTest.testAlgEuc("AlgEucDisBaseOpticsWu", qParams);
+//		AlgTest.testAlgEuc("AlgEucDisAdvancedOpticsWu", qParams);
 //		AlgTest.testAlgEuc("AlgEucDisAdvancedOpticsWu2", qParams);
 		
 //		AlgTest.testAlgEuc("AlgEucDisBaseOptics", qParams);

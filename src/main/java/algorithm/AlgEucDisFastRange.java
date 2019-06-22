@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.Map.Entry;
 
+import entity.Cell;
 import entity.CellCollection;
 import entity.CellSign;
 import entity.Circle;
@@ -257,13 +258,24 @@ public class AlgEucDisFastRange implements AlgInterface{
 		
 		/* fast range */
 		sCircle.center = qNode.location.m_pCoords;
-		NgbNodes ngb = new NgbNodes();	// 有序neighbors，skipping role
+		
 		List<Node> cellNodes = null;
 		double dis = 0.0;
 		Integer tIn = 0;
 		
 		// clear tempClusteredCells
 		tempClusteredCells.clear();	// 获得的点不一定能够构成簇
+		
+		/*	skipping role */
+		NgbNodes ngb = new NgbNodes();	
+		Boolean canSkip = Boolean.TRUE;
+		for(CellSign cs : coveredCellids) {
+			if(null == (cellNodes = cellid2Nodes.get(cs.getId())))	continue;
+			if(null != (tIn = clusteredCells.get(cs.getId())))	continue;
+			canSkip = Boolean.FALSE;
+			break;
+		}
+		if(canSkip)	return null;
 		
 		for(CellSign cs : coveredCellids) {
 			if(null == (cellNodes = cellid2Nodes.get(cs.getId())))	continue;
@@ -286,6 +298,7 @@ public class AlgEucDisFastRange implements AlgInterface{
 			}
 			if(sign)	tempClusteredCells.put(cs.getId(), clusterId);
 		}
+		
 		if(0==ngb.size())	return null;
 		return ngb;
 	}
