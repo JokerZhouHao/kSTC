@@ -70,6 +70,12 @@ public class AlgEucDisBase implements AlgInterface{
 		
 		Global.runTimeRec.setFrontTime();
 		NodeCollection nodeCol = cellidIndex.searchWordsReNodeCol(qParams, allLocations);
+		if(nodeCol == null) {
+			Global.runTimeRec.timeTotal = 0;
+			Global.runTimeRec.timeTotalPrepareData = 0;
+			return null;
+		}
+		Global.runTimeRec.numNid = nodeCol.size();
 		Global.runTimeRec.timeSearchTerms = Global.runTimeRec.getTimeSpan();
 		
 		Global.runTimeRec.setFrontTime();
@@ -130,7 +136,7 @@ public class AlgEucDisBase implements AlgInterface{
 		Global.runTimeRec.numCluster = sClusters.getSize();
 		Global.runTimeRec.timeTotalGetCluster = System.nanoTime() - Global.runTimeRec.timeTotalGetCluster;
 		Global.runTimeRec.timeTotal = System.nanoTime() - Global.runTimeRec.timeTotal;
-		if(0 == sClusters.getSize())	Global.runTimeRec.topKScore = Integer.MIN_VALUE;
+		if(0 == sClusters.getSize())	Global.runTimeRec.topKScore = 0;
 		else Global.runTimeRec.topKScore = sClusters.getLastScore();
 		return sClusters;
 	}

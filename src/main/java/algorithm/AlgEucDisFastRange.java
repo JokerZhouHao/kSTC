@@ -82,7 +82,12 @@ public class AlgEucDisFastRange implements AlgInterface{
 //		sCircle.radius = qParams.epsilon + Global.zorderOffset;	// 处理圆刚好压线的问题
 		sCircle.radius = qParams.epsilon;
 		Map<Integer, List<Node>> cellid2Nodes = cellidWIndex.searchWords(qParams, allLocations);
-		if(null == cellid2Nodes)	return null;
+		if(null == cellid2Nodes) {
+			Global.runTimeRec.timeTotal = 0;
+			Global.runTimeRec.timeTotalPrepareData = 0;
+			return null;
+		}
+		Global.runTimeRec.numCellid = cellid2Nodes.size();
 		Global.runTimeRec.timeSearchTerms = Global.runTimeRec.getTimeSpan();
 		
 		/* building sort distance node collection and sort score node collection */
@@ -153,7 +158,7 @@ public class AlgEucDisFastRange implements AlgInterface{
 		Global.runTimeRec.numCluster = sClusters.getSize();
 		Global.runTimeRec.timeTotalGetCluster = System.nanoTime() - Global.runTimeRec.timeTotalGetCluster;
 		Global.runTimeRec.timeTotal = System.nanoTime() - Global.runTimeRec.timeTotal;
-		if(0==sClusters.getSize())	Global.runTimeRec.topKScore = Integer.MIN_VALUE;
+		if(0==sClusters.getSize())	Global.runTimeRec.topKScore = 0;
 		else Global.runTimeRec.topKScore = sClusters.getLastScore();
 		return sClusters;
 	}

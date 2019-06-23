@@ -17,6 +17,8 @@ public class RunTimeRecordor {
 	}
 	
 	/**************** 准备数据 *********************/
+	public long numNid = 0;
+	public long numCellid = 0;
 	public long timeSearchTerms = 0;
 	
 	public long timeSortByDistance = 0;
@@ -32,6 +34,7 @@ public class RunTimeRecordor {
 	
 	/**************** optic 参数 ******************/
 	public int numExpandClusterOrder = 0;
+	public long numMinByteOfTermPNgb = 0;
 	public long numByteOfTermPNgb = 0;
 	public long timeReadTermPNgb = 0;
 	public long timeSearchTermPNgb = 0;
@@ -51,9 +54,11 @@ public class RunTimeRecordor {
 	public double topKScore = 0;
 	
 	public static String getHeader() {
-		return "id,timeSearchTerms,timeSortByDistance,timeSortByScore," +
+		return  "id," +
+				"numNid,numCellid," +
+				"timeSearchTerms,timeSortByDistance,timeSortByScore," +
 				"numGetCluster,numRangeRtree,timeRangeRtree,numRangeZCurve,timeRangeZCurve," +
-				"numExpandClusterOrder,numByteOfTermPNgb,timeReadTermPNgb,timeSearchTermPNgb," + 
+				"numExpandClusterOrder,numMinByteOfTermPNgb,numByteOfTermPNgb,timeReadTermPNgb,timeSearchTermPNgb," + 
 				"numOpticFastRange,timeOpticFastRange,numOpticLuceneRange,timeOpticLuceneRange,timeOpticFunc,timeExcuteQueryFunc," +
 				"timeTotalPrepareData,timeTotalGetCluster,timeTotal,numCluster,topKScore," +
 				"\n";
@@ -64,7 +69,9 @@ public class RunTimeRecordor {
 	}
 	
 	public String getTimeStr(int id, long base) {
-		return  String.valueOf(id) + "," + String.valueOf(timeSearchTerms/base) + "," + 
+		return  String.valueOf(id) + "," + 
+				String.valueOf(numNid) + "," + String.valueOf(numCellid) + "," +
+				String.valueOf(timeSearchTerms/base) + "," + 
 				String.valueOf(timeSortByDistance/base) + "," + 
 				String.valueOf(timeSortByScore/base) + "," + 
 				String.valueOf(numGetCluster) + "," + 
@@ -73,6 +80,7 @@ public class RunTimeRecordor {
 				String.valueOf(numRangeZCurve) + "," + 
 				String.valueOf(timeRangeZCurve/base) + "," + 
 				String.valueOf(numExpandClusterOrder) + "," + 
+				String.valueOf(numMinByteOfTermPNgb) + "," +
 				String.valueOf(numByteOfTermPNgb) + "," + 
 				String.valueOf(timeReadTermPNgb/base) + "," + 
 				String.valueOf(timeSearchTermPNgb/base) + "," + 

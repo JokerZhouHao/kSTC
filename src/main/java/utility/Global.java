@@ -223,14 +223,15 @@ public class Global {
 		pathWidWord = inputPath + (String)configProps.get("fileWidWord") + suffixFile;
 		pathPidNeighborLen = inputPath + (String)configProps.get("filePidNeighborLen") + suffixFile + 
 							",opticMinpts=" + String.valueOf(opticQParams.minpts) + ",opticEpsilon=" + String.valueOf(opticQParams.epsilon) + 
-							", maxPidNeighborsBytes=" + String.valueOf(maxPidNeighbors4Bytes * 4);
+							", maxPidNeighborsBytes=" + (String)configProps.get("maxPidNeighborsBytes");
 		pathOrderObjects = outPath + (String)configProps.get("fileOrderObjects") + suffixFile;
 		
 		// set index path
 		pathPidAndRtreeIdWordsIndex = outPath + (String)configProps.get("pathPidAndRtreeIdWordsIndex") + suffixFile + File.separator;
 		pathCellidPidWordsIndex = outPath + (String)configProps.get("pathCellidPidWordsIndex") + suffixFile + signNormalized + File.separator;
 		pathTerm2PidNeighborsIndex = outPath + (String)configProps.get("pathTerm2PidNeighborsIndex") + suffixFile + signNormalized +
-				",opticMinpts=" + String.valueOf(opticQParams.minpts) + ",opticEpsilon=" + String.valueOf(opticQParams.epsilon) + File.separator;
+				",opticMinpts=" + String.valueOf(opticQParams.minpts) + ",opticEpsilon=" + String.valueOf(opticQParams.epsilon) + 
+				",maxPidNeighborsBytes=" + (String)configProps.get("maxPidNeighborsBytes") + File.separator;
 		pathPid2Terms2NeighborsIndex = outPath + (String)configProps.get("pathPid2Terms2NeighborsIndex") + suffixFile + signNormalized +
 				",opticMinpts=" + String.valueOf(opticQParams.minpts) + ",opticEpsilon=" + String.valueOf(opticQParams.epsilon) + File.separator;
 		pathCellidRtreeidOrPidWordsIndex = outPath + (String)configProps.get("pathCellidRtreeidOrPidWordsIndex") + suffixFile + signNormalized + File.separator;

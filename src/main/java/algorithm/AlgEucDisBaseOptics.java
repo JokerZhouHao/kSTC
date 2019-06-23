@@ -80,11 +80,15 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 		Global.runTimeRec.setFrontTime();
 		Map<Integer, List<Node>> cellid2Nodes = cellidWIndex.searchWords(qParams, allLocations);
 		
-		if(null != cellid2Nodes)	System.out.println(cellid2Nodes.size());
-		else System.out.println(0);
+//		if(null != cellid2Nodes)	System.out.println(cellid2Nodes.size());
+//		else System.out.println(0);
 		
-		
-		if(null == cellid2Nodes)	return null;
+		if(null == cellid2Nodes) {
+			Global.runTimeRec.timeTotal = 0;
+			Global.runTimeRec.timeTotalPrepareData = 0;
+			return null;
+		}
+		Global.runTimeRec.numCellid = cellid2Nodes.size();
 		Global.runTimeRec.timeSearchTerms = Global.runTimeRec.getTimeSpan();
 		
 		Global.runTimeRec.timeOpticFunc = System.nanoTime();

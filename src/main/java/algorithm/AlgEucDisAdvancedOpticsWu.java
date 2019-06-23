@@ -50,16 +50,14 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics {
 		int minLen = Integer.MAX_VALUE;
 		String minTerm = null;
 		for(String tm : qParams.sWords) {
-			
-			System.out.print(ngbLens.get(tm) + " ");
-			
+//			System.out.print(ngbLens.get(tm) + " ");
 			if(ngbLens.get(tm) <= minLen) {
 				minLen = ngbLens.get(tm);
 				minTerm = tm;
 			}
 		}
-		System.out.println();
-		
+		System.out.println(minLen);
+		Global.runTimeRec.numMinByteOfTermPNgb = minLen;
 		
 //		 改为查并集
 //		int minLen = Integer.MAX_VALUE;
@@ -113,7 +111,7 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics {
 			
 			
 			
-			System.out.println("> advance optic wu NODE : " + pid2Node.size());
+//			System.out.println("> advance optic wu NODE : " + pid2Node.size());
 			
 			
 			

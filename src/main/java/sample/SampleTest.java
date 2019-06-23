@@ -103,19 +103,19 @@ public class SampleTest {
 		List<QueryParams> qps = SampleLoader.load(pathSample);
 		
 		// AlgEucDisBase
-//		pathRecordRunTime = Global.sampleResultPath + "run_time_base_euc.csv";
-//		pathSampleResult = Global.sampleResultPath + "res_base_euc.txt";
-//		samT.test(qps, AlgType.AlgEucDisBase, pathRecordRunTime, pathSampleResult);
+		pathRecordRunTime = Global.sampleResultPath + "run_time_base_euc.csv";
+		pathSampleResult = Global.sampleResultPath + "res_base_euc.txt";
+		samT.test(qps, AlgType.AlgEucDisBase, pathRecordRunTime, pathSampleResult);
 		
 		// AlgEucDisFastRange
-//		pathRecordRunTime = Global.sampleResultPath + "run_time_base_fast.csv";
-//		pathSampleResult = Global.sampleResultPath + "res_base_fast.txt";
-//		samT.test(qps, AlgType.AlgEucDisFastRange, pathRecordRunTime, pathSampleResult);
+		pathRecordRunTime = Global.sampleResultPath + "run_time_base_fast.csv";
+		pathSampleResult = Global.sampleResultPath + "res_base_fast.txt";
+		samT.test(qps, AlgType.AlgEucDisFastRange, pathRecordRunTime, pathSampleResult);
 		
 		// AlgEucDisBaseOpticsWu
-//		pathRecordRunTime = Global.sampleResultPath + "run_time_base_optic_wu.csv";
-//		pathSampleResult = Global.sampleResultPath + "res_base_optic_wu.txt";
-//		samT.test(qps, AlgType.AlgEucDisBaseOpticsWu, pathRecordRunTime, pathSampleResult);
+		pathRecordRunTime = Global.sampleResultPath + "run_time_base_optic_wu.csv";
+		pathSampleResult = Global.sampleResultPath + "res_base_optic_wu.txt";
+		samT.test(qps, AlgType.AlgEucDisBaseOpticsWu, pathRecordRunTime, pathSampleResult);
 		
 		// AlgEucDisAdvancedOpticsWu
 		pathRecordRunTime = Global.sampleResultPath + "run_time_advanced_optic_wu.csv";

@@ -27,4 +27,8 @@ public class NodeCollection extends PNodeCollection{
 	public PNodeCollection getPNodeCollection() {
 		return (PNodeCollection)this;
 	}
+	
+	public int size() {
+		return id2Node.size();
+	}
 }
