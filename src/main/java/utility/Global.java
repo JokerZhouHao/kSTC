@@ -117,6 +117,8 @@ public class Global {
 //	public static String suffixFile = "";
 	public static String suffixFile = null;
 	
+	private static Properties propsGlobal = null;
+	
 	// initBasePath
 	public static void initBasePath() throws Exception{
 		basePath = getBasePath();
@@ -128,12 +130,12 @@ public class Global {
 		String path = baseDatasetPath + "global.properties";
 		if(!new File(path).exists())	throw new Exception("配置文件" + path + "不存在");
 		
-		Properties props = new Properties();
-		props.load(new FileInputStream(path));
-		if(null == props.getProperty("curDataset")) {
+		propsGlobal = new Properties();
+		propsGlobal.load(new FileInputStream(path));
+		if(null == propsGlobal.getProperty("curDataset")) {
 			throw new Exception("配置文件" + path + "缺少参数curDataset");
 		}
-		datasetPath = baseDatasetPath + props.getProperty("curDataset") + File.separator;
+		datasetPath = baseDatasetPath + propsGlobal.getProperty("curDataset") + File.separator;
 		
 		pathOrgId2Name = datasetPath + "id_name.txt";
 		pathOrgId2Text = datasetPath + "id_text.txt";
@@ -169,20 +171,20 @@ public class Global {
 //		IOUtility.existsOrThrowsException(datasetPath);
 		
 		// loading global config
-		Properties props = new Properties();
-		String path = datasetPath + "dataset.properties";
-		if(!new File(path).exists()) {
-			throw new Exception("配置文件" + path + "不存在");
+//		Properties props = new Properties();
+//		String path = datasetPath + "dataset.properties";
+//		if(!new File(path).exists()) {
+//			throw new Exception("配置文件" + path + "不存在");
+//		}
+//		props.load(new FileInputStream(path));
+		
+		if(null == propsGlobal.getProperty("subDataset")) {
+			throw new Exception("配置文件" + propsGlobal + "不存在缺少参数subDataset");
 		}
-		props.load(new FileInputStream(path));
 		
-		if(null == props.getProperty("subDataset")) {
-			throw new Exception("配置文件" + path + "不存在缺少参数subDataset");
-		}
+		subDataSetPath = datasetPath + propsGlobal.getProperty("subDataset") + File.separator;
 		
-		subDataSetPath = datasetPath + props.getProperty("subDataset") + File.separator;
-		
-		System.out.println("subDataSetPath : " + subDataSetPath);
+//		System.out.println("subDataSetPath : " + subDataSetPath);
 		
 		inputPath = subDataSetPath + "input" + File.separator;
 		IOUtility.existsOrThrowsException(inputPath);
@@ -221,9 +223,9 @@ public class Global {
 		pathIdTerms = inputPath + (String)configProps.get("fileIdTerms") + suffixFile;
 		pathWidTerms = inputPath + (String)configProps.get("fileWidTerms") + suffixFile;
 		pathWidWord = inputPath + (String)configProps.get("fileWidWord") + suffixFile;
-		pathPidNeighborLen = inputPath + (String)configProps.get("filePidNeighborLen") + suffixFile + 
+		pathPidNeighborLen = outPath + (String)configProps.get("filePidNeighborLen") + suffixFile + 
 							",opticMinpts=" + String.valueOf(opticQParams.minpts) + ",opticEpsilon=" + String.valueOf(opticQParams.epsilon) + 
-							", maxPidNeighborsBytes=" + (String)configProps.get("maxPidNeighborsBytes");
+							",maxPidNeighborsBytes=" + (String)configProps.get("maxPidNeighborsBytes");
 		pathOrderObjects = outPath + (String)configProps.get("fileOrderObjects") + suffixFile;
 		
 		// set index path
@@ -234,18 +236,22 @@ public class Global {
 				",maxPidNeighborsBytes=" + (String)configProps.get("maxPidNeighborsBytes") + File.separator;
 		pathPid2Terms2NeighborsIndex = outPath + (String)configProps.get("pathPid2Terms2NeighborsIndex") + suffixFile + signNormalized +
 				",opticMinpts=" + String.valueOf(opticQParams.minpts) + ",opticEpsilon=" + String.valueOf(opticQParams.epsilon) + File.separator;
-		pathCellidRtreeidOrPidWordsIndex = outPath + (String)configProps.get("pathCellidRtreeidOrPidWordsIndex") + suffixFile + signNormalized + File.separator;
-		pathTestIndex = outPath + "test" + File.separator;
-		
-		// set num
-		numNode = Integer.parseInt((String)configProps.get("numNode"));
 		
 		// SGPL
 		zorderWidth = Integer.parseInt((String)configProps.get("zorderWidth"));
 		zorderHeight = Integer.parseInt((String)configProps.get("zorderHeight"));
 		zorderOffset = 1.0 / zorderHeight / 10000;
 		sgplInfo = SGPLInfo.getGlobalInstance();
-		pathTerm2CellColIndex =outPath + (String)configProps.get("pathTerm2CellColIndex") + suffixFile + signNormalized + File.separator;
+		pathTerm2CellColIndex =outPath + (String)configProps.get("pathTerm2CellColIndex") + suffixFile + signNormalized + 
+				".rtreeFanout" + (String)configProps.get("rtreeFanout") + ".zw" + zorderWidth + ".zh" + zorderHeight + File.separator;
+		pathCellidRtreeidOrPidWordsIndex = outPath + (String)configProps.get("pathCellidRtreeidOrPidWordsIndex") + 
+											suffixFile + signNormalized + ".rtreeFanout" + (String)configProps.get("rtreeFanout") + 
+											".zw" + zorderWidth + ".zh" + zorderHeight + File.separator;
+		pathTestIndex = outPath + "test" + File.separator;
+		
+		// set num
+		numNode = Integer.parseInt((String)configProps.get("numNode"));
+		
 	}
 	
 	/* rtree index setting parameters */
@@ -325,12 +331,14 @@ public class Global {
 			
 			// set paths
 			initBasePath();
+			
+			// set rtree parameters
 //			setAllPaths(DatasetType.values()[0]);
 //			setAllPaths(DatasetType.values()[1]);
 			setAllPaths();
 			
-			// set rtree parameters
 			Global.initRTreeParameters();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(0);

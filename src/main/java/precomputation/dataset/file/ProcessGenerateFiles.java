@@ -24,9 +24,11 @@ import entity.SGPLInfo;
 import index.CellidPidWordsIndex;
 import index.IdWordsIndex;
 import index.Term2CellColIndex;
+import precomputation.dataset.file.optic.Term2PidNeighborsIndexBuilder;
 import spatialindex.rtree.Node;
 import spatialindex.spatialindex.Point;
 import utility.Global;
+import utility.MLog;
 import utility.index.rtree.MRTree;
 import utility.io.IOUtility;
 import utility.io.LuceneUtility;
@@ -417,6 +419,13 @@ public class ProcessGenerateFiles {
 	}
 	
 	public static void main(String[] args) throws Exception{
+		MLog.log(Global.inputPath);
+		MLog.log(Global.outPath);
+		Thread.sleep(10000);
+		long tTime = 0;
+		long startTime = System.currentTimeMillis();
+		
+		
 		/*********************  alg ecu dis dbscan starting *******************************/ 
 		/* generateIdWidsFile */
 //		ProcessGenerateFiles.generateIdWidsFile(Global.pathIdText, Global.pathIdWids, Global.pathWidWord);
@@ -429,13 +438,15 @@ public class ProcessGenerateFiles {
 //		String pathIdTerms = Global.pathIdTerms;
 //		ProcessGenerateFiles.generateIdTermsFile(pathIdTerms);
 		
-		/* used 	generate rtree */
+		/* used generate rtree */
 //		String placeFile = Global.pathIdCoord + Global.signNormalized;
 //		String treeFile = Global.rtreePath;
 //		ProcessGenerateFiles.buildRTree(placeFile, treeFile, Global.rtreeFanout, Global.rtreeBufferSize, Global.rtreePageSize);
 //		MRTree rtree = MRTree.getInstanceInDisk();
-//		System.out.println(rtree.getTreeHeight());
-//		System.out.println(rtree.getRoot());
+//		MLog.log("root: " + rtree.getRoot());
+//		MLog.log("height: " + rtree.getTreeHeight());
+//		MLog.log("NumNode: " + rtree.m_stats.getNumberOfNodes());
+//		MLog.log("NumData: " + rtree.m_stats.getNumberOfData() + "\n");
 		
 		/* set error stream */
 //		PrintStream ps = new PrintStream(new File(Global.pathTestFile));
@@ -449,7 +460,7 @@ public class ProcessGenerateFiles {
 //		String pathCellidpidWordsIndex = Global.pathCellidPidWordsIndex;
 //		ProcessGenerateFiles.buildCellidPidWordsIndex(pathCellidpidWordsIndex);
 		
-		/* used		 building cellid rtreeid pid words index */
+		/* used	 building cellid rtreeid pid words index */
 //		String pathCellidRtreeidOrPidWordsIndex = Global.pathCellidRtreeidOrPidWordsIndex;
 //		ProcessGenerateFiles.buildCellidRtreeidOrPidWordsIndex(pathCellidRtreeidOrPidWordsIndex);
 		
@@ -465,12 +476,21 @@ public class ProcessGenerateFiles {
 		
 		/*********************	alg optic ******************/
 		/* used		generate wid_terms file, 供后面并行生成索引使用 */
-		String pathWidTerms = Global.pathWidTerms;
-		ProcessGenerateFiles.generateWidTermsFile(pathWidTerms);
+//		String pathWidTerms = Global.pathWidTerms;
+//		ProcessGenerateFiles.generateWidTermsFile(pathWidTerms);
+		
+		/* building term_2_pidNeighbors index 需要用到上面生成的pathWidTerms*/
+//		MLog.log("开始创建term_2_pidNeighbors index . . . ");
+//		MLog.log("index path : " + Global.pathTerm2PidNeighborsIndex);
+//		tTime = System.currentTimeMillis();
+//		Term2PidNeighborsIndexBuilder.main(null);
+//		MLog.log("用时: " + TimeUtility.getSpendTimeStr(tTime, System.currentTimeMillis()) + "\n");
 		
 		/* building k neighbor dis file */
 //		int k = 20;
 //		String pathKNeighborDis = Global.outPath + String.valueOf(k) + Global.signKNeighborDis;
 //		ProcessGenerateFiles.generateKNeighborDisFile(pathKNeighborDis, k);
+		
+		MLog.log("Over，总用时: " + TimeUtility.getSpendTimeStr(startTime, System.currentTimeMillis()));
 	}
 }

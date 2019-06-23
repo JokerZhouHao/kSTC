@@ -125,6 +125,11 @@ public class Term2PidNeighborsIndexBuilder implements Runnable{
 		}
 	}
 	
+	public static Boolean hasStop() throws Exception {
+		if(0 == numThread.x) return Boolean.TRUE;
+		else return Boolean.FALSE;
+	}
+	
 	public void clean() throws Exception{
 		term2PidNeiIndex.close();
 		pidNeighborLenBW.close();
@@ -353,5 +358,6 @@ public class Term2PidNeighborsIndexBuilder implements Runnable{
 			}
 		}
 		
+		while(!Term2PidNeighborsIndexBuilder.hasStop())	Thread.sleep(30000);
 	}
 }
