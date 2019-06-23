@@ -23,8 +23,8 @@
       <file leaf-file-name="orginaldata.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/draw/orginaldata.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="139">
-              <caret line="348" column="76" lean-forward="true" selection-start-line="348" selection-start-column="76" selection-end-line="348" selection-end-column="76" />
+            <state relative-caret-position="403">
+              <caret line="360" column="41" selection-start-line="360" selection-start-column="41" selection-end-line="360" selection-end-column="41" />
             </state>
           </provider>
         </entry>
@@ -75,7 +75,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="1" />
     <option name="width" value="1364" />
     <option name="height" value="728" />
@@ -652,8 +652,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/draw/orginaldata.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="139">
-          <caret line="348" column="76" lean-forward="true" selection-start-line="348" selection-start-column="76" selection-end-line="348" selection-end-column="76" />
+        <state relative-caret-position="403">
+          <caret line="360" column="41" selection-start-line="360" selection-start-column="41" selection-end-line="360" selection-end-column="41" />
         </state>
       </provider>
     </entry>
