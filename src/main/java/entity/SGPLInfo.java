@@ -17,6 +17,8 @@ public class SGPLInfo implements Serializable{
 	 * copy from https://github.com/ilkcan/ktmstc_query_processing/blob/master/src/topkclusterquery/models/SGPLInfo.java
 	 */
 	private static final long serialVersionUID = 6411549802970603504L;
+	private int zorderWidth = 0;
+	private int zorderHeight = 0;
 	private double minLat;
 	private double latStep;
 	private double halfLatStep;
@@ -26,20 +28,35 @@ public class SGPLInfo implements Serializable{
 	
 	private static SGPLInfo sgplInfo = null;
 	
-	public SGPLInfo(double minLng, double lngStep, double minLat, double latStep, int zOrder){
-		this.minLat = minLat;
-		this.minLng = minLng;
+	public SGPLInfo(int zorderWidth, int zorderHeight, double minLng, double lngStep, double minLat, double latStep, int zOrder){
+		this.zorderWidth = zorderWidth;
+		this.zorderHeight = zorderHeight;
 		
-		this.latStep = latStep;
-		this.halfLatStep = latStep/2;
-		this.lngStep = lngStep;
-		this.zOrder = zOrder;
+		double i = 1.0;
+		this.minLat = 0;
+		this.latStep = i / zorderHeight;
+		this.halfLatStep = this.latStep / 2;
+		
+		this.minLng = 0;
+		this.lngStep = i / zorderWidth;
+		this.zOrder = zorderWidth * zorderHeight;
+		
+		
+		
+//		this.minLat = minLat;
+//		this.minLng = minLng;
+//		
+//		this.latStep = latStep;
+//		this.halfLatStep = latStep/2;
+//		this.lngStep = lngStep;
+//		this.zOrder = zOrder;
 	}
 
 	public static SGPLInfo getGlobalInstance() {
 		if(sgplInfo == null) {
 			double i = 1.0;
-			sgplInfo = new SGPLInfo(0, i/Global.zorderWidth, 0, i/Global.zorderHeight, Global.zorderWidth * Global.zorderHeight);
+			sgplInfo = new SGPLInfo(Global.zorderWidth, Global.zorderHeight, 
+					0, i/Global.zorderWidth, 0, i/Global.zorderHeight, Global.zorderWidth * Global.zorderHeight);
 		}
 		return sgplInfo;
 	}
@@ -91,7 +108,7 @@ public class SGPLInfo implements Serializable{
 	}
 	
 	public int nearestAboveCellY(double yCoord) {
-		if(yCoord >= Global.zorderHeight * latStep)	return Global.zorderHeight;
+		if(yCoord >= zorderHeight * latStep)	return zorderHeight;
 //		int y = (int)((yCoord+Global.minPositiveDouble)/latStep);
 		int y = (int)((yCoord)/latStep);
 		if(Global.isZero(y*latStep - yCoord)) return y;
@@ -106,7 +123,7 @@ public class SGPLInfo implements Serializable{
 	
 	public int nearestRightCellX(double xCoord) {
 		if(Global.compareDouble(xCoord, Global.minPositiveDouble) <= 0) return 0;
-		if(xCoord >= Global.zorderWidth * lngStep) { return Global.zorderWidth;}
+		if(xCoord >= zorderWidth * lngStep) { return zorderWidth;}
 //		int x = (int)((xCoord+Global.minPositiveDouble)/lngStep);
 		int x = (int)((xCoord)/lngStep);
 		if(Global.isZero(x*lngStep - xCoord))	return x;
@@ -198,14 +215,14 @@ public class SGPLInfo implements Serializable{
 	}
 
 	public static void main(String[] args) {
-		SGPLInfo info = Global.sgplInfo;
+//		SGPLInfo info = Global.sgplInfo;
 //		SGPLInfo info = new SGPLInfo(0, 0.125, 0, 0.125, 64);
 //		System.out.println(info.getZOrderId(0, 0));
 //		System.out.println(info.getZOrderId(1, 1));
 //		System.out.println(info.getZOrderId(1, 0));
 //		System.out.println(info.getZOrderId(4, 3));
 //		System.out.println(info.getZOrderId(6, 6));
-		System.out.println(info.getZOrderId(0.8, 0.9));
+//		System.out.println(info.getZOrderId(0.8, 0.9));
 		
 //		System.out.println(info.getLngStep());
 //		System.out.println(info.getLatStep());
@@ -218,12 +235,12 @@ public class SGPLInfo implements Serializable{
 //		System.out.println(info.nearestLeftCellX(0.75));
 //		System.out.println(info.nearestRightCellX(0.75));
 		
-		double[] center = {0.35, 0.47};
-		double radius = 0.15;
-		List<CellSign> zids = sgplInfo.cover(new Circle(radius, center));
-		for(CellSign cs : zids) {
-			System.out.println(cs);
-		}
+//		double[] center = {0.35, 0.47};
+//		double radius = 0.15;
+//		List<CellSign> zids = sgplInfo.cover(new Circle(radius, center));
+//		for(CellSign cs : zids) {
+//			System.out.println(cs);
+//		}
 		
 	}
 }

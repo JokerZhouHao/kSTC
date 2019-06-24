@@ -29,13 +29,24 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics {
 	private Term2PidNeighborsIndex term2PNgb = null;
 	private Map<String, Integer> ngbLens = null;
 	
-	public AlgEucDisAdvancedOpticsWu() throws Exception{
-		super();
-		term2PNgb = new Term2PidNeighborsIndex(Global.pathTerm2PidNeighborsIndex);
+//	public AlgEucDisAdvancedOpticsWu(QueryParams qp) throws Exception{
+//		super(qp);
+//		term2PNgb = new Term2PidNeighborsIndex(Global.pathTerm2PidNeighborsIndex);
+//		term2PNgb.openIndexReader();
+//		
+//		ngbLens = FileLoader.loadPidNgbLens(Global.pathPidNeighborLen);
+//	}
+	
+	public AlgEucDisAdvancedOpticsWu(QueryParams qp) throws Exception{
+		super(qp);
+		String path = Global.getPathTerm2PidNeighborsIndex(qp.maxPidNeighborsBytes);
+		term2PNgb = new Term2PidNeighborsIndex(path);
 		term2PNgb.openIndexReader();
 		
-		ngbLens = FileLoader.loadPidNgbLens(Global.pathPidNeighborLen);
+		path = Global.getPathPidNeighborLen(qp.maxPidNeighborsBytes);
+		ngbLens = FileLoader.loadPidNgbLens(path);
 	}
+	
 	
 	@Override
 	public List<Node> optics(Map<Integer, List<Node>> cellid2Nodes, QueryParams qParams, String pathOrderedFile)
@@ -57,7 +68,7 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics {
 			}
 		}
 		System.out.println(minLen);
-		Global.runTimeRec.numMinByteOfTermPNgb = minLen;
+		qp.runTimeRec.numMinByteOfTermPNgb = minLen;
 		
 //		 改为查并集
 //		int minLen = Integer.MAX_VALUE;
@@ -91,16 +102,16 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics {
 				}
 			}
 		} else {	// the term ngb in index
-			Global.runTimeRec.timeSearchTermPNgb = System.nanoTime();
+			qp.runTimeRec.timeSearchTermPNgb = System.nanoTime();
 //			查交集
 			List<Map<Integer, List<NeighborsNode>>> pid2Ngbs = new ArrayList<>();
-			pid2Ngbs.add(term2PNgb.searchTerm(minTerm));
+			pid2Ngbs.add(term2PNgb.searchTerm(minTerm, qp));
 //			查并集
 //			List<Map<Integer, List<NeighborsNode>>> pid2Ngbs = new ArrayList<>();
 //			for(String tm : qParams.sWords) {
 //				pid2Ngbs.add(term2PNgb.searchTerm(tm));
 //			}
-			Global.runTimeRec.timeSearchTermPNgb = System.nanoTime() - Global.runTimeRec.timeSearchTermPNgb; 
+			qp.runTimeRec.timeSearchTermPNgb = System.nanoTime() - qp.runTimeRec.timeSearchTermPNgb; 
 			
 			Map<Integer, Node> pid2Node = new HashMap<>();
 			for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
@@ -119,7 +130,7 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics {
 				for(Node nd : en.getValue()) {
 					if(!nd.isProcessed) {
 						expandClusterOrder(cellid2Nodes, nd, qParams, orderedNodes, ofw, pid2Ngbs, pid2Node);
-						Global.runTimeRec.numExpandClusterOrder++;
+						qp.runTimeRec.numExpandClusterOrder++;
 					}
 				}
 			}
@@ -134,10 +145,10 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics {
 			List<Node> orderedNodes, OrginalFileWriter ofw, List<Map<Integer, List<NeighborsNode>>> pid2Ngbs,
 			Map<Integer, Node> pid2Node) throws Exception {
 		
-		Global.runTimeRec.setFrontTime();
+		qp.runTimeRec.setFrontTime();
 		List<Node> neighbors = fastIndexRange(pid2Ngbs, pid2Node, centerNode);
-		Global.runTimeRec.numOpticLuceneRange++;
-		Global.runTimeRec.timeOpticLuceneRange += Global.runTimeRec.getTimeSpan();
+		qp.runTimeRec.numOpticLuceneRange++;
+		qp.runTimeRec.timeOpticLuceneRange += qp.runTimeRec.getTimeSpan();
 		
 		centerNode.isProcessed = Boolean.TRUE;
 		centerNode.reachabilityDistance = Node.UNDEFINED;
@@ -154,10 +165,10 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics {
 //				if(centerNode.id == 59048) {
 //					System.out.println(centerNode);
 //				}
-				Global.runTimeRec.setFrontTime();
+				qp.runTimeRec.setFrontTime();
 				neighbors = fastIndexRange(pid2Ngbs, pid2Node, centerNode);
-				Global.runTimeRec.numOpticLuceneRange++;
-				Global.runTimeRec.timeOpticLuceneRange += Global.runTimeRec.getTimeSpan();
+				qp.runTimeRec.numOpticLuceneRange++;
+				qp.runTimeRec.timeOpticLuceneRange += qp.runTimeRec.getTimeSpan();
 				
 				centerNode.isProcessed = Boolean.TRUE;
 				centerNode.setCoreDistanceBySorted(qParams, neighbors);

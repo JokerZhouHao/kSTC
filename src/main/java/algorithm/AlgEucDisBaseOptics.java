@@ -40,18 +40,41 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 	protected Point[] allLocations = null;
 	protected CellidPidWordsIndex cellidWIndex = null;
 	protected NoiseRecoder noiseRecoder = new NoiseRecoder();
-	protected SGPLInfo sgplInfo = Global.sgplInfo;
-	protected Circle sCircle = new Circle(0.0, new double[2]);
+	protected SGPLInfo sgplInfo = null;
+//	protected Circle sCircle = new Circle(0.0, new double[2]);
+	protected Circle sCircle = null;
 	protected SteepArea tSteepArea = new SteepArea();
+	protected QueryParams qp = null;
 	
-	public AlgEucDisBaseOptics() throws Exception{
-		allLocations = FileLoader.loadPoints(Global.pathIdNormCoord);
-//		allLocations = FileLoader.loadPoints(Global.pathIdCoord);
-//		cellidWIndex = new CellidPidWordsIndex(Global.pathCellidPidWordsIndex);
+//	public AlgEucDisBaseOptics() throws Exception{
+//		allLocations = FileLoader.loadPoints(Global.pathIdNormCoord);
+////		allLocations = FileLoader.loadPoints(Global.pathIdCoord);
+////		cellidWIndex = new CellidPidWordsIndex(Global.pathCellidPidWordsIndex);
+//		
+//		cellidWIndex = new CellidPidWordsIndex(Global.pathCellidRtreeidOrPidWordsIndex);
+//		
+//		cellidWIndex.openIndexReader();
+//	}
+	
+	
+	public AlgEucDisBaseOptics(QueryParams qp) throws Exception {
+		this.sgplInfo = qp.sgplInfo;
+		sCircle = new Circle(0.0, new double[2], sgplInfo);
+		this.qp = qp;
+		init();
+	}
+	
+	private void init() throws Exception{
+		if(Global.allLocations == null)	allLocations = FileLoader.loadPoints(Global.pathIdNormCoord);
+		else allLocations = Global.allLocations;
 		
-		cellidWIndex = new CellidPidWordsIndex(Global.pathCellidRtreeidOrPidWordsIndex);
-		
+		String path =  Global.getPathCellidRtreeidOrPidWordsIndex(qp.rtreeFanout, qp.zorderWidth, qp.zorderHeight);
+		cellidWIndex = new CellidPidWordsIndex(path);
 		cellidWIndex.openIndexReader();
+	}
+	
+	public void free() throws Exception{
+		cellidWIndex.close();
 	}
 	
 	@Override
@@ -68,7 +91,7 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 	public SortedClusters excuteQuery(QueryParams qParams, String pathOrderedFile) throws Exception{
 		if(qParams.sWords.isEmpty())	return null;
 		
-		Global.runTimeRec.timeTotal = System.nanoTime();
+		qp.runTimeRec.timeTotal = System.nanoTime();
 		
 		// 采用lucene分词产生的wid_terms.txt([-125.0, 28.0], [15.0, 60]文件全部是小写，故输入的查询关键词得先转化为小写
 		List<String> tWs = new ArrayList<>();
@@ -77,38 +100,38 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 		
 		sCircle.radius = qParams.xi;
 		
-		Global.runTimeRec.setFrontTime();
+		qp.runTimeRec.setFrontTime();
 		Map<Integer, List<Node>> cellid2Nodes = cellidWIndex.searchWords(qParams, allLocations);
 		
 //		if(null != cellid2Nodes)	System.out.println(cellid2Nodes.size());
 //		else System.out.println(0);
 		
 		if(null == cellid2Nodes) {
-			Global.runTimeRec.timeTotal = 0;
-			Global.runTimeRec.timeTotalPrepareData = 0;
+			qp.runTimeRec.timeTotal = 0;
+			qp.runTimeRec.timeTotalPrepareData = 0;
 			return null;
 		}
-		Global.runTimeRec.numCellid = cellid2Nodes.size();
-		Global.runTimeRec.timeSearchTerms = Global.runTimeRec.getTimeSpan();
+		qp.runTimeRec.numCellid = cellid2Nodes.size();
+		qp.runTimeRec.timeSearchTerms = qp.runTimeRec.getTimeSpan();
 		
-		Global.runTimeRec.timeOpticFunc = System.nanoTime();
+		qp.runTimeRec.timeOpticFunc = System.nanoTime();
 		List<Node> sortedNodes = optics(cellid2Nodes, qParams, pathOrderedFile);
-		Global.runTimeRec.timeOpticFunc = System.nanoTime() - Global.runTimeRec.timeOpticFunc;
+		qp.runTimeRec.timeOpticFunc = System.nanoTime() - qp.runTimeRec.timeOpticFunc;
 		
-		Global.runTimeRec.timeExcuteQueryFunc = System.nanoTime();
+		qp.runTimeRec.timeExcuteQueryFunc = System.nanoTime();
 		SortedClusters sc = excuteQuery(qParams, pathOrderedFile, cellid2Nodes, sortedNodes);
-		Global.runTimeRec.timeExcuteQueryFunc = System.nanoTime() - Global.runTimeRec.timeExcuteQueryFunc;
+		qp.runTimeRec.timeExcuteQueryFunc = System.nanoTime() - qp.runTimeRec.timeExcuteQueryFunc;
 		
-		Global.runTimeRec.timeTotalPrepareData = Global.runTimeRec.timeSearchTerms + Global.runTimeRec.timeSortByDistance + 
-											     Global.runTimeRec.timeSortByScore;
+		qp.runTimeRec.timeTotalPrepareData = qp.runTimeRec.timeSearchTerms + qp.runTimeRec.timeSortByDistance + 
+											qp.runTimeRec.timeSortByScore;
 		
-		Global.runTimeRec.timeTotal = System.nanoTime() - Global.runTimeRec.timeTotal;
+		qp.runTimeRec.timeTotal = System.nanoTime() - qp.runTimeRec.timeTotal;
 		
-		if(null == sc) Global.runTimeRec.numCluster = 0;
-		else Global.runTimeRec.numCluster = sc.getSize();
+		if(null == sc) qp.runTimeRec.numCluster = 0;
+		else qp.runTimeRec.numCluster = sc.getSize();
 		
-		if(null==sc)	Global.runTimeRec.topKScore = 0;
-		else Global.runTimeRec.topKScore = sc.getLastScore();
+		if(null==sc)	qp.runTimeRec.topKScore = 0;
+		else qp.runTimeRec.topKScore = sc.getLastScore();
 		
 		return sc;
 	}
@@ -130,13 +153,13 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 			nodes.addAll(en.getValue());
 		}
 		
-		Global.runTimeRec.setFrontTime();
+		qp.runTimeRec.setFrontTime();
 		PNodeCollection disPNodeCol = new PNodeCollection(nodes).sortByDistance();
-		Global.runTimeRec.timeSortByDistance = Global.runTimeRec.getTimeSpan();
+		qp.runTimeRec.timeSortByDistance = qp.runTimeRec.getTimeSpan();
 		
-		Global.runTimeRec.setFrontTime();
+		qp.runTimeRec.setFrontTime();
 		PNodeCollection scorePNodeCol = new PNodeCollection(nodes).sortByScore();
-		Global.runTimeRec.timeSortByScore = Global.runTimeRec.getTimeSpan();
+		qp.runTimeRec.timeSortByScore = qp.runTimeRec.getTimeSpan();
 
 		SortedClusters sClusters = new SortedClusters(qParams);
 		Cluster cluster = null;
@@ -152,7 +175,7 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 		SteepArea upArea = null;
 		
 		while(index + 1< size) {
-			if(sortedNodes.get(index).reachabilityDistance * Global.steepOppositeDegree >= sortedNodes.get(index + 1).reachabilityDistance) {
+			if(sortedNodes.get(index).reachabilityDistance * qp.steepOppositeDegree >= sortedNodes.get(index + 1).reachabilityDistance) {
 				// may be is start point of down area
 				steepArea = getDownArea(sortedNodes, qParams, index);
 				if(steepArea.isNormalArea()) {
@@ -164,7 +187,7 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 					index = steepArea.lastEnd;
 					mib = steepArea.lastMib;
 				}
-			} else if (sortedNodes.get(index).reachabilityDistance > sortedNodes.get(index + 1).reachabilityDistance * Global.steepOppositeDegree) {
+			} else if (sortedNodes.get(index).reachabilityDistance > sortedNodes.get(index + 1).reachabilityDistance * qp.steepOppositeDegree) {
 				// is normal point
 				mib = Math.max(mib, sortedNodes.get(index).reachabilityDistance);
 				index++;
@@ -217,7 +240,7 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 			for(Node nd : en.getValue()) {
 				if(!nd.isProcessed) {
 					expandClusterOrder(cellid2Nodes, nd, qParams, orderedNodes, ofw);
-					Global.runTimeRec.numExpandClusterOrder++;
+					qp.runTimeRec.numExpandClusterOrder++;
 				}
 			}
 		}
@@ -228,11 +251,11 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 	}
 	
 	public void expandClusterOrder(Map<Integer, List<Node>> cellid2Nodes, Node centerNode, QueryParams qParams, List<Node> orderedNodes, OrginalFileWriter ofw) throws Exception{
-		Global.runTimeRec.setFrontTime();
+		qp.runTimeRec.setFrontTime();
 		List<Node> neighbors = fastRange(cellid2Nodes, qParams, centerNode);
 		
-		Global.runTimeRec.numOpticFastRange++;
-		Global.runTimeRec.timeOpticFastRange += Global.runTimeRec.getTimeSpan();
+		qp.runTimeRec.numOpticFastRange++;
+		qp.runTimeRec.timeOpticFastRange += qp.runTimeRec.getTimeSpan();
 		
 		centerNode.isProcessed = Boolean.TRUE;
 		centerNode.reachabilityDistance = Node.UNDEFINED;
@@ -247,11 +270,11 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 			while(!orderSeeds.isEmpty()) {
 				centerNode = orderSeeds.pollFirst();
 				
-				Global.runTimeRec.setFrontTime();
+				qp.runTimeRec.setFrontTime();
 				neighbors = fastRange(cellid2Nodes, qParams, centerNode);
 				
-				Global.runTimeRec.numOpticFastRange++;
-				Global.runTimeRec.timeOpticFastRange += Global.runTimeRec.getTimeSpan();
+				qp.runTimeRec.numOpticFastRange++;
+				qp.runTimeRec.timeOpticFastRange += qp.runTimeRec.getTimeSpan();
 				
 				centerNode.isProcessed = Boolean.TRUE;
 //				centerNode.setCoreDistance(qParams, neighbors);
@@ -305,7 +328,7 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 		int tIndex = start + 1;
 		int curPointNum = 0;
 		while(tIndex + 1 < sortedNodes.size()) {
-			if(sortedNodes.get(tIndex).reachabilityDistance * Global.steepOppositeDegree >= sortedNodes.get(tIndex + 1).reachabilityDistance) {
+			if(sortedNodes.get(tIndex).reachabilityDistance * qp.steepOppositeDegree >= sortedNodes.get(tIndex + 1).reachabilityDistance) {
 				end = tIndex;
 				curPointNum = 0;
 			} else if(sortedNodes.get(tIndex).reachabilityDistance >= sortedNodes.get(tIndex + 1).reachabilityDistance) {
@@ -322,7 +345,7 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 		int tIndex = start + 1;
 		int curPointNum = 0;
 		while(tIndex + 1 < sortedNodes.size()) {
-			if(sortedNodes.get(tIndex).reachabilityDistance <= sortedNodes.get(tIndex + 1).reachabilityDistance * Global.steepOppositeDegree) {
+			if(sortedNodes.get(tIndex).reachabilityDistance <= sortedNodes.get(tIndex + 1).reachabilityDistance * qp.steepOppositeDegree) {
 				end = tIndex;
 				curPointNum = 0;
 			} else if(sortedNodes.get(tIndex).reachabilityDistance <= sortedNodes.get(tIndex + 1).reachabilityDistance) {
@@ -335,14 +358,14 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 	}
 	
 	public Cluster getCluster(int clusterId, QueryParams qParams, List<Node> sortedNodes, SteepArea downArea, SteepArea upArea) {
-		if(downArea.mib > sortedNodes.get(upArea.end).reachabilityDistance * Global.steepOppositeDegree ||
+		if(downArea.mib > sortedNodes.get(upArea.end).reachabilityDistance * qp.steepOppositeDegree ||
 			upArea.end - downArea.start + 1 < qParams.minpts) {
 			downArea.mib = Math.max(downArea.mib, sortedNodes.get(upArea.end).reachabilityDistance);
 			return null;
 		} else {
 			double tDou = sortedNodes.get(upArea.end + 1).reachabilityDistance;
 			int i = 0;
-			if(sortedNodes.get(downArea.start).reachabilityDistance * Global.steepOppositeDegree >= tDou) {
+			if(sortedNodes.get(downArea.start).reachabilityDistance * qp.steepOppositeDegree >= tDou) {
 				for(i=downArea.start + 1; i <= downArea.end; i++) {
 					if(sortedNodes.get(i).reachabilityDistance <= tDou)	break;
 				}
@@ -360,7 +383,7 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 			}
 			
 			tDou = sortedNodes.get(downArea.start).reachabilityDistance;
-			if(sortedNodes.get(upArea.end + 1).reachabilityDistance * Global.steepOppositeDegree >= tDou) {
+			if(sortedNodes.get(upArea.end + 1).reachabilityDistance * qp.steepOppositeDegree >= tDou) {
 				for(i=upArea.end; i>= upArea.start; i--) {
 					if(sortedNodes.get(i).reachabilityDistance <= tDou)	break;
 				}
@@ -398,7 +421,7 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 			steepArea = downAreas.get(i);
 			if(steepArea.isStop())	break;
 			else if(steepArea.noUsed()) {
-				if(sortedNodes.get(steepArea.start).reachabilityDistance * Global.steepOppositeDegree < curMib)	steepArea.status = SteepArea.STATUSHASUSED;
+				if(sortedNodes.get(steepArea.start).reachabilityDistance * qp.steepOppositeDegree < curMib)	steepArea.status = SteepArea.STATUSHASUSED;
 				else	steepArea.mib = Math.max(steepArea.mib, curMib);
 			}
 		}
@@ -427,13 +450,13 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 	public SortedClusters excuteQueryByWu(QueryParams qParams, String pathOrderedFile, List<Node> nodes,
 			List<Node> sortedNodes) throws Exception{
 	
-		Global.runTimeRec.setFrontTime();
+		qp.runTimeRec.setFrontTime();
 		PNodeCollection disPNodeCol = new PNodeCollection(nodes).sortByDistance();
-		Global.runTimeRec.timeSortByDistance = Global.runTimeRec.getTimeSpan();
+		qp.runTimeRec.timeSortByDistance = qp.runTimeRec.getTimeSpan();
 		
-		Global.runTimeRec.setFrontTime();
+		qp.runTimeRec.setFrontTime();
 		PNodeCollection scorePNodeCol = new PNodeCollection(nodes).sortByScore();
-		Global.runTimeRec.timeSortByScore = Global.runTimeRec.getTimeSpan();
+		qp.runTimeRec.timeSortByScore = qp.runTimeRec.getTimeSpan();
 		
 		SortedClusters sClusters = new SortedClusters(qParams);
 		Cluster cluster = null;
@@ -449,7 +472,7 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 		SteepArea upArea = null;
 		
 		while(index + 1< size) {
-			if(sortedNodes.get(index).reachabilityDistance * Global.steepOppositeDegree >= sortedNodes.get(index + 1).reachabilityDistance) {
+			if(sortedNodes.get(index).reachabilityDistance * qp.steepOppositeDegree >= sortedNodes.get(index + 1).reachabilityDistance) {
 				// may be is start point of down area
 				steepArea = getDownArea(sortedNodes, qParams, index);
 				if(steepArea.isNormalArea()) {
@@ -461,7 +484,7 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 					index = steepArea.lastEnd;
 					mib = steepArea.lastMib;
 				}
-			} else if (sortedNodes.get(index).reachabilityDistance > sortedNodes.get(index + 1).reachabilityDistance * Global.steepOppositeDegree) {
+			} else if (sortedNodes.get(index).reachabilityDistance > sortedNodes.get(index + 1).reachabilityDistance * qp.steepOppositeDegree) {
 				// is normal point
 				mib = Math.max(mib, sortedNodes.get(index).reachabilityDistance);
 				index++;
@@ -507,7 +530,7 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 			return null;
 		} else {
 			double tDou = Math.min(sortedNodes.get(downArea.start).reachabilityDistance, sortedNodes.get(upArea.end + 1).reachabilityDistance) 
-							* Global.steepOppositeDegree;
+							* qp.steepOppositeDegree;
 			int i = 0;
 			for(i=downArea.start; i <= upArea.end; i++) {
 				if(sortedNodes.get(i).reachabilityDistance <= tDou)	break;

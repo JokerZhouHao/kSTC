@@ -8,8 +8,8 @@ import entity.QueryParams;
 import entity.SortedClusters;
 
 public class AlgEucDisBaseOpticsWu extends AlgEucDisBaseOptics{
-	public AlgEucDisBaseOpticsWu() throws Exception{
-		super();
+	public AlgEucDisBaseOpticsWu(QueryParams qp) throws Exception{
+		super(qp);
 	}
 	
 	@Override

@@ -6,16 +6,18 @@ import utility.Global;
 public class Circle {
 	public double radius = 0.0;
 	public double[] center = new double[2];
-	private SGPLInfo sInfo = Global.sgplInfo;
+	private SGPLInfo sInfo = null;
 	
-	public Circle(double radius, double[] center) {
+	public Circle(double radius, double[] center, SGPLInfo sInfo) {
 		this.radius = radius;
 		this.center = center;
+		this.sInfo = sInfo;
 	}
 	
-	public Circle(double radius, Point center) {
+	public Circle(double radius, Point center, SGPLInfo sInfo) {
 		this.radius = radius;
 		this.center = center.m_pCoords;
+		this.sInfo = sInfo;
 	}
 	
 	public double[] passXX(double y) {
@@ -33,7 +35,7 @@ public class Circle {
 //		double d2 = 1.12;
 //		System.out.println(d1%d2 == 0.0);
 		double[] center = {0.0, 0.0};
-		Circle cir = new Circle(1, center);
+		Circle cir = new Circle(1, center, null);
 		System.out.println(cir.passXX(0.5)[0] + " " + cir.passXX(0.5)[1]);
 		
 	}

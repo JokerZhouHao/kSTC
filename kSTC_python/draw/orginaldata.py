@@ -356,16 +356,16 @@ pathCoord = Global.pathCoord + '([-112.41,33.46],[-111.9,33.68])[normalized]'
 ##############   dbscan #############
 # pathResultAlgEucBase = Global.pathOutput + 'result_ecu_base.txt'
 # Scatter.draw_result(pathCoord, pathResultAlgEucBase, s=50, show=True, title=pathResultAlgEucBase, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
-#
+# #
 # pathResultAlgEucFast = Global.pathOutput + 'result_ecu_fast.txt'
 # Scatter.draw_result(pathCoord, pathResultAlgEucFast, s=50, show=True, title=pathResultAlgEucFast, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
 
 ##############   optic wu #############
-# pathResultAlgEucBaseOpticsWu = Global.pathOutput + 'result_ecu_base_optics_wu.txt'
-# Scatter.draw_result(pathCoord, pathResultAlgEucBaseOpticsWu, s=50, show=True, title=pathResultAlgEucBaseOpticsWu, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
+pathResultAlgEucBaseOpticsWu = Global.pathOutput + 'result_ecu_base_optics_wu.txt'
+Scatter.draw_result(pathCoord, pathResultAlgEucBaseOpticsWu, s=50, show=True, title=pathResultAlgEucBaseOpticsWu, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
 #
-# pathResultAlgEucAdvancedOpticsWu = Global.pathOutput + 'result_ecu_advanced_optics_wu.txt'
-# Scatter.draw_result(pathCoord, pathResultAlgEucAdvancedOpticsWu, s=50, show=True, title=pathResultAlgEucAdvancedOpticsWu, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
+pathResultAlgEucAdvancedOpticsWu = Global.pathOutput + 'result_ecu_advanced_optics_wu.txt'
+Scatter.draw_result(pathCoord, pathResultAlgEucAdvancedOpticsWu, s=50, show=True, title=pathResultAlgEucAdvancedOpticsWu, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
 
 ##############   optic #############
 # pathResultAlgEucBaseOptics = Global.pathOutput + 'result_ecu_base_optics.txt'

@@ -33,8 +33,8 @@ import utility.Global;
 public class AlgEucDisAdvancedOpticsWu2 extends AlgEucDisBaseOptics {
 	private Pid2Text2NeighborIndex pid2Text2Nei = null;
 	
-	public AlgEucDisAdvancedOpticsWu2() throws Exception{
-		super();
+	public AlgEucDisAdvancedOpticsWu2(QueryParams qp) throws Exception{
+		super(qp);
 		pid2Text2Nei = new Pid2Text2NeighborIndex(Global.pathPid2Terms2NeighborsIndex);
 		pid2Text2Nei.openIndexReader();
 	}
@@ -48,7 +48,7 @@ public class AlgEucDisAdvancedOpticsWu2 extends AlgEucDisBaseOptics {
 	public SortedClusters excuteQuery(QueryParams qParams, String pathOrderedFile) throws Exception{
 		if(qParams.sWords.isEmpty())	return null;
 		
-		Global.runTimeRec.timeTotal = System.nanoTime();
+		qp.runTimeRec.timeTotal = System.nanoTime();
 		
 		// 采用lucene分词产生的wid_terms.txt([-125.0, 28.0], [15.0, 60]文件全部是小写，故输入的查询关键词得先转化为小写
 		List<String> tWs = new ArrayList<>();
@@ -57,7 +57,7 @@ public class AlgEucDisAdvancedOpticsWu2 extends AlgEucDisBaseOptics {
 		
 		sCircle.radius = qParams.xi;
 		
-		Global.runTimeRec.setFrontTime();
+		qp.runTimeRec.setFrontTime();
 		Map<Integer, List<NeighborsNode>> pidNeighbors = new HashMap<>();
 		List<Node> nodes = new ArrayList<>();
 		
@@ -65,26 +65,26 @@ public class AlgEucDisAdvancedOpticsWu2 extends AlgEucDisBaseOptics {
 		
 		System.out.println(pidNeighbors.size());
 		
-		Global.runTimeRec.timeSearchTerms = Global.runTimeRec.getTimeSpan();
+		qp.runTimeRec.timeSearchTerms = qp.runTimeRec.getTimeSpan();
 		
-		Global.runTimeRec.timeOpticFunc = System.nanoTime();
+		qp.runTimeRec.timeOpticFunc = System.nanoTime();
 		List<Node> sortedNodes = optics1(pidNeighbors, nodes, qParams, pathOrderedFile);
-		Global.runTimeRec.timeOpticFunc = System.nanoTime() - Global.runTimeRec.timeOpticFunc;
+		qp.runTimeRec.timeOpticFunc = System.nanoTime() - qp.runTimeRec.timeOpticFunc;
 		
-		Global.runTimeRec.timeExcuteQueryFunc = System.nanoTime();
+		qp.runTimeRec.timeExcuteQueryFunc = System.nanoTime();
 		SortedClusters sc = excuteQuery(qParams, pathOrderedFile, nodes, sortedNodes);
-		Global.runTimeRec.timeExcuteQueryFunc = System.nanoTime() - Global.runTimeRec.timeExcuteQueryFunc;
+		qp.runTimeRec.timeExcuteQueryFunc = System.nanoTime() - qp.runTimeRec.timeExcuteQueryFunc;
 		
-		Global.runTimeRec.timeTotalPrepareData = Global.runTimeRec.timeSearchTerms + Global.runTimeRec.timeSortByDistance + 
-											     Global.runTimeRec.timeSortByScore;
+		qp.runTimeRec.timeTotalPrepareData = qp.runTimeRec.timeSearchTerms + qp.runTimeRec.timeSortByDistance + 
+				qp.runTimeRec.timeSortByScore;
 		
-		Global.runTimeRec.timeTotal = System.nanoTime() - Global.runTimeRec.timeTotal;
+		qp.runTimeRec.timeTotal = System.nanoTime() - qp.runTimeRec.timeTotal;
 		
-		if(null == sc) Global.runTimeRec.numCluster = 0;
-		else Global.runTimeRec.numCluster = sc.getSize();
+		if(null == sc) qp.runTimeRec.numCluster = 0;
+		else qp.runTimeRec.numCluster = sc.getSize();
 		
-		if(null==sc)	Global.runTimeRec.topKScore = 0;
-		else Global.runTimeRec.topKScore = sc.getLastScore();
+		if(null==sc)	qp.runTimeRec.topKScore = 0;
+		else qp.runTimeRec.topKScore = sc.getLastScore();
 		
 		return sc;
 	}
@@ -103,7 +103,7 @@ public class AlgEucDisAdvancedOpticsWu2 extends AlgEucDisBaseOptics {
 		for(Node nd : nodes) {
 			if(!nd.isProcessed) {
 				expandClusterOrder1(pidNeighbors, pid2Node, nd, qParams, orderedNodes, ofw);
-				Global.runTimeRec.numExpandClusterOrder++;
+				qp.runTimeRec.numExpandClusterOrder++;
 			}
 		}
 		
@@ -117,10 +117,10 @@ public class AlgEucDisAdvancedOpticsWu2 extends AlgEucDisBaseOptics {
 			Node centerNode, QueryParams qParams,
 			List<Node> orderedNodes, OrginalFileWriter ofw) throws Exception {
 		
-		Global.runTimeRec.setFrontTime();
+		qp.runTimeRec.setFrontTime();
 		List<Node> neighbors = fastIndexRange(pidNeighbors.get(centerNode.id), pid2Node, centerNode, sCircle);
-		Global.runTimeRec.numOpticLuceneRange++;
-		Global.runTimeRec.timeOpticLuceneRange += Global.runTimeRec.getTimeSpan();
+		qp.runTimeRec.numOpticLuceneRange++;
+		qp.runTimeRec.timeOpticLuceneRange += qp.runTimeRec.getTimeSpan();
 		
 		centerNode.isProcessed = Boolean.TRUE;
 		centerNode.reachabilityDistance = Node.UNDEFINED;
@@ -133,10 +133,10 @@ public class AlgEucDisAdvancedOpticsWu2 extends AlgEucDisBaseOptics {
 			while(!orderSeeds.isEmpty()) {
 				centerNode = orderSeeds.pollFirst();
 				
-				Global.runTimeRec.setFrontTime();
+				qp.runTimeRec.setFrontTime();
 				neighbors = fastIndexRange(pidNeighbors.get(centerNode.id), pid2Node, centerNode, sCircle);
-				Global.runTimeRec.numOpticLuceneRange++;
-				Global.runTimeRec.timeOpticLuceneRange += Global.runTimeRec.getTimeSpan();
+				qp.runTimeRec.numOpticLuceneRange++;
+				qp.runTimeRec.timeOpticLuceneRange += qp.runTimeRec.getTimeSpan();
 				
 				centerNode.isProcessed = Boolean.TRUE;
 				centerNode.setCoreDistanceBySorted(qParams, neighbors);

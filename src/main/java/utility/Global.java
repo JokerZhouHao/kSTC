@@ -9,7 +9,9 @@ import java.util.Properties;
 import entity.QueryParams;
 import entity.Rectangle;
 import entity.SGPLInfo;
+import precomputation.dataset.file.FileLoader;
 import services.RunTimeRecordor;
+import spatialindex.spatialindex.Point;
 import utility.io.IOUtility;
 import utility.io.TimeUtility;
 
@@ -20,6 +22,8 @@ import utility.io.TimeUtility;
  * 2018/10/24
  */
 public class Global {
+	
+	public static Point[] allLocations = null;
 	
 	public static final double minPositiveDouble = 0.000000000001;
 	
@@ -37,16 +41,16 @@ public class Global {
 	}
 	
 	// run time recoder
-	public static RunTimeRecordor runTimeRec = new RunTimeRecordor();
+//	public static RunTimeRecordor runTimeRec = new RunTimeRecordor();
 	
 	// query parameters
 //	public static double xi = 0.05;
-	public static double steepDegree = 0.1;
-	public static double steepOppositeDegree = 1 - steepDegree;
+//	public static double steepDegree = 0.1;
+//	public static double steepOppositeDegree = 1 - steepDegree;
 	public static QueryParams opticQParams = null;
 	public static int maxPidNeighbors4Bytes = 0;
 	
-	private static Properties configProps = null;
+	public static Properties configProps = null;
 	
 	public static String projectName = "kSTC";
 	public static String basePath = null;
@@ -208,8 +212,8 @@ public class Global {
 		if(null == suffixFile)	suffixFile = "";
 		
 		// query parameters
-		steepDegree =  Double.parseDouble((String)configProps.get("steepDegree"));
-		steepOppositeDegree = 1 - steepDegree;
+//		steepDegree =  Double.parseDouble((String)configProps.get("steepDegree"));
+//		steepOppositeDegree = 1 - steepDegree;
 		opticQParams = new QueryParams(Double.parseDouble((String)configProps.get("opticEpsilon")),
 				Integer.parseInt((String)configProps.get("opticMinpts")));
 		maxPidNeighbors4Bytes = Integer.parseInt((String)configProps.get("maxPidNeighborsBytes"))/4;
@@ -225,9 +229,11 @@ public class Global {
 		pathIdTerms = inputPath + (String)configProps.get("fileIdTerms") + suffixFile;
 		pathWidTerms = inputPath + (String)configProps.get("fileWidTerms") + suffixFile;
 		pathWidWord = inputPath + (String)configProps.get("fileWidWord") + suffixFile;
-		pathPidNeighborLen = outPath + (String)configProps.get("filePidNeighborLen") + suffixFile + 
-							",opticMinpts=" + String.valueOf(opticQParams.minpts) + ",opticEpsilon=" + String.valueOf(opticQParams.epsilon) + 
-							",maxPidNeighborsBytes=" + (String)configProps.get("maxPidNeighborsBytes");
+//		pathPidNeighborLen = outPath + (String)configProps.get("filePidNeighborLen") + suffixFile + 
+//							",opticMinpts=" + String.valueOf(opticQParams.minpts) + ",opticEpsilon=" + String.valueOf(opticQParams.epsilon) + 
+//							",maxPidNeighborsBytes=" + (String)configProps.get("maxPidNeighborsBytes");
+		pathPidNeighborLen = getPathPidNeighborLen(Integer.parseInt((String)configProps.get("maxPidNeighborsBytes")));
+		
 		pathOrderObjects = outPath + (String)configProps.get("fileOrderObjects") + suffixFile;
 		pathSample = inputPath + "sample" + File.separator;
 		pathResult = inputPath + "result" + File.separator;
@@ -235,9 +241,10 @@ public class Global {
 		// set index path
 		pathPidAndRtreeIdWordsIndex = outPath + (String)configProps.get("pathPidAndRtreeIdWordsIndex") + suffixFile + File.separator;
 		pathCellidPidWordsIndex = outPath + (String)configProps.get("pathCellidPidWordsIndex") + suffixFile + signNormalized + File.separator;
-		pathTerm2PidNeighborsIndex = outPath + (String)configProps.get("pathTerm2PidNeighborsIndex") + suffixFile + signNormalized +
-				",opticMinpts=" + String.valueOf(opticQParams.minpts) + ",opticEpsilon=" + String.valueOf(opticQParams.epsilon) + 
-				",maxPidNeighborsBytes=" + (String)configProps.get("maxPidNeighborsBytes") + File.separator;
+//		pathTerm2PidNeighborsIndex = outPath + (String)configProps.get("pathTerm2PidNeighborsIndex") + suffixFile + signNormalized +
+//				",opticMinpts=" + String.valueOf(opticQParams.minpts) + ",opticEpsilon=" + String.valueOf(opticQParams.epsilon) + 
+//				",maxPidNeighborsBytes=" + (String)configProps.get("maxPidNeighborsBytes") + File.separator;
+		pathTerm2PidNeighborsIndex = getPathTerm2PidNeighborsIndex(Integer.parseInt((String)configProps.get("maxPidNeighborsBytes")));
 		pathPid2Terms2NeighborsIndex = outPath + (String)configProps.get("pathPid2Terms2NeighborsIndex") + suffixFile + signNormalized +
 				",opticMinpts=" + String.valueOf(opticQParams.minpts) + ",opticEpsilon=" + String.valueOf(opticQParams.epsilon) + File.separator;
 		
@@ -248,14 +255,34 @@ public class Global {
 		sgplInfo = SGPLInfo.getGlobalInstance();
 		pathTerm2CellColIndex =outPath + (String)configProps.get("pathTerm2CellColIndex") + suffixFile + signNormalized + 
 				".rtreeFanout" + (String)configProps.get("rtreeFanout") + ".zw" + zorderWidth + ".zh" + zorderHeight + File.separator;
-		pathCellidRtreeidOrPidWordsIndex = outPath + (String)configProps.get("pathCellidRtreeidOrPidWordsIndex") + 
-											suffixFile + signNormalized + ".rtreeFanout" + (String)configProps.get("rtreeFanout") + 
-											".zw" + zorderWidth + ".zh" + zorderHeight + File.separator;
+//		pathCellidRtreeidOrPidWordsIndex = outPath + (String)configProps.get("pathCellidRtreeidOrPidWordsIndex") + 
+//											suffixFile + signNormalized + ".rtreeFanout" + (String)configProps.get("rtreeFanout") + 
+//											".zw" + zorderWidth + ".zh" + zorderHeight + File.separator;
+		pathCellidRtreeidOrPidWordsIndex = getPathCellidRtreeidOrPidWordsIndex(Integer.parseInt((String)configProps.get("rtreeFanout")), 
+										zorderWidth, zorderHeight);
 		pathTestIndex = outPath + "test" + File.separator;
 		
 		// set num
 		numNode = Integer.parseInt((String)configProps.get("numNode"));
 		
+	}
+	
+	public static String getPathCellidRtreeidOrPidWordsIndex(int rtreeFanout, int zorderWidth, int zorderHeight) {
+		return outPath + (String)configProps.get("pathCellidRtreeidOrPidWordsIndex") + 
+				suffixFile + signNormalized + ".rtreeFanout" + rtreeFanout + 
+				".zw" + zorderWidth + ".zh" + zorderHeight + File.separator;
+	}
+	
+	public static String getPathTerm2PidNeighborsIndex(int maxPidNeighborsBytes) {
+		return outPath + (String)configProps.get("pathTerm2PidNeighborsIndex") + suffixFile + signNormalized +
+				",opticMinpts=" + String.valueOf(opticQParams.minpts)  + ",opticEpsilon=" + String.valueOf(opticQParams.epsilon) + 
+				",maxPidNeighborsBytes=" + maxPidNeighborsBytes + File.separator;
+	}
+	
+	public static String getPathPidNeighborLen(int maxPidNeighborsBytes) {
+		return outPath + (String)configProps.get("filePidNeighborLen") + suffixFile + 
+				",opticMinpts=" + String.valueOf(opticQParams.minpts) + ",opticEpsilon=" + String.valueOf(opticQParams.epsilon) + 
+				",maxPidNeighborsBytes=" + maxPidNeighborsBytes;
 	}
 	
 	/* rtree index setting parameters */
@@ -289,8 +316,8 @@ public class Global {
 		
 		
 		System.out.println("--------------------------- base path --------------------------");
-		System.out.println("steepDegree : " + Global.steepDegree);
-		System.out.println("steepOppositeDegree : " + Global.steepOppositeDegree);
+//		System.out.println("steepDegree : " + Global.steepDegree);
+//		System.out.println("steepOppositeDegree : " + Global.steepOppositeDegree);
 		System.out.println("projectName : " + Global.projectName);
 		System.out.println("basePath : " + Global.basePath);
 		System.out.println("baseDatasetPath : " + Global.baseDatasetPath);
@@ -342,6 +369,8 @@ public class Global {
 			setAllPaths();
 			
 			Global.initRTreeParameters();
+			
+			Global.allLocations = FileLoader.loadPoints(Global.pathIdNormCoord);
 			
 		} catch (Exception e) {
 			e.printStackTrace();

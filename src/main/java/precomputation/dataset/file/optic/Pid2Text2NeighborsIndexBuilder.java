@@ -66,7 +66,7 @@ public class Pid2Text2NeighborsIndexBuilder implements Runnable{
 		this.start = start;
 		this.end = end;
 		this.qParams = qParams;
-		this.sCircle = new Circle(qParams.epsilon, new double[2]);
+		this.sCircle = new Circle(qParams.epsilon, new double[2], Global.sgplInfo);
 		this.rtree = MRTree.getInstanceInDisk(Boolean.FALSE);
 		synchronized (Pid2Text2NeighborsIndexBuilder.class) {
 			if(null == pid2TermsNeighborsIndex) {

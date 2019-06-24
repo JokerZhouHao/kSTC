@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import services.RunTimeRecordor;
 import spatialindex.spatialindex.Point;
 import utility.Global;
 import utility.io.IOUtility;
@@ -32,7 +33,11 @@ public class QueryParams {
 	public double xi = 0;
 	public List<String> sWords = new ArrayList<>();
 	
+	public SGPLInfo sgplInfo = null;
+	
 	public int maxPidNeighborsBytes = 0;
+	
+	public RunTimeRecordor runTimeRec = new RunTimeRecordor();
 	
 	private final static String head = "rFanout steepD steepOD zw    zh    ns   " + 
 			"t  k  nw  mpts   eps       xi       maxPNeiByte   ";
@@ -47,7 +52,8 @@ public class QueryParams {
 		this.minpts = minpts;
 	}
 	
-	public QueryParams(int rtreeFanout, double steepDegree, int zorderWidth, int zorderHeight, int numSample, int type,
+	public QueryParams(int rtreeFanout, double steepDegree, int zorderWidth, int zorderHeight, 
+			int numSample, int type,
 			int k, int numWord, int minpts, double epsilon, double xi, int maxPidNeighborsBytes) {
 		super();
 		this.rtreeFanout = rtreeFanout;
@@ -63,6 +69,10 @@ public class QueryParams {
 		this.epsilon = epsilon;
 		this.xi = xi;
 		this.maxPidNeighborsBytes = maxPidNeighborsBytes;
+		
+		double i = 1.0;
+		sgplInfo = new SGPLInfo(zorderWidth, zorderHeight, 0, i/zorderWidth, 
+							0, i/zorderHeight, zorderWidth * zorderHeight);
 	}
 	
 	//	public QueryParams(Point location, List<String> sWords, int k, double epsilonOrXi, int minpts) {
@@ -92,6 +102,7 @@ public class QueryParams {
 	}
 	
 	public static void displays(List<QueryParams> qps) {
+		System.out.println("Global.rtreeFanout: " + Global.rtreeFanout + " # 只能通过改config.props文件，来选择rtree");
 		System.out.println(head);
 		for(QueryParams qp : qps) {
 			System.out.println(String.format(formatStr, qp.rtreeFanout, qp.steepDegree,
@@ -102,6 +113,7 @@ public class QueryParams {
 	}
 	
 	public static void display(QueryParams qp) {
+		System.out.println("Global.rtreeFanout: " + Global.rtreeFanout + " # 只能通过改config.props文件，来选择rtree");
 		System.out.println(head);
 		System.out.println(String.format(formatStr, qp.rtreeFanout, qp.steepDegree,
 				qp.steepOppositeDegree, qp.zorderWidth, qp.zorderHeight, qp.numSample,

@@ -64,7 +64,7 @@ public class Term2PidNeighborsIndexBuilder implements Runnable{
 		this.start = start;
 		this.end = end;
 		this.qParams = qParams;
-		this.sCircle = new Circle(qParams.epsilon, new double[2]);
+		this.sCircle = new Circle(qParams.epsilon, new double[2], Global.sgplInfo);
 		synchronized (sgplInfo) {
 			if(null == term2PidNeiIndex) {
 				term2PidNeiIndex = new Term2PidNeighborsIndex(pathTerm2PidNei);

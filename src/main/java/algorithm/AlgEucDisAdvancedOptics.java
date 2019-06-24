@@ -24,12 +24,17 @@ public class AlgEucDisAdvancedOptics extends AlgEucDisBaseOptics{
 	private Term2PidNeighborsIndex term2PNgb = null;
 	private Map<String, Integer> ngbLens = null;
 	
-	public AlgEucDisAdvancedOptics() throws Exception{
-		super();
+	public AlgEucDisAdvancedOptics(QueryParams qp) throws Exception{
+		super(qp);
 		term2PNgb = new Term2PidNeighborsIndex(Global.pathTerm2PidNeighborsIndex);
 		term2PNgb.openIndexReader();
 		
 		ngbLens = FileLoader.loadPidNgbLens(Global.pathPidNeighborLen);
+	}
+	
+	public void free() throws Exception{
+		cellidWIndex.close();
+		term2PNgb.close();
 	}
 	
 	@Override
@@ -86,7 +91,7 @@ public class AlgEucDisAdvancedOptics extends AlgEucDisBaseOptics{
 //			查并集
 			Map<Integer, List<NeighborsNode>> pid2Ngb = new HashMap<>();
 			for(String tm : qParams.sWords) {
-				pid2Ngb.putAll(term2PNgb.searchTerm(tm));
+				pid2Ngb.putAll(term2PNgb.searchTerm(tm, qp));
 			}
 			
 			Map<Integer, Node> pid2Node = new HashMap<>();

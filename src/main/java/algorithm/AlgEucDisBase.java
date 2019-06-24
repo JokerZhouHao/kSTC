@@ -1,5 +1,6 @@
 package algorithm;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -36,17 +37,39 @@ public class AlgEucDisBase implements AlgInterface{
 	private CellidPidWordsIndex cellidIndex = null;
 	private MRTree rtree = null;
 	private NoiseRecoder noiseRecoder = new NoiseRecoder();
+	private QueryParams qp = null;
 	
-	public AlgEucDisBase() throws Exception{
-		allLocations = FileLoader.loadPoints(Global.pathIdNormCoord);
-//		allLocations = FileLoader.loadPoints(Global.pathIdCoord);
-//		idWordsIndex = new IdWordsIndex(Global.pathPidAndRtreeIdWordsIndex);
-//		idWordsIndex.openIndexReader();
+//	public AlgEucDisBase() throws Exception{
+//		allLocations = FileLoader.loadPoints(Global.pathIdNormCoord);
+////		allLocations = FileLoader.loadPoints(Global.pathIdCoord);
+////		idWordsIndex = new IdWordsIndex(Global.pathPidAndRtreeIdWordsIndex);
+////		idWordsIndex.openIndexReader();
+//		
+//		cellidIndex = new CellidPidWordsIndex(Global.pathCellidRtreeidOrPidWordsIndex);
+//		cellidIndex.openIndexReader();
+//		
+//		rtree = MRTree.getInstanceInDisk();
+//	}
+	
+	
+	public AlgEucDisBase(QueryParams qp) throws Exception {
+		this.qp = qp;
+		init();
+	}
+	
+	private void init() throws Exception{
+		if(Global.allLocations == null)	allLocations = FileLoader.loadPoints(Global.pathIdNormCoord);
+		else allLocations = Global.allLocations;
 		
-		cellidIndex = new CellidPidWordsIndex(Global.pathCellidRtreeidOrPidWordsIndex);
+		String path =  Global.getPathCellidRtreeidOrPidWordsIndex(qp.rtreeFanout, qp.zorderWidth, qp.zorderHeight);
+		cellidIndex = new CellidPidWordsIndex(path);
 		cellidIndex.openIndexReader();
 		
-		rtree = MRTree.getInstanceInDisk();
+		rtree = MRTree.getInstanceInDisk(Boolean.FALSE);
+	}
+	
+	public void free() throws Exception{
+		cellidIndex.close();
 	}
 	
 	/**
@@ -58,8 +81,8 @@ public class AlgEucDisBase implements AlgInterface{
 	public SortedClusters excuteQuery(QueryParams qParams) throws Exception{
 		if(qParams.sWords.isEmpty())	return null;
 		
-		Global.runTimeRec.timeTotal = System.nanoTime();
-		Global.runTimeRec.timeTotalPrepareData = System.nanoTime();
+		qp.runTimeRec.timeTotal = System.nanoTime();
+		qp.runTimeRec.timeTotalPrepareData = System.nanoTime();
 		
 		// 采用lucene分词产生的wid_terms.txt([-125.0, 28.0], [15.0, 60]文件全部是小写，故输入的查询关键词得先转化为小写
 		List<String> tWs = new ArrayList<>();
@@ -68,27 +91,27 @@ public class AlgEucDisBase implements AlgInterface{
 		
 //		NodeCollection nodeCol = idWordsIndex.searchWords(qParams, allLocations);
 		
-		Global.runTimeRec.setFrontTime();
+		qp.runTimeRec.setFrontTime();
 		NodeCollection nodeCol = cellidIndex.searchWordsReNodeCol(qParams, allLocations);
 		if(nodeCol == null) {
-			Global.runTimeRec.timeTotal = 0;
-			Global.runTimeRec.timeTotalPrepareData = 0;
+			qp.runTimeRec.timeTotal = 0;
+			qp.runTimeRec.timeTotalPrepareData = 0;
 			return null;
 		}
-		Global.runTimeRec.numNid = nodeCol.size();
-		Global.runTimeRec.timeSearchTerms = Global.runTimeRec.getTimeSpan();
+		qp.runTimeRec.numNid = nodeCol.size();
+		qp.runTimeRec.timeSearchTerms = qp.runTimeRec.getTimeSpan();
 		
-		Global.runTimeRec.setFrontTime();
+		qp.runTimeRec.setFrontTime();
 		PNodeCollection disPNodeCol = nodeCol.getPNodeCollection().sortByDistance();
-		Global.runTimeRec.timeSortByDistance = Global.runTimeRec.getTimeSpan();
+		qp.runTimeRec.timeSortByDistance = qp.runTimeRec.getTimeSpan();
 		
-		Global.runTimeRec.setFrontTime();
+		qp.runTimeRec.setFrontTime();
 		PNodeCollection scorePNodeCol = nodeCol.getPNodeCollection().copy().sortByScore();
-		Global.runTimeRec.timeSortByScore = Global.runTimeRec.getTimeSpan();
+		qp.runTimeRec.timeSortByScore = qp.runTimeRec.getTimeSpan();
 		
-		Global.runTimeRec.timeTotalPrepareData = System.nanoTime() - Global.runTimeRec.timeTotalPrepareData;
+		qp.runTimeRec.timeTotalPrepareData = System.nanoTime() - qp.runTimeRec.timeTotalPrepareData;
 		
-		Global.runTimeRec.timeTotalGetCluster = System.nanoTime();
+		qp.runTimeRec.timeTotalGetCluster = System.nanoTime();
 		
 		SortedClusters sClusters = new SortedClusters(qParams);
 		Cluster cluster = null;
@@ -116,7 +139,7 @@ public class AlgEucDisBase implements AlgInterface{
 				continue;
 			}
 			cluster = getCluster(qParams, curClusterId, curNode, nodeCol, signAccessDis);
-			Global.runTimeRec.numGetCluster++;
+			qp.runTimeRec.numGetCluster++;
 			if(null != cluster) {
 				sClusters.add(cluster);
 				curClusterId++;
@@ -133,11 +156,11 @@ public class AlgEucDisBase implements AlgInterface{
 		} while(bound <= topKScore);
 		noiseRecoder.clear();
 		
-		Global.runTimeRec.numCluster = sClusters.getSize();
-		Global.runTimeRec.timeTotalGetCluster = System.nanoTime() - Global.runTimeRec.timeTotalGetCluster;
-		Global.runTimeRec.timeTotal = System.nanoTime() - Global.runTimeRec.timeTotal;
-		if(0 == sClusters.getSize())	Global.runTimeRec.topKScore = 0;
-		else Global.runTimeRec.topKScore = sClusters.getLastScore();
+		qp.runTimeRec.numCluster = sClusters.getSize();
+		qp.runTimeRec.timeTotalGetCluster = System.nanoTime() - qp.runTimeRec.timeTotalGetCluster;
+		qp.runTimeRec.timeTotal = System.nanoTime() - qp.runTimeRec.timeTotal;
+		if(0 == sClusters.getSize())	qp.runTimeRec.topKScore = 0;
+		else qp.runTimeRec.topKScore = sClusters.getLastScore();
 		return sClusters;
 	}
 	
@@ -156,10 +179,10 @@ public class AlgEucDisBase implements AlgInterface{
 		LinkedList<Node> ngb = null;
 		Node centerNode = null;
 		
-		Global.runTimeRec.setFrontTime();
+		qp.runTimeRec.setFrontTime();
 		ngb = rtree.rangeQuery(qParams, clusterId, qNode, nodeCol, allLocations);
-		Global.runTimeRec.numRangeRtree++;
-		Global.runTimeRec.timeRangeRtree += Global.runTimeRec.getTimeSpan();
+		qp.runTimeRec.numRangeRtree++;
+		qp.runTimeRec.timeRangeRtree += qp.runTimeRec.getTimeSpan();
 		
 		if(null == ngb) {
 			return null;
@@ -185,10 +208,10 @@ public class AlgEucDisBase implements AlgInterface{
 			while(!neighbors.isEmpty()) {
 				centerNode = neighbors.pollFirst();
 				
-				Global.runTimeRec.setFrontTime();
+				qp.runTimeRec.setFrontTime();
 				ngb = rtree.rangeQuery(qParams, clusterId, centerNode, nodeCol, allLocations);
-				Global.runTimeRec.numRangeRtree++;
-				Global.runTimeRec.timeRangeRtree += Global.runTimeRec.getTimeSpan();
+				qp.runTimeRec.numRangeRtree++;
+				qp.runTimeRec.timeRangeRtree += qp.runTimeRec.getTimeSpan();
 				
                 if(ngb == null || ngb.size() < qParams.minpts) {
                     continue;

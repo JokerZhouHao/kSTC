@@ -113,15 +113,15 @@ public class Term2PidNeighborsIndex extends AbstractLuceneIndex{
 		this.addDoc(term, pidNeighborsToBytes(pidNeighbors));
 	}
 	
-	public Map<Integer, List<NeighborsNode>> searchTerm(String term) throws Exception{
+	public Map<Integer, List<NeighborsNode>> searchTerm(String term, QueryParams qp) throws Exception{
 		TopDocs results = indexSearcher.search(queryParser.parse(term), 1);
 		ScoreDoc[] hits = results.scoreDocs;
 		if(0 == hits.length)	return null;
 		
-		Global.runTimeRec.setFrontTime();
+		qp.runTimeRec.setFrontTime();
 		byte[] bs = indexSearcher.doc(hits[0].doc).getBinaryValue(fieldPidNeighbors).bytes;
-		Global.runTimeRec.numByteOfTermPNgb += bs.length;
-		Global.runTimeRec.timeReadTermPNgb += Global.runTimeRec.getTimeSpan();
+		qp.runTimeRec.numByteOfTermPNgb += bs.length;
+		qp.runTimeRec.timeReadTermPNgb += qp.runTimeRec.getTimeSpan();
 		
 		return bytesToPidNeighbors(bs);
 	}
@@ -153,7 +153,7 @@ public class Term2PidNeighborsIndex extends AbstractLuceneIndex{
 	public static void main(String[] args) throws Exception{
 		Term2PidNeighborsIndex index = new Term2PidNeighborsIndex(Global.pathTerm2PidNeighborsIndex);
 		index.openIndexReader();
-		Map<Integer, List<NeighborsNode>> pid2Ngb = index.searchTerm("pet");
+		Map<Integer, List<NeighborsNode>> pid2Ngb = index.searchTerm("pet", null);
 		System.out.println(pid2Ngb);
 		
 //		index.openIndexWriter();
