@@ -124,20 +124,3 @@ public class SampleLoader {
 		write(Global.samplePath + "w_test.txt", qps);
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

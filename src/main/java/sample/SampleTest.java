@@ -10,7 +10,7 @@ import algorithm.AlgEucDisBaseOptics;
 import algorithm.AlgEucDisBaseOpticsWu;
 import algorithm.AlgEucDisFastRange;
 import algorithm.AlgInterface;
-import algorithm.AlgTest;
+import algorithm.SingleAlgTest;
 import entity.AlgType;
 import entity.QueryParams;
 import entity.SortedClusters;
@@ -123,14 +123,4 @@ public class SampleTest {
 		samT.test(qps, AlgType.AlgEucDisAdvancedOpticsWu, pathRecordRunTime, pathSampleResult);
 	}
 }
-
-
-
-
-
-
-
-
-
-
 

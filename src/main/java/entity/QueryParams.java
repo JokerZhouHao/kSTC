@@ -9,7 +9,7 @@ import java.util.Random;
 
 import spatialindex.spatialindex.Point;
 import utility.Global;
-import utility.IOUtility;
+import utility.io.IOUtility;
 import utility.io.LuceneUtility;
 
 public class QueryParams {
@@ -175,7 +175,7 @@ public class QueryParams {
 		QueryParams.display(qp);
 		System.out.println();
 		
-		String path = Global.inputPath + File.separator + "sample" + File.separator + "result" + File.separator + "qptest.txt";
+		String path = Global.pathResult + "qptest.txt";
 		qps = QueryParams.load(path);
 		QueryParams.displays(qps);
 		System.out.println();

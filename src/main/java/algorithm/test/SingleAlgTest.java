@@ -1,9 +1,16 @@
-package algorithm;
+package algorithm.test;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import algorithm.AlgEucDisAdvancedOptics;
+import algorithm.AlgEucDisAdvancedOpticsWu;
+import algorithm.AlgEucDisAdvancedOpticsWu2;
+import algorithm.AlgEucDisBase;
+import algorithm.AlgEucDisBaseOptics;
+import algorithm.AlgEucDisBaseOpticsWu;
+import algorithm.AlgEucDisFastRange;
 import entity.QueryParams;
 import entity.SortedClusters;
 import precomputation.dataset.file.FileLoader;
@@ -12,7 +19,7 @@ import utility.Global;
 import utility.io.IOUtility;
 import utility.io.TimeUtility;
 
-public class AlgTest {
+public class SingleAlgTest {
 	
 	public static AlgEucDisBase eucBase = null;
 	public static AlgEucDisFastRange eucFast = null;
@@ -38,32 +45,32 @@ public class AlgTest {
 		
 		if(algName.equals("base")) {
 			System.out.println("----------------------- AlgEucDisBase ----------------------");
-			sClusters = AlgTest.eucBase.excuteQuery(qParams);
+			sClusters = SingleAlgTest.eucBase.excuteQuery(qParams);
 			resPath = Global.outPath + "result_ecu_base.txt";
 		} else if(algName.equals("fast")) {
 			System.out.println("----------------------- AlgEucDisFastRange ----------------------");
-			sClusters = AlgTest.eucFast.excuteQuery(qParams);
+			sClusters = SingleAlgTest.eucFast.excuteQuery(qParams);
 			resPath = Global.outPath + "result_ecu_fast.txt";
 		} else if(algName.equals("AlgEucDisBaseOptics")) {
 			System.out.println("----------------------- AlgEucDisBaseOptics ----------------------");
-			sClusters = AlgTest.eucBaseOptics.excuteQuery(qParams, Global.pathOrderObjects + "_AlgEucDisBaseOptics");
+			sClusters = SingleAlgTest.eucBaseOptics.excuteQuery(qParams, Global.pathOrderObjects + "_AlgEucDisBaseOptics");
 			resPath = Global.outPath + "result_ecu_base_optics.txt";
 		} else if(algName.equals("AlgEucDisBaseOpticsWu")) {
 			System.out.println("----------------------- AlgEucDisBaseOpticsWu ----------------------");
-			sClusters = AlgTest.eucBaseOpticsWu.excuteQuery(qParams, Global.pathOrderObjects + "_AlgEucDisBaseOpticsWu");
+			sClusters = SingleAlgTest.eucBaseOpticsWu.excuteQuery(qParams, Global.pathOrderObjects + "_AlgEucDisBaseOpticsWu");
 //			sClusters = AlgTest.eucBaseOpticsWu.excuteQuery(qParams, null);
 			resPath = Global.outPath + "result_ecu_base_optics_wu.txt";
 		} else if(algName.equals("AlgEucDisAdvancedOptics")) {
 			System.out.println("----------------------- AlgEucDisAdvancedOptics ----------------------");
-			sClusters = AlgTest.eucAdvancedOptics.excuteQuery(qParams, Global.pathOrderObjects + "_AlgEucDisAdvancedOptics");
+			sClusters = SingleAlgTest.eucAdvancedOptics.excuteQuery(qParams, Global.pathOrderObjects + "_AlgEucDisAdvancedOptics");
 			resPath = Global.outPath + "result_ecu_advanced_optics.txt";
 		} else if(algName.equals("AlgEucDisAdvancedOpticsWu")) {
 			System.out.println("----------------------- AlgEucDisAdvancedOpticsWu ----------------------");
-			sClusters = AlgTest.eucAdvancedOpticsWu.excuteQuery(qParams, Global.pathOrderObjects + "_AlgEucDisAdvancedOpticsWu");
+			sClusters = SingleAlgTest.eucAdvancedOpticsWu.excuteQuery(qParams, Global.pathOrderObjects + "_AlgEucDisAdvancedOpticsWu");
 			resPath = Global.outPath + "result_ecu_advanced_optics_wu.txt";
 		} else if(algName.equals("AlgEucDisAdvancedOpticsWu2")) {
 			System.out.println("----------------------- AlgEucDisAdvancedOpticsWu2 ----------------------");
-			sClusters = AlgTest.eucAdvancedOpticsWu2.excuteQuery(qParams, Global.pathOrderObjects + "_AlgEucDisAdvancedOpticsWu2");
+			sClusters = SingleAlgTest.eucAdvancedOpticsWu2.excuteQuery(qParams, Global.pathOrderObjects + "_AlgEucDisAdvancedOpticsWu2");
 			resPath = Global.outPath + "result_ecu_advanced_optics_wu2.txt";
 		}
 		
@@ -134,20 +141,20 @@ public class AlgTest {
 	}
 	
 	public static void main(String[] args) throws Exception{
-		AlgTest.eucBase = new AlgEucDisBase();
-		AlgTest.eucFast = new AlgEucDisFastRange();
+		SingleAlgTest.eucBase = new AlgEucDisBase();
+		SingleAlgTest.eucFast = new AlgEucDisFastRange();
 		
-		AlgTest.eucBaseOptics = new AlgEucDisBaseOptics();
-		AlgTest.eucBaseOpticsWu = new AlgEucDisBaseOpticsWu();
+		SingleAlgTest.eucBaseOptics = new AlgEucDisBaseOptics();
+		SingleAlgTest.eucBaseOpticsWu = new AlgEucDisBaseOpticsWu();
 		
-		AlgTest.eucAdvancedOptics = new AlgEucDisAdvancedOptics();
-		AlgTest.eucAdvancedOpticsWu = new AlgEucDisAdvancedOpticsWu();
+		SingleAlgTest.eucAdvancedOptics = new AlgEucDisAdvancedOptics();
+		SingleAlgTest.eucAdvancedOpticsWu = new AlgEucDisAdvancedOpticsWu();
 //		AlgTest.eucAdvancedOpticsWu2 = new AlgEucDisAdvancedOpticsWu2();
 		
-		QueryParams qParams = AlgTest.getQParams();
+		QueryParams qParams = SingleAlgTest.getQParams();
 		
-		AlgTest.testAlgEuc("base", qParams);
-		AlgTest.testAlgEuc("fast", qParams);
+		SingleAlgTest.testAlgEuc("base", qParams);
+		SingleAlgTest.testAlgEuc("fast", qParams);
 		
 //		AlgTest.testAlgEuc("AlgEucDisBaseOpticsWu", qParams);
 //		AlgTest.testAlgEuc("AlgEucDisAdvancedOpticsWu", qParams);

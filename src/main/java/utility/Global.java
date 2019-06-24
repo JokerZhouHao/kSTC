@@ -81,6 +81,8 @@ public class Global {
 	public static String pathOrderObjects = null;
 	public static String pathPidNeighborLen = null; // 记录每个term对应的pid neighbors的int数量
 	public static String pathTestFile = null;
+	public static String pathSample = null;
+	public static String pathResult = null;
 	
 	// index
 	public static String pathPidAndRtreeIdWordsIndex = null;
@@ -227,6 +229,8 @@ public class Global {
 							",opticMinpts=" + String.valueOf(opticQParams.minpts) + ",opticEpsilon=" + String.valueOf(opticQParams.epsilon) + 
 							",maxPidNeighborsBytes=" + (String)configProps.get("maxPidNeighborsBytes");
 		pathOrderObjects = outPath + (String)configProps.get("fileOrderObjects") + suffixFile;
+		pathSample = inputPath + "sample" + File.separator;
+		pathResult = inputPath + "result" + File.separator;
 		
 		// set index path
 		pathPidAndRtreeIdWordsIndex = outPath + (String)configProps.get("pathPidAndRtreeIdWordsIndex") + suffixFile + File.separator;
