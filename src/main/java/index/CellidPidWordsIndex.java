@@ -156,21 +156,21 @@ public class CellidPidWordsIndex extends AbstractLuceneIndex{
 		ByteBuffer bb = null;
 		Document doc = null;
 		int pid = 0;
+		int cellId = 0;
 		double maxScore = hits[0].score;
 		for(int i=0; i<hits.length; i++) {
 			doc = indexSearcher.doc(hits[i].doc);
 			bb = ByteBuffer.wrap(doc.getBinaryValue(fieldId).bytes);
-			bb.getInt();
+			cellId = bb.getInt();
 			pid = bb.getInt();
 			if(pid >= 0) {
 				pot = allLocations[pid];
 				dis = queryParams.location.getMinimumDistance(allLocations[pid]);
-			}
-			else {
+			} else {
 				pot = null;
-				dis = Double.MAX_VALUE;
+				dis = Global.signInfDis;
 			}
-			nodeCol.add(new Node(pid, pot, dis, 1 - hits[i].score/maxScore));
+			nodeCol.add(new Node(pid, pot, dis, 1 - hits[i].score/maxScore, cellId));
 //			System.out.println(String.valueOf(id) + " " + hits[i].score/queryParams.sWords.size());
 //			resSet.add(Integer.parseInt(doc.get(fieldId)));
 		}

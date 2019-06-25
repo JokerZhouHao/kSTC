@@ -431,8 +431,8 @@ public class ProcessGenerateFiles {
 //		ProcessGenerateFiles.generateIdWidsFile(Global.pathIdText, Global.pathIdWids, Global.pathWidWord);
 		
 		/* used		对子集坐标正则化处理	*/
-//		String pathCoords = Global.pathIdCoord + Global.subYelpBus1.toString();
-//		ProcessGenerateFiles.normalizedCoordFile(pathCoords, Global.subYelpBus1);
+		String pathCoords = Global.pathIdCoord + Global.subYelpBus1.toString();
+		ProcessGenerateFiles.normalizedCoordFile(pathCoords, Global.subYelpBus1);
 		
 		/* generate id_terms file */
 //		String pathIdTerms = Global.pathIdTerms;

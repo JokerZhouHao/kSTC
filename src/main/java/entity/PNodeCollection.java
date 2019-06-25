@@ -7,7 +7,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import index.CellidPidWordsIndex;
 import spatialindex.spatialindex.Point;
+import utility.Global;
 import utility.MComparator;
 
 public class PNodeCollection {
@@ -49,7 +51,7 @@ public class PNodeCollection {
 		do {
 			curIndex++;
 		} while(curIndex != pNodes.size() && pNodes.get(curIndex).isClassified());
-		if(curIndex==pNodes.size())	return null;
+		if(curIndex==pNodes.size() || pNodes.get(curIndex).distance == Global.signInfDis)	return null;
 		return pNodes.get(curIndex);
 	}
 	

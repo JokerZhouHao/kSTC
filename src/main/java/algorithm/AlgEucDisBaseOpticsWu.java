@@ -12,10 +12,12 @@ public class AlgEucDisBaseOpticsWu extends AlgEucDisBaseOptics{
 		super(qp);
 	}
 	
+	
+	
 	@Override
 	public SortedClusters excuteQuery(QueryParams qParams, String pathOrderedFile,
-			Map<Integer, List<Node>> cellid2Nodes, List<Node> sortedNodes) throws Exception {
+		List<Node> nodes, List<Node> sortedNodes) throws Exception {
 		// TODO Auto-generated method stub
-		return super.excuteQueryByWu(qParams, pathOrderedFile, cellid2Nodes, sortedNodes);
+		return super.excuteQueryByWu(qParams, pathOrderedFile, nodes, sortedNodes);
 	}
 }

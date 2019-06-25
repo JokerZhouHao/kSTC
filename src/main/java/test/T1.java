@@ -48,6 +48,13 @@ public class T1 {
 //		nds.add(new Node(1, null, 0, 0));
 //		System.out.println(nds.contains(new NeighborsNode(-1, 1)));
 		
+		TreeSet<Integer> ts = new TreeSet<>();
+		ts.add(10);
+		ts.add(3);
+		for(int it : ts) {
+			System.out.println(it);
+		}
+		
 		System.out.println();
 	}
 }

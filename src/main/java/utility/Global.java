@@ -27,6 +27,7 @@ public class Global {
 	 * 各种标志
 	 */
 	public final static QueryParams signQueryThreadOver = new QueryParams();
+	public final static double signInfDis = 1000000000;
 	
 	public static Point[] allLocations = null;
 	

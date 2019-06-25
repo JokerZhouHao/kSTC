@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeSet;
 
 import entity.CellSign;
 import entity.Circle;
@@ -119,7 +120,11 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 		qp.runTimeRec.timeOpticFunc = System.nanoTime() - qp.runTimeRec.timeOpticFunc;
 		
 		qp.runTimeRec.timeExcuteQueryFunc = System.nanoTime();
-		SortedClusters sc = excuteQuery(qParams, pathOrderedFile, cellid2Nodes, sortedNodes);
+		List<Node> nodes = new ArrayList<>();
+		for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
+			nodes.addAll(en.getValue());
+		}
+		SortedClusters sc = excuteQuery(qParams, pathOrderedFile, nodes, sortedNodes);
 		qp.runTimeRec.timeExcuteQueryFunc = System.nanoTime() - qp.runTimeRec.timeExcuteQueryFunc;
 		
 		qp.runTimeRec.timeTotalPrepareData = qp.runTimeRec.timeSearchTerms + qp.runTimeRec.timeSortByDistance + 
@@ -145,13 +150,13 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 	 * @return
 	 * @throws Exception
 	 */
-	public SortedClusters excuteQuery(QueryParams qParams, String pathOrderedFile, Map<Integer, List<Node>> cellid2Nodes,
+	public SortedClusters excuteQuery(QueryParams qParams, String pathOrderedFile, List<Node> nodes,
 			List<Node> sortedNodes) throws Exception{
 		/* building sort distance node collection and sort score node collection */
-		List<Node> nodes = new ArrayList<>();
-		for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
-			nodes.addAll(en.getValue());
-		}
+//		List<Node> nodes = new ArrayList<>();
+//		for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
+//			nodes.addAll(en.getValue());
+//		}
 		
 		qp.runTimeRec.setFrontTime();
 		PNodeCollection disPNodeCol = new PNodeCollection(nodes).sortByDistance();
@@ -236,6 +241,23 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 		if(null!=pathOrderedFile) {
 			ofw = new OrginalFileWriter(pathOrderedFile);
 		}
+		
+		
+		//////// test
+//		TreeSet<Node> allNds = new TreeSet<>();
+//		for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
+//			allNds.addAll(en.getValue());
+//		}
+//		System.out.println(allNds.size());
+//		for(Node nd : allNds) {
+//			if(!nd.isProcessed) {
+//				expandClusterOrder(cellid2Nodes, nd, qParams, orderedNodes, ofw);
+//				qp.runTimeRec.numExpandClusterOrder++;
+//			}
+//		}
+		
+		
+		
 		for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
 			for(Node nd : en.getValue()) {
 				if(!nd.isProcessed) {
