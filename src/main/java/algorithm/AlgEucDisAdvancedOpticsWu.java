@@ -67,7 +67,7 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics {
 				minTerm = tm;
 			}
 		}
-		System.out.println(minLen);
+//		System.out.println(minLen);
 		qp.runTimeRec.numMinByteOfTermPNgb = minLen;
 		
 //		 改为查并集
@@ -184,6 +184,8 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics {
 	
 	public List<Node> fastIndexRange(List<Map<Integer, List<NeighborsNode>>> pid2Ngbs, Map<Integer, Node> pid2Node, Node centerNode){
 		NgbNodes recNgb = new NgbNodes(Boolean.TRUE);
+//		List<Node> ngbList = new ArrayList<>();
+		
 		for(Map<Integer, List<NeighborsNode>> pidNeighbors : pid2Ngbs) {
 			List<NeighborsNode> ngb = pidNeighbors.get(centerNode.id);
 			if(ngb==null)	continue;
@@ -193,16 +195,13 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics {
 				if(null != (nd = pid2Node.get(nn.id))) {
 					nd.disToCenter = nn.disToCenter;
 					recNgb.add(nn.disToCenter, nd);
+//					ngbList.add(nd);
 				}
 			}
 		}
-		
-		
 //		System.out.println(centerNode.id + " : " + recNgb.toList().size());
-		
-		
-		
 		return recNgb.toList();
+//		return ngbList;
 	}
 
 	@Override

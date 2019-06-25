@@ -480,11 +480,11 @@ public class ProcessGenerateFiles {
 //		ProcessGenerateFiles.generateWidTermsFile(pathWidTerms);
 		
 		/* building term_2_pidNeighbors index 需要用到上面生成的pathWidTerms*/
-//		MLog.log("开始创建term_2_pidNeighbors index . . . ");
-//		MLog.log("index path : " + Global.pathTerm2PidNeighborsIndex);
-//		tTime = System.currentTimeMillis();
-//		Term2PidNeighborsIndexBuilder.main(null);
-//		MLog.log("用时: " + TimeUtility.getSpendTimeStr(tTime, System.currentTimeMillis()) + "\n");
+		MLog.log("开始创建term_2_pidNeighbors index . . . ");
+		MLog.log("index path : " + Global.pathTerm2PidNeighborsIndex);
+		tTime = System.currentTimeMillis();
+		Term2PidNeighborsIndexBuilder.main(null);
+		MLog.log("用时: " + TimeUtility.getSpendTimeStr(tTime, System.currentTimeMillis()) + "\n");
 		
 		/* building k neighbor dis file */
 //		int k = 20;

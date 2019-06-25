@@ -7,6 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import algorithm.AlgEucDisAdvancedOpticsWu;
+import algorithm.AlgEucDisBase;
+import algorithm.AlgEucDisBaseOpticsWu;
+import algorithm.AlgEucDisFastRange;
 import services.RunTimeRecordor;
 import spatialindex.spatialindex.Point;
 import utility.Global;
@@ -22,6 +26,13 @@ public class QueryParams {
 	public int zorderHeight = 1000;
 	
 	public int numSample = 0;
+	
+	/**
+	 * 1	AlgEucDisBase
+	 * 2	AlgEucDisFastRange
+	 * 11	AlgEucDisBaseOpticsWu
+	 * 12	AlgEucDisAdvancedOpticsWu
+	 */
 	public int type = 0;
 	
 	public int k = 0;
@@ -40,9 +51,9 @@ public class QueryParams {
 	public RunTimeRecordor runTimeRec = new RunTimeRecordor();
 	
 	private final static String head = "rFanout steepD steepOD zw    zh    ns   " + 
-			"t  k  nw  mpts   eps       xi       maxPNeiByte   ";
+			"t  k     nw  mpts   eps       xi       maxPNeiByte   ";
 	private final static String formatStr = "%-8d%-7s%-8s%-6d%-6d%-5d" +
-			   "%-3d%-3d%-4d%-7d%-10s%-9s%-14d";
+			   "%-3d%-6d%-4d%-7d%-10s%-9s%-14d";
 	
 	public QueryParams() {}
 	
@@ -75,26 +86,23 @@ public class QueryParams {
 							0, i/zorderHeight, zorderWidth * zorderHeight);
 	}
 	
-	//	public QueryParams(Point location, List<String> sWords, int k, double epsilonOrXi, int minpts) {
-	//	super();
-	//	this.location = location;
-	//	this.sWords = sWords;
-	//	this.k = k;
-	//	this.epsilon = epsilonOrXi;
-	//	this.xi = epsilonOrXi;
-	//	this.minpts = minpts;
-	//}
-	//
-	//public QueryParams(Point location, String words, int numWord, int k, double epsilonOrXi, int minpts) throws Exception{
-	//	super();
-	//	this.location = location;
-	//	this.sWords = this.getWords(words, numWord);
-	//	this.k = k;
-	//	this.epsilon = epsilonOrXi;
-	//	this.xi = epsilonOrXi;
-	//	this.minpts = minpts;
-	//}
-	//
+	
+	public AlgType algType() {
+		switch (type) {
+			case 1:
+				return AlgType.AlgEucDisBase;
+			case 2:
+				return AlgType.AlgEucDisFastRange;
+			case 11:
+				return AlgType.AlgEucDisBaseOpticsWu;
+			case 12:
+				return AlgType.AlgEucDisAdvancedOpticsWu;
+			default:
+				break;
+		}
+		return AlgType.AlgEucDisBase;
+	}
+	
 	
 	public void setCoordAndSWords(Point location, List<String> sWords) {
 		this.location = location;
@@ -102,7 +110,7 @@ public class QueryParams {
 	}
 	
 	public static void displays(List<QueryParams> qps) {
-		System.out.println("Global.rtreeFanout: " + Global.rtreeFanout + " # 只能通过改config.props文件，来选择rtree");
+		System.out.println("Global.rtreeFanout: " + Global.rtreeFanout + "          # 只能通过改config.props文件，来选择rtree");
 		System.out.println(head);
 		for(QueryParams qp : qps) {
 			System.out.println(String.format(formatStr, qp.rtreeFanout, qp.steepDegree,
@@ -113,7 +121,7 @@ public class QueryParams {
 	}
 	
 	public static void display(QueryParams qp) {
-		System.out.println("Global.rtreeFanout: " + Global.rtreeFanout + " # 只能通过改config.props文件，来选择rtree");
+		System.out.println("Global.rtreeFanout: " + Global.rtreeFanout + "          # 只能通过改config.props文件，来选择rtree");
 		System.out.println(head);
 		System.out.println(String.format(formatStr, qp.rtreeFanout, qp.steepDegree,
 				qp.steepOppositeDegree, qp.zorderWidth, qp.zorderHeight, qp.numSample,
@@ -121,7 +129,7 @@ public class QueryParams {
 				qp.epsilon, qp.xi, qp.maxPidNeighborsBytes));
 	}
 	
-	public static String resPath(QueryParams qp) {
+	public static String resFileName(QueryParams qp) {
 		return qp.toString() + ".csv";
 	}
 	
@@ -146,25 +154,10 @@ public class QueryParams {
 		else return qps;
 	}
 	
-	public static String generateTestSample(int rtreeFanout, double steepDegree, int zorderWidth, int zorderHeight, int numSample, int type,
+	public static String generateTestQuery(int rtreeFanout, double steepDegree, int zorderWidth, int zorderHeight, int numSample, int type,
 			int k, int numWord, int minpts, double epsilon, double xi, int maxPidNeighborsBytes) {
-		return String.format("%s %s %s %s %s %s %s %s %s %s %s %s ", rtreeFanout, steepDegree, zorderWidth,
+		return String.format("%s %s %s %s %s %s %s %s %s %s %s %s", rtreeFanout, steepDegree, zorderWidth,
 							zorderHeight, numSample, type, k, numWord, minpts, epsilon, xi, maxPidNeighborsBytes);
-	}
-	
-	public List<String> getWords(String str, int numWord) throws Exception{
-		List<String> terms = LuceneUtility.getTerms(str);
-//		int num = new Random().nextInt(numWord<terms.size()?numWord:terms.size());
-//		if(num==0)	num = new Random().nextInt(numWord<terms.size()?numWord:terms.size());
-//		if(num==0)	num = new Random().nextInt(numWord<terms.size()?numWord:terms.size());
-		
-		int num = numWord<terms.size()?numWord:terms.size();
-		
-		List<String> words = new ArrayList<>();
-		for(int i=terms.size()%num; i < terms.size(); i+=terms.size()/num) {
-			words.add(terms.get(i));
-		}
-		return words;
 	}
 	
 	@Override
@@ -192,7 +185,7 @@ public class QueryParams {
 		QueryParams.displays(qps);
 		System.out.println();
 		
-		System.out.println(QueryParams.resPath(qp));
+		System.out.println(QueryParams.resFileName(qp));
 		System.out.println(qp);
 		
 	}

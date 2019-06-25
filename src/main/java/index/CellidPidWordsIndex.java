@@ -26,14 +26,15 @@ import entity.QueryParams;
 import precomputation.dataset.file.FileLoader;
 import spatialindex.spatialindex.Point;
 import utility.Global;
+import utility.MLog;
 import utility.StringTools;
 import utility.indexlucene.AbstractLuceneIndex;
 
 public class CellidPidWordsIndex extends AbstractLuceneIndex{
 	private static final String fieldId = "cellidpid";
 	private static final String fieldWords = "words";
-	private static QueryParser queryAndWordsParser = null;
-	private static QueryParser queryOrWordsParser = null;
+	private QueryParser queryAndWordsParser = null;
+	private QueryParser queryOrWordsParser = null;
 	public static final int signRtreeNode = Integer.MIN_VALUE; 
 	
 	public CellidPidWordsIndex(String indexPath) throws Exception{
@@ -102,6 +103,9 @@ public class CellidPidWordsIndex extends AbstractLuceneIndex{
 	
 	public Map<Integer, List<Node>> searchWords(QueryParams queryParams, Point[] allLocations) throws Exception {
 		Query query = null;
+		
+		if(queryParams.sWords.isEmpty()) MLog.log("queryParams.sWords.isEmpty");
+		
 		query = queryAndWordsParser.parse(StringTools.collection2Str(queryParams.sWords));
 //		query = queryOrWordsParser.parse(StringTools.collection2Str(queryParams.sWords));
 		

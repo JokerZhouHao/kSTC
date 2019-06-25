@@ -39,8 +39,8 @@ import utility.indexlucene.AbstractLuceneIndex;
 public class Pid2Text2NeighborIndex extends AbstractLuceneIndex{
 	private static final String fieldTerms = "terms";
 	private static final String  fieldPidNeighbors = "pidNeighbors";
-	private static QueryParser queryAndWordsParser = null;
-	private static QueryParser queryOrWordsParser = null;
+	private QueryParser queryAndWordsParser = null;
+	private QueryParser queryOrWordsParser = null;
 	public static final int signRtreeNode = Integer.MIN_VALUE; 
 	
 	public Pid2Text2NeighborIndex(String indexPath) throws Exception{

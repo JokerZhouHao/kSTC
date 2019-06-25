@@ -23,8 +23,8 @@
       <file leaf-file-name="orginaldata.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/draw/orginaldata.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="337">
-              <caret line="360" column="63" selection-start-line="356" selection-start-column="61" selection-end-line="360" selection-end-column="63" />
+            <state relative-caret-position="1019">
+              <caret line="352" lean-forward="true" selection-start-line="352" selection-end-line="352" />
             </state>
           </provider>
         </entry>
@@ -75,7 +75,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="1" />
     <option name="width" value="1364" />
     <option name="height" value="728" />
@@ -262,7 +262,7 @@
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16649105" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Python Console" order="8" weight="0.32947367" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.26526317" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.26526317" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.26526317" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info id="Structure" order="1" weight="0.25" />
@@ -652,8 +652,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/draw/orginaldata.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="337">
-          <caret line="360" column="63" selection-start-line="356" selection-start-column="61" selection-end-line="360" selection-end-column="63" />
+        <state relative-caret-position="1019">
+          <caret line="352" lean-forward="true" selection-start-line="352" selection-end-line="352" />
         </state>
       </provider>
     </entry>

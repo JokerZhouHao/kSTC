@@ -111,13 +111,14 @@ public class SampleChooser {
 	
 	public static void main(String[] args) throws Exception {
 		List<Integer> nws = new ArrayList<>();
+		nws.add(2);
 		nws.add(3);
 		nws.add(5);
 		for(int nw : nws) {
 			SampleChooser.chooseSample(500, nw);
 		}
 		
-		List<Sample> sams = load(3, 3);
-		System.out.println(sams);
+//		List<Sample> sams = load(3, 3);
+//		System.out.println(sams);
 	}
 }

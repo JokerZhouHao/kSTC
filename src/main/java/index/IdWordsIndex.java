@@ -54,7 +54,7 @@ public class IdWordsIndex extends AbstractLuceneIndex {
 	private static final String fieldId = "id";
 	private static final String fieldWids = "wids";
 	private static final String fieldWords = "words";
-	private static QueryParser queryAndWordsParser = null;
+	private QueryParser queryAndWordsParser = null;
 	
 	
 	public IdWordsIndex(String indexPath) throws Exception{

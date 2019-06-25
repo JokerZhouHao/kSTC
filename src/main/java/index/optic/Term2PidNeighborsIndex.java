@@ -34,7 +34,7 @@ import utility.indexlucene.AbstractLuceneIndex;
 public class Term2PidNeighborsIndex extends AbstractLuceneIndex{
 	private static final String fieldTerm = "term";
 	private static final String fieldPidNeighbors = "pidneighbors";
-	private static QueryParser queryParser = null;
+	private QueryParser queryParser = null;
 	
 	public Term2PidNeighborsIndex(String indexPath) throws Exception{
 		super(indexPath);

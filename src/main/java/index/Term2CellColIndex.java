@@ -20,7 +20,7 @@ import utility.indexlucene.AbstractLuceneIndex;
 public class Term2CellColIndex extends AbstractLuceneIndex{
 	private static final String fieldTerm = "term";
 	private static final String fieldCellCol = "cellCol";
-	private static QueryParser queryParser = null;
+	private  QueryParser queryParser = null;
 	
 	public Term2CellColIndex(String indexPath) throws Exception{
 		super(indexPath);

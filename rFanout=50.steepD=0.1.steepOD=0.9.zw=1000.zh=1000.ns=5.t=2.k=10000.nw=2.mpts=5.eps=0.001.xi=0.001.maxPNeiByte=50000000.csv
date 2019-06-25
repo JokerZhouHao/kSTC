@@ -1,0 +1,12 @@
+id,numNid,numCellid,timeSearchTerms,timeSortByDistance,timeSortByScore,numGetCluster,numRangeRtree,timeRangeRtree,numRangeZCurve,timeRangeZCurve,numExpandClusterOrder,numMinByteOfTermPNgb,numByteOfTermPNgb,timeReadTermPNgb,timeSearchTermPNgb,numOpticFastRange,timeOpticFastRange,numOpticLuceneRange,timeOpticLuceneRange,timeOpticFunc,timeExcuteQueryFunc,timeTotalPrepareData,timeTotalGetCluster,timeTotal,numCluster,topKScore,
+
+1,0,191,254,2,0,100,0,0,1162,89,0,0,0,0,0,0,0,0,0,0,0,257,140,398,11,0.27292188301612763,
+
+2,0,552,187,3,1,121,0,0,10408,1112,0,0,0,0,0,0,0,0,0,0,0,192,1188,1381,21,0.2485649994185862,
+
+3,0,31,15,0,0,1,0,0,1163,60,0,0,0,0,0,0,0,0,0,0,0,16,62,78,1,0.019527379917728457,
+
+4,0,9,9,0,0,7,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,9,0,9,1,0.017958175588168982,
+
+5,0,578,92,4,2,112,0,0,17771,1827,0,0,0,0,0,0,0,0,0,0,0,99,1924,2024,23,0.33396771048148494,
+

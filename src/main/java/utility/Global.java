@@ -23,6 +23,11 @@ import utility.io.TimeUtility;
  */
 public class Global {
 	
+	/**
+	 * 各种标志
+	 */
+	public final static QueryParams signQueryThreadOver = new QueryParams();
+	
 	public static Point[] allLocations = null;
 	
 	public static final double minPositiveDouble = 0.000000000001;
@@ -196,7 +201,7 @@ public class Global {
 		IOUtility.existsOrThrowsException(inputPath);
 		
 		samplePath = inputPath + "sample" + File.separator;
-		sampleResultPath = samplePath + "result" + File.separator;
+		sampleResultPath = inputPath + "result" + File.separator;
 		
 		outPath = subDataSetPath + "output" + File.separator;
 		IOUtility.existsOrThrowsException(outPath);
