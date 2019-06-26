@@ -24,6 +24,7 @@ import entity.PNodeCollection;
 import entity.QueryParams;
 import entity.SGPLInfo;
 import entity.SortedClusters;
+import entity.fastrange.Cellid2Nodes;
 import entity.fastrange.NgbNodes;
 import index.CellidPidWordsIndex;
 import index.IdWordsIndex;
@@ -105,27 +106,29 @@ public class AlgEucDisFastRange implements AlgInterface{
 		qp.runTimeRec.setFrontTime();
 //		sCircle.radius = qParams.epsilon + Global.zorderOffset;	// 处理圆刚好压线的问题
 		sCircle.radius = qParams.epsilon;
-		Map<Integer, List<Node>> cellid2Nodes = cellidWIndex.searchWords(qParams, allLocations);
-		if(null == cellid2Nodes) {
+//		Map<Integer, List<Node>> cellid2Nodes = cellidWIndex.searchWords(qParams, allLocations);
+		Cellid2Nodes cid2nds = cellidWIndex.searchWordsReCellid2Nodes(qParams, allLocations);
+		if(null == cid2nds) {
 			qp.runTimeRec.timeTotal = 0;
 			qp.runTimeRec.timeTotalPrepareData = 0;
 			return null;
 		}
-		qp.runTimeRec.numCellid = cellid2Nodes.size();
+		qp.runTimeRec.numNid = cid2nds.numNode();
+		qp.runTimeRec.numCellid = cid2nds.numCell();
 		qp.runTimeRec.timeSearchTerms = qp.runTimeRec.getTimeSpan();
 		
 		/* building sort distance node collection and sort score node collection */
-		List<Node> nodes = new ArrayList<>();
-		for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
-			nodes.addAll(en.getValue());
-		}
+//		List<Node> nodes = new ArrayList<>();
+//		for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
+//			nodes.addAll(en.getValue());
+//		}
 		
 		qp.runTimeRec.setFrontTime();
-		PNodeCollection disPNodeCol = new PNodeCollection(nodes).sortByDistance();
+		PNodeCollection disPNodeCol = new PNodeCollection(cid2nds.pNodes).sortByDistance();
 		qp.runTimeRec.timeSortByDistance = qp.runTimeRec.getTimeSpan();
 		
 		qp.runTimeRec.setFrontTime();
-		PNodeCollection scorePNodeCol = new PNodeCollection(nodes).sortByScore();
+		PNodeCollection scorePNodeCol = new PNodeCollection(cid2nds.pNodes).sortByScore();
 		qp.runTimeRec.timeSortByScore = qp.runTimeRec.getTimeSpan();
 		
 		qp.runTimeRec.timeTotalPrepareData = System.nanoTime() - qp.runTimeRec.timeTotalPrepareData;
@@ -159,7 +162,7 @@ public class AlgEucDisFastRange implements AlgInterface{
 				else noiseRecoder.addScoNoise(new NodeNeighbors(curNode, curNode.neighbors));
 				continue;
 			}
-			cluster = getCluster(cellid2Nodes, clusteredCells, qParams, curClusterId, curNode, signAccessDis);
+			cluster = getCluster(cid2nds.cellid2Nodes, clusteredCells, qParams, curClusterId, curNode, signAccessDis);
 			qp.runTimeRec.numGetCluster++;
 			if(null != cluster) {
 				sClusters.add(cluster);

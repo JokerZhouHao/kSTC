@@ -3,9 +3,11 @@ package utility;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import entity.Node;
 import entity.QueryParams;
 import entity.Rectangle;
 import entity.SGPLInfo;
@@ -22,6 +24,11 @@ import utility.io.TimeUtility;
  * 2018/10/24
  */
 public class Global {
+	
+//	public static Map<Integer, Node> pid2Node = null;
+//	public static List<Node> nodes = null;
+	
+	
 	
 	/**
 	 * 各种标志

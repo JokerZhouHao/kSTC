@@ -139,7 +139,7 @@ public class QueryParams {
 		BufferedReader br = IOUtility.getBR(path);
 		String line = null;
 		String arr[] = null;
-		while(null != (line = br.readLine())) {
+		while(null != (line = br.readLine()) && !line.startsWith("--")) {
 			if(line.startsWith("#") || line.trim().equals(""))	continue;
 			arr = line.split(Global.delimiterSpace);
 			qp = new QueryParams(Integer.parseInt(arr[0]), Double.parseDouble(arr[1]), Integer.parseInt(arr[2]), 

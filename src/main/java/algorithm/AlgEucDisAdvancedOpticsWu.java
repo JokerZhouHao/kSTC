@@ -8,8 +8,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TreeSet;
 
 import entity.Node;
+import entity.NodeCollection;
 import entity.QueryParams;
 import entity.SortedClusters;
 import entity.fastrange.NgbNodes;
@@ -47,9 +49,53 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics {
 		ngbLens = FileLoader.loadPidNgbLens(path);
 	}
 	
+	/**
+	 * excute query
+	 * @param qParams
+	 * @return
+	 * @throws Exception
+	 */
+	public SortedClusters excuteQuery(QueryParams qParams, String pathOrderedFile) throws Exception{
+		if(qParams.sWords.isEmpty())	return null;
+		
+		qp.runTimeRec.timeTotal = System.nanoTime();
+		
+		// 采用lucene分词产生的wid_terms.txt([-125.0, 28.0], [15.0, 60]文件全部是小写，故输入的查询关键词得先转化为小写
+		List<String> tWs = new ArrayList<>();
+		for(String w : qParams.sWords)	tWs.add(w.toLowerCase());
+		qParams.sWords = tWs;
+		
+		sCircle.radius = qParams.xi;
+		
+		qp.runTimeRec.setFrontTime();
+		NodeCollection nodeCol = cellidWIndex.searchWordsReNodeCol(qParams, allLocations);
+		qp.runTimeRec.numNid = nodeCol.size();
+		qp.runTimeRec.timeSearchTerms = qp.runTimeRec.getTimeSpan();
+		
+		qp.runTimeRec.timeOpticFunc = System.nanoTime();
+		List<Node> sortedNodes = optics(qParams, pathOrderedFile, nodeCol);
+		qp.runTimeRec.timeOpticFunc = System.nanoTime() - qp.runTimeRec.timeOpticFunc;
+		
+		qp.runTimeRec.timeExcuteQueryFunc = System.nanoTime();
+		SortedClusters sc = excuteQueryByWu(qParams, pathOrderedFile, nodeCol.getPNodes(), sortedNodes);
+		qp.runTimeRec.timeExcuteQueryFunc = System.nanoTime() - qp.runTimeRec.timeExcuteQueryFunc;
+		
+		qp.runTimeRec.timeTotalPrepareData = qp.runTimeRec.timeSearchTerms + qp.runTimeRec.timeSortByDistance + 
+											qp.runTimeRec.timeSortByScore;
+		
+		qp.runTimeRec.timeTotal = System.nanoTime() - qp.runTimeRec.timeTotal;
+		
+		if(null == sc) qp.runTimeRec.numCluster = 0;
+		else qp.runTimeRec.numCluster = sc.getSize();
+		
+		if(null==sc)	qp.runTimeRec.topKScore = 0;
+		else qp.runTimeRec.topKScore = sc.getLastScore();
+		
+		return sc;
+	}
 	
-	@Override
-	public List<Node> optics(Map<Integer, List<Node>> cellid2Nodes, QueryParams qParams, String pathOrderedFile)
+	
+	public List<Node> optics(QueryParams qParams, String pathOrderedFile, NodeCollection nodeCol)
 			throws Exception {
 		List<Node> orderedNodes = new ArrayList<>();
 		OrginalFileWriter ofw = null;
@@ -81,19 +127,22 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics {
 //				maxLen = ngbLens.get(tm);
 //		}
 		
+		Map<Integer, Node> pid2Node = nodeCol.id2Node();
+		Map<Integer, List<Node>> cellid2Nodes = null;
+		
 		if(minLen <= 0) { // the all points of containing the term aren't core points
-			for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
-				for(Node nd : en.getValue()) {
-					if(!nd.isProcessed) {
-						nd.isProcessed = Boolean.TRUE;
-						nd.reachabilityDistance = Node.UNDEFINED;
-						nd.coreDistance = Node.UNDEFINED;
-						if(null != ofw)	ofw.writeIdCoreAndDirectDis(nd.id, nd.coreDistance, nd.reachabilityDistance); 
-						orderedNodes.add(nd);
-					}
+			for(Node nd : nodeCol.getPNodes()) {
+				if(!nd.isProcessed) {
+					nd.isProcessed = Boolean.TRUE;
+					nd.reachabilityDistance = Node.UNDEFINED;
+					nd.coreDistance = Node.UNDEFINED;
+					if(null != ofw)	ofw.writeIdCoreAndDirectDis(nd.id, nd.coreDistance, nd.reachabilityDistance); 
+					orderedNodes.add(nd);
 				}
 			}
+			
 		} else if (minLen == Integer.MAX_VALUE) { // the term ngb too long
+			cellid2Nodes = nodeCol.toCellid2Nodes();
 			for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
 				for(Node nd : en.getValue()) {
 					if(!nd.isProcessed) {
@@ -113,23 +162,14 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics {
 //			}
 			qp.runTimeRec.timeSearchTermPNgb = System.nanoTime() - qp.runTimeRec.timeSearchTermPNgb; 
 			
-			Map<Integer, Node> pid2Node = new HashMap<>();
-			for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
-				for(Node nd : en.getValue()) {
-					pid2Node.put(nd.id, nd);
-				}
-			}
-			
-			
-			
-//			System.out.println("> advance optic wu NODE : " + pid2Node.size());
-			
-			
+			qp.runTimeRec.excludeTimeOpticAdvToCellidNodes = System.nanoTime();
+			cellid2Nodes = nodeCol.toCellid2Nodes();
+			qp.runTimeRec.excludeTimeOpticAdvToCellidNodes = System.nanoTime() - qp.runTimeRec.excludeTimeOpticAdvToCellidNodes;
 			
 			for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
 				for(Node nd : en.getValue()) {
 					if(!nd.isProcessed) {
-						expandClusterOrder(cellid2Nodes, nd, qParams, orderedNodes, ofw, pid2Ngbs, pid2Node);
+						expandClusterOrder(nd, qParams, orderedNodes, ofw, pid2Ngbs, pid2Node);
 						qp.runTimeRec.numExpandClusterOrder++;
 					}
 				}
@@ -141,7 +181,7 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics {
 		return orderedNodes;
 	}
 
-	public void expandClusterOrder(Map<Integer, List<Node>> cellid2Nodes, Node centerNode, QueryParams qParams,
+	public void expandClusterOrder(Node centerNode, QueryParams qParams,
 			List<Node> orderedNodes, OrginalFileWriter ofw, List<Map<Integer, List<NeighborsNode>>> pid2Ngbs,
 			Map<Integer, Node> pid2Node) throws Exception {
 		
@@ -183,8 +223,8 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics {
 	
 	
 	public List<Node> fastIndexRange(List<Map<Integer, List<NeighborsNode>>> pid2Ngbs, Map<Integer, Node> pid2Node, Node centerNode){
-		NgbNodes recNgb = new NgbNodes(Boolean.TRUE);
-//		List<Node> ngbList = new ArrayList<>();
+//		NgbNodes recNgb = new NgbNodes(Boolean.TRUE);
+		List<Node> ngbList = new ArrayList<>();
 		
 		for(Map<Integer, List<NeighborsNode>> pidNeighbors : pid2Ngbs) {
 			List<NeighborsNode> ngb = pidNeighbors.get(centerNode.id);
@@ -194,21 +234,21 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics {
 				if(nn.disToCenter > sCircle.radius)	break;	// disToCenter is bigger than xi
 				if(null != (nd = pid2Node.get(nn.id))) {
 					nd.disToCenter = nn.disToCenter;
-					recNgb.add(nn.disToCenter, nd);
-//					ngbList.add(nd);
+//					recNgb.add(nn.disToCenter, nd);
+					ngbList.add(nd);
 				}
 			}
 		}
 //		System.out.println(centerNode.id + " : " + recNgb.toList().size());
-		return recNgb.toList();
-//		return ngbList;
+//		return recNgb.toList();
+		return ngbList;
 	}
 
-	@Override
-	public SortedClusters excuteQuery(QueryParams qParams, String pathOrderedFile,
-			Map<Integer, List<Node>> cellid2Nodes, List<Node> sortedNodes) throws Exception {
-		// TODO Auto-generated method stub
-		return super.excuteQueryByWu(qParams, pathOrderedFile, cellid2Nodes, sortedNodes);
-	}
+//	@Override
+//	public SortedClusters excuteQuery(QueryParams qParams, String pathOrderedFile,
+//			Map<Integer, List<Node>> cellid2Nodes, List<Node> sortedNodes) throws Exception {
+//		// TODO Auto-generated method stub
+//		return super.excuteQueryByWu(qParams, pathOrderedFile, cellid2Nodes, sortedNodes);
+//	}
 	
 }

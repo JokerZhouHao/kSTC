@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 import java.util.Map.Entry;
 
 import entity.CellSign;
@@ -20,6 +21,7 @@ import entity.PNodeCollection;
 import entity.QueryParams;
 import entity.SGPLInfo;
 import entity.SortedClusters;
+import entity.fastrange.Cellid2Nodes;
 import entity.fastrange.NgbNodes;
 import entity.optics.OrderSeeds;
 import entity.optics.SteepArea;
@@ -101,25 +103,22 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 		sCircle.radius = qParams.xi;
 		
 		qp.runTimeRec.setFrontTime();
-		Map<Integer, List<Node>> cellid2Nodes = cellidWIndex.searchWords(qParams, allLocations);
-		
-//		if(null != cellid2Nodes)	System.out.println(cellid2Nodes.size());
-//		else System.out.println(0);
-		
-		if(null == cellid2Nodes) {
+		Cellid2Nodes cid2nds = cellidWIndex.searchWordsReCellid2Nodes(qParams, allLocations);
+		if(null == cid2nds) {
 			qp.runTimeRec.timeTotal = 0;
 			qp.runTimeRec.timeTotalPrepareData = 0;
 			return null;
 		}
-		qp.runTimeRec.numCellid = cellid2Nodes.size();
+		qp.runTimeRec.numNid = cid2nds.numNode();
+		qp.runTimeRec.numCellid = cid2nds.numCell();
 		qp.runTimeRec.timeSearchTerms = qp.runTimeRec.getTimeSpan();
 		
 		qp.runTimeRec.timeOpticFunc = System.nanoTime();
-		List<Node> sortedNodes = optics(cellid2Nodes, qParams, pathOrderedFile);
+		List<Node> sortedNodes = optics(cid2nds.cellid2Nodes, qParams, pathOrderedFile);
 		qp.runTimeRec.timeOpticFunc = System.nanoTime() - qp.runTimeRec.timeOpticFunc;
 		
 		qp.runTimeRec.timeExcuteQueryFunc = System.nanoTime();
-		SortedClusters sc = excuteQuery(qParams, pathOrderedFile, cellid2Nodes, sortedNodes);
+		SortedClusters sc = excuteQueryByWu(qParams, pathOrderedFile, cid2nds.pNodes, sortedNodes);
 		qp.runTimeRec.timeExcuteQueryFunc = System.nanoTime() - qp.runTimeRec.timeExcuteQueryFunc;
 		
 		qp.runTimeRec.timeTotalPrepareData = qp.runTimeRec.timeSearchTerms + qp.runTimeRec.timeSortByDistance + 
@@ -236,6 +235,7 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 		if(null!=pathOrderedFile) {
 			ofw = new OrginalFileWriter(pathOrderedFile);
 		}
+		
 		for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
 			for(Node nd : en.getValue()) {
 				if(!nd.isProcessed) {
@@ -428,25 +428,6 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 	}
 	
 	/**********************	以下全部是采用吴老师提出的方法来计算cluster的相关函数	******************/
-	/**
-	 * excuteQueryByWu
-	 * @param qParams
-	 * @param pathOrderedFile
-	 * @param cellid2Nodes
-	 * @param sortedNodes
-	 * @return
-	 * @throws Exception
-	 */
-	public SortedClusters excuteQueryByWu(QueryParams qParams, String pathOrderedFile, Map<Integer, List<Node>> cellid2Nodes,
-			List<Node> sortedNodes) throws Exception{
-		/* building sort distance node collection and sort score node collection */
-		List<Node> nodes = new ArrayList<>();
-		for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
-			nodes.addAll(en.getValue());
-		}
-		return excuteQueryByWu(qParams, pathOrderedFile, nodes, sortedNodes);
-	}
-	
 	public SortedClusters excuteQueryByWu(QueryParams qParams, String pathOrderedFile, List<Node> nodes,
 			List<Node> sortedNodes) throws Exception{
 	

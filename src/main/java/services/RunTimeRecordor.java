@@ -45,6 +45,10 @@ public class RunTimeRecordor {
 	public long timeOpticFunc = 0;
 	public long timeExcuteQueryFunc = 0;
 	
+	/**************** 要排除的时间  ****************/
+	public long excludeTimeOpticAdvToCellidNodes = 0;
+	
+	
 	/**************** 总时间 *********************/
 	public long timeTotalPrepareData = 0;	// timeSearchTerms + timeSortByDistance + timeSortByScore
 	public long timeTotalGetCluster = 0;
@@ -69,6 +73,9 @@ public class RunTimeRecordor {
 	}
 	
 	public String getTimeStr(int id, long base) {
+		timeTotal -= excludeTimeOpticAdvToCellidNodes;
+		timeOpticFunc -= excludeTimeOpticAdvToCellidNodes;
+		
 		return  String.valueOf(id) + "," + 
 				String.valueOf(numNid) + "," + String.valueOf(numCellid) + "," +
 				String.valueOf(timeSearchTerms/base) + "," + 

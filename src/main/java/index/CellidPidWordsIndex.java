@@ -23,6 +23,7 @@ import org.apache.lucene.util.BytesRef;
 import entity.Node;
 import entity.NodeCollection;
 import entity.QueryParams;
+import entity.fastrange.Cellid2Nodes;
 import precomputation.dataset.file.FileLoader;
 import spatialindex.spatialindex.Point;
 import utility.Global;
@@ -101,7 +102,7 @@ public class CellidPidWordsIndex extends AbstractLuceneIndex{
 		
 	}
 	
-	public Map<Integer, List<Node>> searchWords(QueryParams queryParams, Point[] allLocations) throws Exception {
+	public Cellid2Nodes searchWordsReCellid2Nodes(QueryParams queryParams, Point[] allLocations) throws Exception {
 		Query query = null;
 		
 		if(queryParams.sWords.isEmpty()) MLog.log("queryParams.sWords.isEmpty");
@@ -115,30 +116,25 @@ public class CellidPidWordsIndex extends AbstractLuceneIndex{
 		if(0 == hits.length)	return null;
 		double dis = Double.MAX_VALUE;
 		Point pot = null;
-		Map<Integer, List<Node>> cellid2Node = new HashMap<>();
-		List<Node> nList = null;
 		ByteBuffer bb = null;
 		Document doc = null;
 		int cellid, pid = 0;
 		double maxScore = hits[0].score;
+		Cellid2Nodes cid2Nds = new Cellid2Nodes();
 		for(int i=0; i<hits.length; i++) {
 			doc = indexSearcher.doc(hits[i].doc);
 			bb = ByteBuffer.wrap(doc.getBinaryValue(fieldId).bytes);
 			cellid = bb.getInt();
 			if(cellid == signRtreeNode)	continue;
 			pid = bb.getInt();
-			if(null == (nList = cellid2Node.get(cellid))) {
-				nList = new ArrayList<>();
-				cellid2Node.put(cellid, nList);
-			}
 			pot = allLocations[pid];
 			dis = queryParams.location.getMinimumDistance(allLocations[pid]);
-			nList.add(new Node(pid, pot, dis, 1 - hits[i].score/maxScore));
+			cid2Nds.add(new Node(pid, pot, dis, 1 - hits[i].score/maxScore, cellid));
 //			System.out.println(String.valueOf(id) + " " + hits[i].score/queryParams.sWords.size());
 //			resSet.add(Integer.parseInt(doc.get(fieldId)));
 		}
-		if(cellid2Node.isEmpty())	return null;
-		return cellid2Node;
+		if(cid2Nds.isEmpty())	return null;
+		return cid2Nds;
 	}
 	
 	public NodeCollection searchWordsReNodeCol(QueryParams queryParams, Point[] allLocations) throws Exception {
@@ -156,11 +152,12 @@ public class CellidPidWordsIndex extends AbstractLuceneIndex{
 		ByteBuffer bb = null;
 		Document doc = null;
 		int pid = 0;
+		int cellId = 0;
 		double maxScore = hits[0].score;
 		for(int i=0; i<hits.length; i++) {
 			doc = indexSearcher.doc(hits[i].doc);
 			bb = ByteBuffer.wrap(doc.getBinaryValue(fieldId).bytes);
-			bb.getInt();
+			cellId = bb.getInt();
 			pid = bb.getInt();
 			if(pid >= 0) {
 				pot = allLocations[pid];
@@ -170,7 +167,7 @@ public class CellidPidWordsIndex extends AbstractLuceneIndex{
 				pot = null;
 				dis = Double.MAX_VALUE;
 			}
-			nodeCol.add(new Node(pid, pot, dis, 1 - hits[i].score/maxScore));
+			nodeCol.add(new Node(pid, pot, dis, 1 - hits[i].score/maxScore, cellId));
 //			System.out.println(String.valueOf(id) + " " + hits[i].score/queryParams.sWords.size());
 //			resSet.add(Integer.parseInt(doc.get(fieldId)));
 		}
@@ -191,7 +188,7 @@ public class CellidPidWordsIndex extends AbstractLuceneIndex{
 		double[] pots = {0.1, 0.2};
 		qParams.location = new Point(pots);
 		qParams.sWords = sWords;
-		System.out.println(index.searchWords(qParams, allLocations));
+//		System.out.println(index.searchWords(qParams, allLocations));
 		
 		index.close();
 	}

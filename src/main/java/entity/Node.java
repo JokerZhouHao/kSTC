@@ -11,8 +11,9 @@ import index.optic.NeighborsNode;
 import spatialindex.spatialindex.Point;
 import utility.Global;
 
-public class Node implements Serializable{
+public class Node implements Serializable, Comparable{
 	public Integer id = 0;	// >=0 is pid, <0 is rtree node
+	public Integer cellId = 0;
 	public int orderId = -1;
 	public Point location = null;
 	public double distance = 0;	// the distance of the node to searched location
@@ -36,6 +37,23 @@ public class Node implements Serializable{
 		this.score = score;
 	}
 	
+	public Node(int id, Point location, double distance, double score, int ceId) {
+		this.id = id;
+		this.location = location;
+		this.distance = distance;
+		this.score = score;
+		this.cellId = ceId;
+	}
+	
+	@Override
+	public int compareTo(Object o) {
+		Node nd = (Node)o;
+		if(this.id > nd.id)	return 1;
+		else if(this.id == nd.id)	return 0;
+		else return -1;
+	}
+
+
 	public Node copy() {
 		Node nd = new Node(id, location, distance, score);
 		nd.clusterId = clusterId;

@@ -1,7 +1,9 @@
 package algorithm;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import entity.Node;
 import entity.QueryParams;
@@ -12,10 +14,8 @@ public class AlgEucDisBaseOpticsWu extends AlgEucDisBaseOptics{
 		super(qp);
 	}
 	
-	@Override
-	public SortedClusters excuteQuery(QueryParams qParams, String pathOrderedFile,
-			Map<Integer, List<Node>> cellid2Nodes, List<Node> sortedNodes) throws Exception {
-		// TODO Auto-generated method stub
-		return super.excuteQueryByWu(qParams, pathOrderedFile, cellid2Nodes, sortedNodes);
+	public SortedClusters excuteQueryByWu(QueryParams qParams, String pathOrderedFile,
+			List<Node> nodes, List<Node> sortedNodes) throws Exception {
+		return super.excuteQueryByWu(qParams, pathOrderedFile, nodes, sortedNodes);
 	}
 }

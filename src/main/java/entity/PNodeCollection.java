@@ -11,7 +11,7 @@ import spatialindex.spatialindex.Point;
 import utility.MComparator;
 
 public class PNodeCollection {
-	private List<Node> pNodes = new ArrayList<>();	// just record coordinate node
+	protected List<Node> pNodes = new ArrayList<>();	// just record coordinate node
 	private int curIndex = -1; 
 	private static final MComparator<Node> cptDis = new MComparator<>(0);
 	private static final MComparator<Node> cptScore = new MComparator<>(1);
