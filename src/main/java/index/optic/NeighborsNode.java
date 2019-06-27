@@ -1,8 +1,10 @@
 package index.optic;
 
+import java.io.Serializable;
+
 import entity.Node;
 
-public class NeighborsNode {
+public class NeighborsNode implements Serializable{
 	public Integer id = 0;
 	public double disToCenter = 0.0;
 	public NeighborsNode(int id, double disToCenter) {

@@ -47,6 +47,11 @@ public class T1 {
 //		Set<Node> nds = new HashSet<>();
 //		nds.add(new Node(1, null, 0, 0));
 //		System.out.println(nds.contains(new NeighborsNode(-1, 1)));
+//		System.out.println(Double.MAX_VALUE);
+//		System.out.println(1 > Double.MIN_VALUE);
+		
+		System.out.println(Math.pow(2, 10000));
+		
 		
 		System.out.println();
 	}
