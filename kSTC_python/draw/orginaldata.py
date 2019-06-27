@@ -25,18 +25,18 @@ class Scatter:
         # self.fig = plt.figure(random.randint(1, 10000))
         self.fig.canvas.set_window_title(title)
 
-        if xs is None:
-            self.xs = []
-            for i in range(0, 11, 1):
-                self.xs.append(i * 0.1)
-        else:
-            self.xs = xs;
-        if ys is None:
-            self.ys = []
-            for i in range(0, 11, 1):
-                self.ys.append(i * 0.1)
-        else:
-            self.ys = ys;
+        # if xs is None:
+        #     self.xs = []
+        #     for i in range(0, 11, 1):
+        #         self.xs.append(i * 0.1)
+        # else:
+        #     self.xs = xs;
+        # if ys is None:
+        #     self.ys = []
+        #     for i in range(0, 11, 1):
+        #         self.ys.append(i * 0.1)
+        # else:
+        #     self.ys = ys;
 
         self.xlim = xlim
         self.ylim = ylim
@@ -47,20 +47,29 @@ class Scatter:
             self.ax = self.fig.add_subplot(111)
 
 
-    def draw_scatter(self, points, s=1, marker='o', c=None):
+    def draw_scatter(self, points, s=1, marker='o', c=None, label = None):
         # self.ax.scatter(points[0], points[1], s=s, marker=marker, c=(random.uniform(0, 1), random.uniform(0, 1), random.uniform(0, 1)))
         Scatter.index_colors = Scatter.index_colors + 1
         # self.ax.scatter(points[0], points[1], s=s, marker=marker, c = Scatter.colors[Scatter.index_colors])
         if c is None:
-            self.ax.scatter(points[0], points[1], s=s, marker=marker)
+            self.ax.scatter(points[0], points[1], s=s, marker=marker, label=label)
         else:
-            self.ax.scatter(points[0], points[1], s=s, marker=marker, c=c)
+            self.ax.scatter(points[0], points[1], s=s, marker=marker, c=c, label=label)
 
     def show(self):
-        if self.xlim != None:
-            self.ax.set_xlim(self.xlim)
-        if self.ylim != None:
-            self.ax.set_ylim(self.ylim)
+        # if self.xlim != None:
+        #     self.ax.set_xlim(self.xlim)
+        # if self.ylim != None:
+        #     self.ax.set_ylim(self.ylim)
+
+        self.ax.legend(loc=2, prop={'size': 15}, markerscale =5)
+        # params = {'legend.fontsize': 20,
+        #   'legend.handlelength': 2}
+        # self.ax.legend(loc=2, prop=params)
+        # plt.rcParams.update(params)
+
+        self.ax.set_ylim([1, 1000000000])
+        self.ax.set_yscale('log')
 
         # self.ax.set_xlim(self.xs[0], self.xs[len(self.xs)-1])
         # self.ax.set_xticks(self.xs)
@@ -147,18 +156,19 @@ class Scatter:
         return scatter
 
     @staticmethod
-    def draw_k_nearest_distance(file_path, s=10, show=True, title='title'):
+    def draw_k_nearest_distance(file_paths, s=10, show=True, title='title'):
         scatter = Scatter(title=title)
-
-        allCoords = [[], []]
-        reader = IterableReader(file_path)
-        i = 1
-        for line in reader:
-                allCoords[0].append(i)
-                coords = line.split(Global.delimiterLevel1)
-                allCoords[1].append(float(coords[0]))
-                i = i + 1
-        scatter.draw_scatter(allCoords, s=s, marker='v')
+        for file_path in file_paths:
+            allCoords = [[], []]
+            reader = IterableReader(file_path)
+            i = 1
+            for line in reader:
+                    allCoords[0].append(i)
+                    coords = line.split(Global.delimiterLevel1)
+                    allCoords[1].append(float(coords[0]) * 1000000000 + 1)
+                    i = i + 1
+            scatter.draw_scatter(allCoords, s=s, marker='o',
+                                 label="k = " + file_path[file_path.rindex("_") + 1:file_path.rindex(".")])
 
         if show:
             scatter.show()
@@ -337,7 +347,7 @@ class Line:
 # pathBgImg = Global.pathImgs + 'LonLat^-112.41,33.46 -111.90,33.68.png'
 # pathBgImg = Global.pathImgs + 'LonLat^-112.41,33.46 -111.90,33.68[gray].png'
 # pathBgImg = Global.pathImgs + 'test.png'
-pathCoord = Global.pathCoord + '([-112.41,33.46],[-111.9,33.68])[normalized]'
+# pathCoord = Global.pathCoord + '([-112.41,33.46],[-111.9,33.68])[normalized]'
 # Scatter.draw_orginal_coord(pathCoord, s=20, show=False)
 
 ###########################  path ##########################################
@@ -361,11 +371,11 @@ pathCoord = Global.pathCoord + '([-112.41,33.46],[-111.9,33.68])[normalized]'
 # Scatter.draw_result(pathCoord, pathResultAlgEucFast, s=50, show=True, title=pathResultAlgEucFast, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
 
 ##############   optic wu #############
-pathResultAlgEucBaseOpticsWu = Global.pathOutput + 'result_ecu_base_optics_wu.txt'
-Scatter.draw_result(pathCoord, pathResultAlgEucBaseOpticsWu, s=50, show=True, title=pathResultAlgEucBaseOpticsWu, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
-#
-pathResultAlgEucAdvancedOpticsWu = Global.pathOutput + 'result_ecu_advanced_optics_wu.txt'
-Scatter.draw_result(pathCoord, pathResultAlgEucAdvancedOpticsWu, s=50, show=True, title=pathResultAlgEucAdvancedOpticsWu, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
+# pathResultAlgEucBaseOpticsWu = Global.pathOutput + 'result_ecu_base_optics_wu.txt'
+# Scatter.draw_result(pathCoord, pathResultAlgEucBaseOpticsWu, s=50, show=True, title=pathResultAlgEucBaseOpticsWu, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
+# #
+# pathResultAlgEucAdvancedOpticsWu = Global.pathOutput + 'result_ecu_advanced_optics_wu.txt'
+# Scatter.draw_result(pathCoord, pathResultAlgEucAdvancedOpticsWu, s=50, show=True, title=pathResultAlgEucAdvancedOpticsWu, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
 
 ##############   optic #############
 # pathResultAlgEucBaseOptics = Global.pathOutput + 'result_ecu_base_optics.txt'
@@ -402,7 +412,14 @@ Scatter.draw_result(pathCoord, pathResultAlgEucAdvancedOpticsWu, s=50, show=True
 
 
 
-
+########## draw k nearest distance ########
+k_paths = []
+k_paths.append(Global.pathOutput + 'KNNNeighborDis_3.txt')
+k_paths.append(Global.pathOutput + 'KNNNeighborDis_5.txt')
+k_paths.append(Global.pathOutput + 'KNNNeighborDis_10.txt')
+k_paths.append(Global.pathOutput + 'KNNNeighborDis_50.txt')
+k_paths.append(Global.pathOutput + 'KNNNeighborDis_100.txt')
+Scatter.draw_k_nearest_distance(k_paths, s=1, title="KNNNeighborDis")
 
 
 

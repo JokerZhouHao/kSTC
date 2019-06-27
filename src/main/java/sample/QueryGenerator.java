@@ -27,9 +27,9 @@ public class QueryGenerator {
 	
 	public static void one() {
 		int rtreeFanout = 50;
+		double alpha = 0.01;
 		double steepDegree = 0.1;
-		int zorderWidth = 1000;
-		int zorderHeight = 1000;
+		int h = 5;
 		
 		int numSample = 200;
 		int type = 1;
@@ -39,12 +39,12 @@ public class QueryGenerator {
 		
 		int minpts = 5;
 		double epsilon = 0.001;
-		double xi = 0.001;
+		double xi = 0.0001;
 		
 		int maxPidNeighborsBytes = 50000000;
 		
-		System.out.println(QueryParams.generateTestQuery(rtreeFanout, steepDegree, 
-						zorderWidth, zorderHeight, numSample, type, k, numWord, minpts, 
+		System.out.println(QueryParams.generateTestQuery(rtreeFanout, alpha, steepDegree, 
+						h, numSample, type, k, numWord, minpts, 
 						epsilon, xi, maxPidNeighborsBytes));
 	}
 	

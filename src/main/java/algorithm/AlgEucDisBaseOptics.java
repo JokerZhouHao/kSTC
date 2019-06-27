@@ -212,7 +212,7 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 								// compare to threshold
 								disPNodeCol.refreshFirstIndex();
 								scorePNodeCol.refreshFirstIndex();
-								bound = disPNodeCol.getFirstNoUsedDis() * Global.alpha + scorePNodeCol.getFirstNoUsedScore() * (1 - Global.alpha);
+								bound = disPNodeCol.getFirstNoUsedDis() * qp.alpha + scorePNodeCol.getFirstNoUsedScore() * (1 - qp.alpha);
 								if(bound >= sClusters.getTopKScore())	return sClusters;
 								break;
 							}
@@ -379,7 +379,7 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 					sortedNodes.get(i).orderId = i;
 					nds.add(sortedNodes.get(i));
 				}
-				return new Cluster(clusterId, nds);
+				return new Cluster(clusterId, nds, qp);
 			}
 			
 			tDou = sortedNodes.get(downArea.start).reachabilityDistance;
@@ -398,7 +398,7 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 					sortedNodes.get(i).orderId = i;
 					nds.add(sortedNodes.get(i));
 				}
-				return new Cluster(clusterId, nds);
+				return new Cluster(clusterId, nds, qp);
 			}
 			List<Node> nds = new ArrayList<>();
 			if(sortedNodes.get(downArea.start).reachabilityDistance == Node.UNDEFINED)	i = downArea.start + 1;
@@ -408,7 +408,7 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 				sortedNodes.get(i).orderId = i;
 				nds.add(sortedNodes.get(i));
 			}
-			return new Cluster(clusterId, nds);
+			return new Cluster(clusterId, nds, qp);
 		}
 		
 	}
@@ -490,7 +490,7 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 								// compare to threshold
 								disPNodeCol.refreshFirstIndex();
 								scorePNodeCol.refreshFirstIndex();
-								bound = disPNodeCol.getFirstNoUsedDis() * Global.alpha + scorePNodeCol.getFirstNoUsedScore() * (1 - Global.alpha);
+								bound = disPNodeCol.getFirstNoUsedDis() * qp.alpha + scorePNodeCol.getFirstNoUsedScore() * (1 - qp.alpha);
 								if(bound >= sClusters.getTopKScore())	return sClusters;
 								break;
 							}
@@ -528,7 +528,7 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 				sortedNodes.get(i).orderId = i;
 				nds.add(sortedNodes.get(i));
 			}
-			return new Cluster(clusterId, nds);
+			return new Cluster(clusterId, nds, qp);
 		}
 		
 	}

@@ -174,7 +174,7 @@ public class AlgEucDisFastRange implements AlgInterface{
 			disAndSco[0] = disAndSco[0] <= disPNodeCol.first(1).distance ? disAndSco[0]:disPNodeCol.first(1).distance;
 			disAndSco[1] = disAndSco[1] <= scorePNodeCol.first(1).score ? disAndSco[1]:scorePNodeCol.first(1).score;
 			
-			bound = Global.alpha * disAndSco[0] + (1 - Global.alpha) * disAndSco[1];
+			bound = qp.alpha * disAndSco[0] + (1 - qp.alpha) * disAndSco[1];
 			
 			if(signAccessDis) signAccessDis = Boolean.FALSE;
 			else signAccessDis = Boolean.TRUE;
@@ -267,7 +267,7 @@ public class AlgEucDisFastRange implements AlgInterface{
 			}
 		}
 		if(!addedNodes.isEmpty()) {
-			return new Cluster(clusterId, addedNodes);
+			return new Cluster(clusterId, addedNodes, qp);
 		} else return null;
 	}
 	
