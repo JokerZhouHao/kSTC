@@ -77,7 +77,7 @@ public class AlgEucDisFastRange implements AlgInterface{
 		if(Global.allLocations == null)	allLocations = FileLoader.loadPoints(Global.pathIdNormCoord);
 		else allLocations = Global.allLocations;
 		
-		String path =  Global.getPathCellidRtreeidOrPidWordsIndex(qp.rtreeFanout, qp.zorderWidth, qp.zorderHeight);
+		String path =  Global.getPathCellidRtreeidOrPidWordsIndex(qp.rtreeFanout, qp.h);
 		cellidWIndex = new CellidPidWordsIndex(path);
 		cellidWIndex.openIndexReader();
 	}

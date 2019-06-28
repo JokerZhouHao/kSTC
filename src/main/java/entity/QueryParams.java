@@ -122,6 +122,7 @@ public class QueryParams {
 					qp.type, qp.k, qp.numWord, qp.minpts,
 					qp.epsilon, qp.xi, qp.maxPidNeighborsBytes));
 		}
+		System.out.println();
 	}
 	
 	public static void display(QueryParams qp) {
@@ -131,6 +132,7 @@ public class QueryParams {
 				qp.h, qp.numSample,
 				qp.type, qp.k, qp.numWord, qp.minpts,
 				qp.epsilon, qp.xi, qp.maxPidNeighborsBytes));
+		System.out.println();
 	}
 	
 	public static String resFileName(QueryParams qp) {

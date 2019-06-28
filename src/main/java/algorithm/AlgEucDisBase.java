@@ -61,7 +61,7 @@ public class AlgEucDisBase implements AlgInterface{
 		if(Global.allLocations == null)	allLocations = FileLoader.loadPoints(Global.pathIdNormCoord);
 		else allLocations = Global.allLocations;
 		
-		String path =  Global.getPathCellidRtreeidOrPidWordsIndex(qp.rtreeFanout, qp.zorderWidth, qp.zorderHeight);
+		String path =  Global.getPathCellidRtreeidOrPidWordsIndex(qp.rtreeFanout, qp.h);
 		cellidIndex = new CellidPidWordsIndex(path);
 		cellidIndex.openIndexReader();
 		

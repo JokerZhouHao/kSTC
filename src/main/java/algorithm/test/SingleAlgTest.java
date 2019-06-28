@@ -120,23 +120,23 @@ public class SingleAlgTest {
 	public static QueryParams getQParams() throws Exception{
 		
 		int rtreeFanout = 50;
+		double alpha = 0.5;
 		double steepDegree = 0.1;
-		int zorderWidth = 1000;
-		int zorderHeight = 1000;
+		int h = 6;
 		
 		int numSample = 200;
 		int type = 0;
 		
-		int k = 5;
+		int k = 10000;
 		int numWord = 0;
 		
 		int minpts = 5;
-		double epsilon = 0.001;
-		double xi = 0.001;
+		double epsilon = 0.0001;
+		double xi = 0.0001;
 		
-		int maxPidNeighborsBytes = 50000000;
+		int maxPidNeighborsBytes = 2147483631;
 		
-		QueryParams qp = new QueryParams(rtreeFanout, steepDegree, zorderWidth, zorderHeight, 
+		QueryParams qp = new QueryParams(rtreeFanout, alpha, steepDegree, h, 
 										numSample, type, k, numWord, minpts, epsilon, 
 										xi, maxPidNeighborsBytes);
 		
@@ -154,18 +154,23 @@ public class SingleAlgTest {
 //		words.add("Bars".toLowerCase());
 		sWords.add("university".toLowerCase());
 		
+		qp.numWord = sWords.size();
 		
 		qp.setCoordAndSWords(location, sWords);
 		return qp;
 	}
 	
 	public static void main(String[] args) throws Exception{
+		System.out.println(Global.inputPath);
+		System.out.println(Global.outPath);
+		System.out.println();
 		
 		QueryParams qParams = SingleAlgTest.getQParams();
+		QueryParams.display(qParams);
 		
 //		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisBase, qParams);
 //		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisFastRange, qParams);
-
+		
 		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisBaseOpticsWu, qParams);
 		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisAdvancedOpticsWu, qParams);
 		

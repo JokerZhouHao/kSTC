@@ -102,6 +102,31 @@ public class CellidPidWordsIndex extends AbstractLuceneIndex{
 		
 	}
 	
+	public Map<Integer, Double> searchWordsReScore(List<String> words, Point[] allLocations) throws Exception {
+		Query query = null;
+		query = queryAndWordsParser.parse(StringTools.collection2Str(words));
+		
+		TopDocs results = indexSearcher.search(query, Integer.MAX_VALUE);
+		ScoreDoc[] hits = results.scoreDocs;
+		
+		if(0 == hits.length)	return null;
+		ByteBuffer bb = null;
+		Document doc = null;
+		int cellid, pid = 0;
+		Map<Integer, Double> pid2score = new HashMap<>();
+		for(int i=0; i<hits.length; i++) {
+			doc = indexSearcher.doc(hits[i].doc);
+			bb = ByteBuffer.wrap(doc.getBinaryValue(fieldId).bytes);
+			cellid = bb.getInt();
+			if(cellid == signRtreeNode)	continue;
+			pid = bb.getInt();
+			pid2score.put(pid, (double)hits[i].score);
+		}
+		if(pid2score.isEmpty())	return null;
+		return pid2score;
+	}
+	
+	
 	public Cellid2Nodes searchWordsReCellid2Nodes(QueryParams queryParams, Point[] allLocations) throws Exception {
 		Query query = null;
 		

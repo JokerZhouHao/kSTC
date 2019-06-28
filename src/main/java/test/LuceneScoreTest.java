@@ -1,6 +1,10 @@
 package test;
 
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -24,10 +28,17 @@ import org.apache.lucene.search.similarities.ClassicSimilarity;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
+import index.CellidPidWordsIndex;
+import index.optic.Term2PidNeighborsIndex;
+import spatialindex.spatialindex.Point;
 import utility.Global;
 
 public class LuceneScoreTest {
-	public static void main(String[] args) throws Exception {
+	/**
+	 * 测试基本评分方式
+	 * @throws Exception
+	 */
+	public static void testBaseScore() throws Exception {
 		Directory indexDir = FSDirectory.open(Paths.get(Global.pathTestIndex));
 		IndexWriterConfig iwc = new IndexWriterConfig(new StandardAnalyzer());
 		iwc.setOpenMode(OpenMode.CREATE);
@@ -87,6 +98,54 @@ public class LuceneScoreTest {
 		System.out.println();
 		
 		indexReader.close();
+	}
+	
+	/**
+	 * 测试doc长度是否影响评分
+	 * @throws Exception
+	 */
+	public static void testDocLenInfluenceScore() throws Exception{
+		Point[] allLocations = Global.allLocations;
+		
+		String path1 = Global.getPathCellidRtreeidOrPidWordsIndex(50, 6);
+		String path2 = Global.getPathCellidRtreeidOrPidWordsIndex(50, 10);
+		
+		CellidPidWordsIndex index1 = new CellidPidWordsIndex(path1);
+		index1.openIndexReader();
+		CellidPidWordsIndex index2 = new CellidPidWordsIndex(path2);
+		index2.openIndexReader();
+		
+		List<String> words = new ArrayList<>();
+//		caters business
+//		bars tuesday
+		words.add("bars");
+		words.add("tuesday");
+		
+		Map<Integer, Double> res1 = index1.searchWordsReScore(words, allLocations);
+		Map<Integer, Double> res2 = index2.searchWordsReScore(words, allLocations);
+		
+		if(res1.size() == res2.size()) {
+			for(Entry<Integer, Double> en : res1.entrySet()) {
+				if(!en.getValue().equals(res2.get(en.getKey()))) {
+					System.out.println(en.getKey() + " " + en.getValue() + "  -  " +
+							en.getKey() + " " + res2.get(en.getKey()));
+				}
+//				if(res2.containsKey(en.getKey()) && res2.get(en.getKey()) == en.getValue())	continue;
+//				else {
+//					System.out.println(en.getKey() + " " + en.getValue() + "  -  " +
+//										en.getKey() + " " + res2.get(en.getKey()));
+//				}
+			}
+		} else {
+			System.out.println(res1.size() + "   " + res2.size());
+		}
+		
+		index1.close();
+		index2.close();
+	}
+	
+	public static void main(String[] args) throws Exception {
+		testDocLenInfluenceScore();
 	}
 
 }

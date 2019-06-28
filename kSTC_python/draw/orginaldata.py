@@ -17,7 +17,7 @@ class Scatter:
     index_marker = 0
     index_colors = -1
 
-    def __init__(self, fig=None, xs=None, ys=None, xlim=None, ylim=None, title='title', pathBgImg = None):
+    def __init__(self, fig=None, xs=None, ys=None, xlim=None, ylim=None, title='title', pathBgImg = None, yscale = 'linear', markerscale = 1):
         if fig is None:
             self.fig = plt.figure(random.randint(1, 10000), figsize=(10.1023, 6.5), tight_layout=True)
         else:
@@ -25,19 +25,15 @@ class Scatter:
         # self.fig = plt.figure(random.randint(1, 10000))
         self.fig.canvas.set_window_title(title)
 
-        # if xs is None:
-        #     self.xs = []
-        #     for i in range(0, 11, 1):
-        #         self.xs.append(i * 0.1)
+        # #  = None
+        # if yscale != None:
+        #     self.yscale = yscale
         # else:
-        #     self.xs = xs;
-        # if ys is None:
-        #     self.ys = []
-        #     for i in range(0, 11, 1):
-        #         self.ys.append(i * 0.1)
-        # else:
-        #     self.ys = ys;
-
+        #     self.yscale = 'linear'
+        self.markerscale = markerscale
+        self.yscale = yscale
+        self.xs = xs
+        self.ys = ys
         self.xlim = xlim
         self.ylim = ylim
         self.pathBgImg = pathBgImg
@@ -57,26 +53,20 @@ class Scatter:
             self.ax.scatter(points[0], points[1], s=s, marker=marker, c=c, label=label)
 
     def show(self):
-        # if self.xlim != None:
-        #     self.ax.set_xlim(self.xlim)
-        # if self.ylim != None:
-        #     self.ax.set_ylim(self.ylim)
+        self.ax.legend(loc=2, prop={'size': 15}, markerscale = self.markerscale)
 
-        self.ax.legend(loc=2, prop={'size': 15}, markerscale =5)
-        # params = {'legend.fontsize': 20,
-        #   'legend.handlelength': 2}
-        # self.ax.legend(loc=2, prop=params)
-        # plt.rcParams.update(params)
+        if self.xs != None:
+            self.ax.set_xticks(self.xs)
+            self.ax.set_xlim(self.xs[0], self.xs[len(self.xs) - 1])
+        if self.ys != None:
+            self.ax.set_yticks(self.ys)
+            self.ax.set_ylim(self.ys[0], self.ys[len(self.ys) - 1])
+        if self.xlim != None:
+            self.ax.set_xlim(self.xlim)
+        if self.ylim != None:
+            self.ax.set_ylim(self.ylim)
 
-        self.ax.set_ylim([1, 1000000000])
-        self.ax.set_yscale('log')
-
-        # self.ax.set_xlim(self.xs[0], self.xs[len(self.xs)-1])
-        # self.ax.set_xticks(self.xs)
-        # self.ax.set_ylim(self.ys[0], self.ys[len(self.ys)-1])
-        # self.ax.set_yticks(self.ys)
-        # self.ax.set_yscale('log')
-        # self.ax.set_xscale('log')
+        self.ax.set_yscale(self.yscale)
 
         if self.pathBgImg != None:
             imgBg = plt.imread(pathBgImg)
@@ -121,9 +111,28 @@ class Scatter:
     @staticmethod
     def draw_result(all_coord_path, result_path, s=10, show=True, title='title', pathBgImg = None, xlim=None, ylim=None):
         # scatter = Scatter.draw_orginal_coord(all_coord_path, s=s, show=False, title=title, pathBgImg=pathBgImg, xlim=xlim, ylim=ylim)
+        #  if xs is None:
+        #     self.xs = []
+        #     for i in range(0, 11, 1):
+        #         self.xs.append(i * 0.1)
+        # else:
+        #     self.xs = xs;
+        # if ys is None:
+        #     self.ys = []
+        #     for i in range(0, 11, 1):
+        #         self.ys.append(i * 0.1)
+        # else:
+        #     self.ys = ys;
+
+        xs = []
+        for i in range(0, 11, 1):
+            xs.append(i * 0.1)
+        ys = xs
+        # xlim = [0, 1]
+        # ylim = [0, 1]
 
         Scatter.index_marker = 0
-        scatter = Scatter(title=title, xlim=xlim, ylim=ylim, pathBgImg = pathBgImg)
+        scatter = Scatter(title=title, xs=xs, ys=ys, pathBgImg = pathBgImg)
 
         allCoords = [[], []]
         centerCoords = [[], []]
@@ -157,7 +166,8 @@ class Scatter:
 
     @staticmethod
     def draw_k_nearest_distance(file_paths, s=10, show=True, title='title'):
-        scatter = Scatter(title=title)
+        upRate = 1000000000
+        scatter = Scatter(title=title, ylim=[1, upRate], yscale ='log', markerscale=8)
         for file_path in file_paths:
             allCoords = [[], []]
             reader = IterableReader(file_path)
@@ -165,7 +175,7 @@ class Scatter:
             for line in reader:
                     allCoords[0].append(i)
                     coords = line.split(Global.delimiterLevel1)
-                    allCoords[1].append(float(coords[0]) * 1000000000 + 1)
+                    allCoords[1].append(float(coords[0]) * upRate + 1)
                     i = i + 1
             scatter.draw_scatter(allCoords, s=s, marker='o',
                                  label="k = " + file_path[file_path.rindex("_") + 1:file_path.rindex(".")])
@@ -357,25 +367,30 @@ class Line:
 # pathCoord = Global.pathCoord + '([-112.41,33.46],[-111.9,33.68])[normalized]'
 
 ############   ([-112.41,33.46],[-111.9,33.68])[normalized]  path ##########
+# pathBgImg = None
+# pathBgImg = None
+# pathCoord = Global.pathCoord + '([-112.41,33.46],[-111.9,33.68])[normalized]'
+
+############   [-125.0,28.0],[15.0,60.0] [normalized]  path ##########
 pathBgImg = None
 pathBgImg = None
-pathCoord = Global.pathCoord + '([-112.41,33.46],[-111.9,33.68])[normalized]'
+pathCoord = Global.pathCoord + '[normalized]'
 
 
 ########## draw result data ###############
 ##############   dbscan #############
 # pathResultAlgEucBase = Global.pathOutput + 'result_ecu_base.txt'
-# Scatter.draw_result(pathCoord, pathResultAlgEucBase, s=50, show=True, title=pathResultAlgEucBase, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
+# Scatter.draw_result(pathCoord, pathResultAlgEucBase, s=20, show=True, title=pathResultAlgEucBase, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
 # #
 # pathResultAlgEucFast = Global.pathOutput + 'result_ecu_fast.txt'
-# Scatter.draw_result(pathCoord, pathResultAlgEucFast, s=50, show=True, title=pathResultAlgEucFast, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
+# Scatter.draw_result(pathCoord, pathResultAlgEucFast, s=20, show=True, title=pathResultAlgEucFast, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
 
 ##############   optic wu #############
 # pathResultAlgEucBaseOpticsWu = Global.pathOutput + 'result_ecu_base_optics_wu.txt'
-# Scatter.draw_result(pathCoord, pathResultAlgEucBaseOpticsWu, s=50, show=True, title=pathResultAlgEucBaseOpticsWu, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
+# Scatter.draw_result(pathCoord, pathResultAlgEucBaseOpticsWu, s=20, show=True, title=pathResultAlgEucBaseOpticsWu, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
 # #
 # pathResultAlgEucAdvancedOpticsWu = Global.pathOutput + 'result_ecu_advanced_optics_wu.txt'
-# Scatter.draw_result(pathCoord, pathResultAlgEucAdvancedOpticsWu, s=50, show=True, title=pathResultAlgEucAdvancedOpticsWu, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
+# Scatter.draw_result(pathCoord, pathResultAlgEucAdvancedOpticsWu, s=20, show=True, title=pathResultAlgEucAdvancedOpticsWu, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
 
 ##############   optic #############
 # pathResultAlgEucBaseOptics = Global.pathOutput + 'result_ecu_base_optics.txt'
@@ -405,21 +420,22 @@ pathCoord = Global.pathCoord + '([-112.41,33.46],[-111.9,33.68])[normalized]'
 # Line.draw_reachability_dis_base(path_reach_dis, pathResultAlgEucFast, s=1, title=pathResultAlgEucFast, max_y=0.01)
 
 
-# path_reach_dis = Global.pathOutput + 'order_objects.obj([-112.41,33.46],[-111.9,33.68])_AlgEucDisAdvancedOpticsWu'
-# pathResultAlgEucAdvancedOpticsWu = Global.pathOutput + 'result_ecu_advanced_optics_wu.txt'
+path_reach_dis = Global.pathOutput + 'order_objects.obj_AlgEucDisAdvancedOpticsWu'
+pathResultAlgEucAdvancedOpticsWu = Global.pathOutput + 'result_ecu_advanced_optics_wu.txt'
 # # 将optic的结果显示在distance图上
-# Line.draw_reachability_dis_cluster(path_reach_dis, pathResultAlgEucAdvancedOpticsWu, s=1, title=pathResultAlgEucAdvancedOpticsWu, max_y=0.01)
+Line.draw_reachability_dis_cluster(path_reach_dis, pathResultAlgEucAdvancedOpticsWu, s=1, title=pathResultAlgEucAdvancedOpticsWu, max_y=0.0002)
+
 
 
 
 ########## draw k nearest distance ########
-k_paths = []
-k_paths.append(Global.pathOutput + 'KNNNeighborDis_3.txt')
-k_paths.append(Global.pathOutput + 'KNNNeighborDis_5.txt')
-k_paths.append(Global.pathOutput + 'KNNNeighborDis_10.txt')
-k_paths.append(Global.pathOutput + 'KNNNeighborDis_50.txt')
-k_paths.append(Global.pathOutput + 'KNNNeighborDis_100.txt')
-Scatter.draw_k_nearest_distance(k_paths, s=1, title="KNNNeighborDis")
+# k_paths = []
+# k_paths.append(Global.pathOutput + 'KNNNeighborDis_3.txt')
+# k_paths.append(Global.pathOutput + 'KNNNeighborDis_5.txt')
+# k_paths.append(Global.pathOutput + 'KNNNeighborDis_10.txt')
+# k_paths.append(Global.pathOutput + 'KNNNeighborDis_50.txt')
+# k_paths.append(Global.pathOutput + 'KNNNeighborDis_100.txt')
+# Scatter.draw_k_nearest_distance(k_paths, s=1, title="KNNNeighborDis")
 
 
 

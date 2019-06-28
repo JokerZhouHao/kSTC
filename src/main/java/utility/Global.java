@@ -109,6 +109,7 @@ public class Global {
 	public static String pathTestIndex = null;
 	
 	// SGPL
+	public static int h = 0;
 	public static int zorderWidth = 0;
 	public static int zorderHeight = 0;
 	public static double zorderOffset = 0; // 处理圆刚好压线的问题
@@ -261,8 +262,9 @@ public class Global {
 				",opticMinpts=" + String.valueOf(opticQParams.minpts) + ",opticEpsilon=" + String.valueOf(opticQParams.epsilon) + File.separator;
 		
 		// SGPL
-		zorderWidth = Integer.parseInt((String)configProps.get("zorderWidth"));
-		zorderHeight = Integer.parseInt((String)configProps.get("zorderHeight"));
+		h = Integer.parseInt((String)configProps.get("h"));
+		zorderWidth = (int)Math.pow(2, h);
+		zorderHeight = zorderWidth;
 		zorderOffset = 1.0 / zorderHeight / 10000;
 		sgplInfo = SGPLInfo.getGlobalInstance();
 		pathTerm2CellColIndex =outPath + (String)configProps.get("pathTerm2CellColIndex") + suffixFile + signNormalized + 
@@ -271,7 +273,7 @@ public class Global {
 //											suffixFile + signNormalized + ".rtreeFanout" + (String)configProps.get("rtreeFanout") + 
 //											".zw" + zorderWidth + ".zh" + zorderHeight + File.separator;
 		pathCellidRtreeidOrPidWordsIndex = getPathCellidRtreeidOrPidWordsIndex(Integer.parseInt((String)configProps.get("rtreeFanout")), 
-										zorderWidth, zorderHeight);
+										h);
 		pathTestIndex = outPath + "test" + File.separator;
 		
 		// set num
@@ -279,10 +281,10 @@ public class Global {
 		
 	}
 	
-	public static String getPathCellidRtreeidOrPidWordsIndex(int rtreeFanout, int zorderWidth, int zorderHeight) {
+	public static String getPathCellidRtreeidOrPidWordsIndex(int rtreeFanout, int h) {
 		return outPath + (String)configProps.get("pathCellidRtreeidOrPidWordsIndex") + 
 				suffixFile + signNormalized + ".rtreeFanout" + rtreeFanout + 
-				".zw" + zorderWidth + ".zh" + zorderHeight + File.separator;
+				".h" + h + File.separator;
 	}
 	
 	public static String getPathTerm2PidNeighborsIndex(int maxPidNeighborsBytes) {

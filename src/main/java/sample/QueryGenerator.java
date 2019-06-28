@@ -27,21 +27,21 @@ public class QueryGenerator {
 	
 	public static void one() {
 		int rtreeFanout = 50;
-		double alpha = 0.01;
+		double alpha = 0.5;
 		double steepDegree = 0.1;
-		int h = 5;
+		int h = 6;
 		
 		int numSample = 200;
-		int type = 1;
+		int type = 11;
 		
-		int k = 10000;
+		int k = 5000;
 		int numWord = 2;
 		
 		int minpts = 5;
-		double epsilon = 0.001;
+		double epsilon = 0.0001;
 		double xi = 0.0001;
 		
-		int maxPidNeighborsBytes = 50000000;
+		int maxPidNeighborsBytes = 2147483631;
 		
 		System.out.println(QueryParams.generateTestQuery(rtreeFanout, alpha, steepDegree, 
 						h, numSample, type, k, numWord, minpts, 
