@@ -50,6 +50,7 @@ public class Term2PidNeighborsIndex extends AbstractLuceneIndex{
 			for(Node inn : en.getValue()) {
 				bb.putInt(inn.id);
 				bb.putDouble(inn.disToCenter);
+//				bb.putFloat((float)inn.disToCenter);
 			}
 		}
 		return bb.array();
@@ -95,7 +96,8 @@ public class Term2PidNeighborsIndex extends AbstractLuceneIndex{
 			numNeighbor = bb.getInt();
 			neighbors = new ArrayList<>();
 			for(int j=0; j<numNeighbor; j++) {
-				neighbors.add(new NeighborsNode(bb.getInt(), bb.getDouble()));
+//				neighbors.add(new NeighborsNode(bb.getInt(), bb.getDouble()));
+				neighbors.add(new NeighborsNode(bb.getInt(), bb.getFloat()));
 			}
 			map.put(pid, neighbors);
 		}

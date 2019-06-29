@@ -52,6 +52,6 @@ public class T1 {
 		
 //		System.out.println(Math.pow(2, 10000));
 		
-		System.out.println();
+		System.out.println(Integer.MAX_VALUE);
 	}
 }

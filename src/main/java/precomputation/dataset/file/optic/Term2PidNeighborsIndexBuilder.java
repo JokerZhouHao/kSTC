@@ -184,7 +184,8 @@ public class Term2PidNeighborsIndexBuilder implements Runnable{
 						
 						pidNeighbors.put(centerNode.id, tList);
 						numCur4Bytes += 2;
-						numCur4Bytes += 3 * tList.size();
+//						numCur4Bytes += 2 * tList.size();	// int float
+						numCur4Bytes += 3 * tList.size();	// int double
 						if(numCur4Bytes > Global.maxPidNeighbors4Bytes)	break;
 					}
 					if(numCur4Bytes > Global.maxPidNeighbors4Bytes)	break;
@@ -313,6 +314,17 @@ public class Term2PidNeighborsIndexBuilder implements Runnable{
 	
 	
 	public static void main(String[] args) throws Exception{
+		/********** 重置参数  ******************/ 
+		numThread = new TInt(0);
+		numNgbTooLong = new TInt(0);
+		term2PidNeiIndex = null;
+		pidNeighborLenBW = null;
+		sgplInfo = Global.sgplInfo;
+		cellidWIndex = null;
+		allLocations = null;
+		numDealedTerm = new TInt(0);
+		
+		
 		System.out.println("> starting build term2PidNeighborsIndex . . .");
 		String[] allTerms = FileLoader.loadAllTerms(Global.pathWidTerms);
 //		32102
