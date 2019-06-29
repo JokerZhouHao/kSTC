@@ -35,6 +35,8 @@ public class Global {
 	 */
 	public final static QueryParams signQueryThreadOver = new QueryParams();
 	
+	public final static int MAX_LUCENE_BYTE_LEN = 2147483631;
+	
 	public static Point[] allLocations = null;
 	
 	public static final double minPositiveDouble = 0.000000000001;

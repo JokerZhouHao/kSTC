@@ -49,25 +49,25 @@ public class SingleAlgTest {
 			System.out.println("----------------------- AlgEucDisBase ----------------------");
 			if(SingleAlgTest.eucBase == null)	SingleAlgTest.eucBase = new AlgEucDisBase(qParams);
 			sClusters = SingleAlgTest.eucBase.excuteQuery(qParams);
-			resPath = Global.outPath + "result_ecu_base.txt";
+			resPath = Global.outPath + "result_ecu_base" + qParams.toString();
 			break;
 		case AlgEucDisFastRange:
 			System.out.println("----------------------- AlgEucDisFastRange ----------------------");
 			if(SingleAlgTest.eucFast == null)	SingleAlgTest.eucFast = new AlgEucDisFastRange(qParams);
 			sClusters = SingleAlgTest.eucFast.excuteQuery(qParams);
-			resPath = Global.outPath + "result_ecu_fast.txt";
+			resPath = Global.outPath + "result_ecu_fast" + qParams.toString();
 			break;
 		case AlgEucDisBaseOpticsWu:
 			System.out.println("----------------------- AlgEucDisBaseOpticsWu ----------------------");
 			if(SingleAlgTest.eucBaseOpticsWu == null)	SingleAlgTest.eucBaseOpticsWu = new AlgEucDisBaseOpticsWu(qParams);
 			sClusters = SingleAlgTest.eucBaseOpticsWu.excuteQuery(qParams, Global.pathOrderObjects + "_AlgEucDisBaseOpticsWu");
-			resPath = Global.outPath + "result_ecu_base_optics_wu.txt";
+			resPath = Global.outPath + "result_ecu_base_optics_wu" + qParams.toString();
 			break;
 		case AlgEucDisAdvancedOpticsWu:
 			System.out.println("----------------------- AlgEucDisAdvancedOpticsWu ----------------------");
 			if(SingleAlgTest.eucAdvancedOpticsWu == null)	SingleAlgTest.eucAdvancedOpticsWu = new AlgEucDisAdvancedOpticsWu(qParams);
 			sClusters = SingleAlgTest.eucAdvancedOpticsWu.excuteQuery(qParams, Global.pathOrderObjects + "_AlgEucDisAdvancedOpticsWu");
-			resPath = Global.outPath + "result_ecu_advanced_optics_wu.txt";
+			resPath = Global.outPath + "result_ecu_advanced_optics_wu" + qParams.toString();
 			break;
 		default:
 			break;
@@ -122,12 +122,12 @@ public class SingleAlgTest {
 		int rtreeFanout = 50;
 		double alpha = 0.5;
 		double steepDegree = 0.1;
-		int h = 6;
+		int h = 10;
 		
 		int numSample = 200;
 		int type = 0;
 		
-		int k = 10000;
+		int k = 100000;
 		int numWord = 0;
 		
 		int minpts = 5;
@@ -172,7 +172,7 @@ public class SingleAlgTest {
 //		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisFastRange, qParams);
 		
 		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisBaseOpticsWu, qParams);
-		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisAdvancedOpticsWu, qParams);
+//		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisAdvancedOpticsWu, qParams);
 		
 //		SingleAlgTest.testAlgEuc("AlgEucDisAdvancedOpticsWu2", qParams);
 //		SingleAlgTest.testAlgEuc("AlgEucDisBaseOptics", qParams);

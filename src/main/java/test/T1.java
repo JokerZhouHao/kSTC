@@ -50,8 +50,7 @@ public class T1 {
 //		System.out.println(Double.MAX_VALUE);
 //		System.out.println(1 > Double.MIN_VALUE);
 		
-		System.out.println(Math.pow(2, 10000));
-		
+//		System.out.println(Math.pow(2, 10000));
 		
 		System.out.println();
 	}

@@ -17,6 +17,8 @@ public class SGPLInfo implements Serializable{
 	 * copy from https://github.com/ilkcan/ktmstc_query_processing/blob/master/src/topkclusterquery/models/SGPLInfo.java
 	 */
 	private static final long serialVersionUID = 6411549802970603504L;
+	private static final double SPAN_LNG = 1.0;
+	private static final double SPAN_LAT = 1.0;
 	private int zorderWidth = 0;
 	private int zorderHeight = 0;
 	private double minLat;
@@ -54,11 +56,18 @@ public class SGPLInfo implements Serializable{
 
 	public static SGPLInfo getGlobalInstance() {
 		if(sgplInfo == null) {
-			double i = 1.0;
 			sgplInfo = new SGPLInfo(Global.zorderWidth, Global.zorderHeight, 
-					0, i/Global.zorderWidth, 0, i/Global.zorderHeight, Global.zorderWidth * Global.zorderHeight);
+					0, SPAN_LNG/Global.zorderWidth, 0, SPAN_LAT/Global.zorderHeight, Global.zorderWidth * Global.zorderHeight);
 		}
 		return sgplInfo;
+	}
+	
+	public static SGPLInfo getInstance(int h) {
+		int zorderWidth = (int)Math.pow(2, h);
+		int zorderHeight = zorderWidth;
+		return new SGPLInfo(zorderWidth, zorderHeight, 
+				0, SPAN_LNG / zorderWidth, 0, SPAN_LAT / zorderHeight, zorderWidth * zorderHeight);
+		
 	}
 	
 	public double getMinLat() {

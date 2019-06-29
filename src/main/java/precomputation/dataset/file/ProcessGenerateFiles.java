@@ -326,9 +326,8 @@ public class ProcessGenerateFiles {
 		return sb;
 	}
 	
-	public static void buildCellidRtreeidOrPidWordsIndex(String pathIndex) throws Exception{
+	public static void buildCellidRtreeidOrPidWordsIndex(String pathIndex, SGPLInfo sInfo) throws Exception{
 		System.out.println("> start build " + pathIndex);
-		SGPLInfo sInfo = Global.sgplInfo;
 		CellidPidWordsIndex index = new CellidPidWordsIndex(pathIndex);
 		index.openIndexWriter();
 		String[] texts = FileLoader.loadText(Global.pathIdText);
@@ -339,6 +338,10 @@ public class ProcessGenerateFiles {
 		System.out.println("> over build rtreeids");
 		index.close();
 		System.out.println("> over, spend time : " + TimeUtility.getGlobalSpendTime());
+	}
+	
+	public static void buildCellidRtreeidOrPidWordsIndex(String pathIndex) throws Exception{
+		buildCellidRtreeidOrPidWordsIndex(pathIndex, Global.sgplInfo);
 	}
 	
 	/**
@@ -464,10 +467,14 @@ public class ProcessGenerateFiles {
 		
 		
 		/* used	 building cellid rtreeid pid words index */
-		String pathCellidRtreeidOrPidWordsIndex = Global.pathCellidRtreeidOrPidWordsIndex;
-		ProcessGenerateFiles.buildCellidRtreeidOrPidWordsIndex(pathCellidRtreeidOrPidWordsIndex);
-		
-		
+//		List<Integer> hs = new ArrayList<>();
+//		hs.add(4);
+//		hs.add(8);
+//		for(int h : hs) {
+//			String pathCellidRtreeidOrPidWordsIndex = Global.getPathCellidRtreeidOrPidWordsIndex(Global.rtreeFanout, h);
+//			ProcessGenerateFiles.buildCellidRtreeidOrPidWordsIndex(pathCellidRtreeidOrPidWordsIndex, 
+//								 SGPLInfo.getInstance(h));
+//		}
 		
 		
 		
@@ -486,12 +493,34 @@ public class ProcessGenerateFiles {
 //		String pathWidTerms = Global.pathWidTerms;
 //		ProcessGenerateFiles.generateWidTermsFile(pathWidTerms);
 		
+		
 		/* building term_2_pidNeighbors index 需要用到上面生成的pathWidTerms*/
-//		MLog.log("开始创建term_2_pidNeighbors index . . . ");
-//		MLog.log("index path : " + Global.pathTerm2PidNeighborsIndex);
-//		tTime = System.currentTimeMillis();
-//		Term2PidNeighborsIndexBuilder.main(null);
-//		MLog.log("用时: " + TimeUtility.getSpendTimeStr(tTime, System.currentTimeMillis()) + "\n");
+		List<Integer> mpts = new ArrayList<>();
+		mpts.add(1);
+		List<Double> epss = new ArrayList<>();
+		epss.add(0.001);
+		epss.add(0.0001);
+		List<Integer> lens = new ArrayList<>();
+		lens.add(2147483631);
+		int h = 10;
+		Global.sgplInfo = SGPLInfo.getInstance(h);
+		for(int mpt : mpts) {
+			for(double eps : epss) {
+				for(int len : lens) {
+					Global.opticQParams.minpts = mpt;
+					Global.opticQParams.epsilon = eps;
+					Global.pathTerm2PidNeighborsIndex = Global.getPathTerm2PidNeighborsIndex(len);
+					Global.pathCellidRtreeidOrPidWordsIndex = Global.getPathCellidRtreeidOrPidWordsIndex(Global.rtreeFanout, h);
+					Global.pathPidNeighborLen = Global.getPathPidNeighborLen(len);
+					MLog.log("开始创建term_2_pidNeighbors index . . . ");
+					MLog.log("index path : " + Global.pathTerm2PidNeighborsIndex);
+					tTime = System.currentTimeMillis();
+					Term2PidNeighborsIndexBuilder.main(null);
+					MLog.log("用时: " + TimeUtility.getSpendTimeStr(tTime, System.currentTimeMillis()) + "\n");
+				}
+			}
+		}
+		
 		
 		/* building k neighbor dis file */
 //		int k = 20;

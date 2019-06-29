@@ -32,7 +32,13 @@ public class GeoDisUtility {
 	
 	
 	public static void main(String[] args) {
-		dis2GeoDis(0.0003);
-		geoDis2dis(3353.562149178792);
+//		dis2GeoDis(0.001);
+		dis2GeoDis(0.0001);
+		dis2GeoDis(0.001);
+		
+		float f = (float)1/3;
+		System.out.println(f);
+		
+//		geoDis2dis(3353.562149178792);
 	}
 }
