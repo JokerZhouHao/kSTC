@@ -101,6 +101,10 @@ public class QueryParams {
 			case 1:
 				return AlgType.AlgEucDisBase;
 			case 2:
+				return AlgType.AlgEucDisBase;
+			case 3:
+				return AlgType.AlgEucDisBase;
+			case 4:
 				return AlgType.AlgEucDisFastRange;
 			case 11:
 				return AlgType.AlgEucDisBaseOpticsWu;

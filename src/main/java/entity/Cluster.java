@@ -10,6 +10,8 @@ public class Cluster extends PNodeCollection{
 	private double score = Double.MAX_VALUE;
 	private QueryParams qp = null;
 	
+	public final static int SIGN_CELL_MUL_CLUSTER = -1000000;	// 标记已经被分类，但是有些node所在cluster id不一样的cell
+	
 	public Cluster(int id) {
 		this.id = id;
 	}

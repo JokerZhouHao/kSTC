@@ -467,20 +467,20 @@ public class ProcessGenerateFiles {
 		
 		
 		/* used	 building cellid rtreeid pid words index */
-//		List<Integer> hs = new ArrayList<>();
+		List<Integer> hs = new ArrayList<>();
 //		hs.add(4);
 //		hs.add(6);
 //		hs.add(8);
 //		hs.add(10);
 //		hs.add(12);
 //		hs.add(14);
-//		hs.add(16);
-//		for(int h : hs) {
-//			String pathCellidRtreeidOrPidWordsIndex = Global.getPathCellidRtreeidOrPidWordsIndex(Global.rtreeFanout, h);
-//			ProcessGenerateFiles.buildCellidRtreeidOrPidWordsIndex(pathCellidRtreeidOrPidWordsIndex, 
-//								 SGPLInfo.getInstance(h));
-//			System.out.println();
-//		}
+		hs.add(15);
+		for(int h : hs) {
+			String pathCellidRtreeidOrPidWordsIndex = Global.getPathCellidRtreeidOrPidWordsIndex(Global.rtreeFanout, h);
+			ProcessGenerateFiles.buildCellidRtreeidOrPidWordsIndex(pathCellidRtreeidOrPidWordsIndex, 
+								 SGPLInfo.getInstance(h));
+			System.out.println();
+		}
 		
 		
 		
@@ -501,36 +501,36 @@ public class ProcessGenerateFiles {
 		
 		
 		/* building term_2_pidNeighbors index 需要用到上面生成的pathWidTerms*/
-		int h = 10;	// 注意：得先创建h对应的CellidRtreeidOrPidWordsIndex 
-		Global.sgplInfo = SGPLInfo.getInstance(h);
-		Global.pathCellidRtreeidOrPidWordsIndex = Global.getPathCellidRtreeidOrPidWordsIndex(Global.rtreeFanout, h);
-		List<Integer> mpts = new ArrayList<>();
-		mpts.add(1);
-		List<Double> epss = new ArrayList<>();
-//		epss.add(0.001);
-//		epss.add(0.0001);
-		epss.add(0.0003);
-		List<Integer> maxNumBytes = new ArrayList<>();
-		maxNumBytes.add(2147483631);
-		Global.sgplInfo = SGPLInfo.getInstance(h);
-		for(int mpt : mpts) {
-			for(double eps : epss) {
-				for(int numByte : maxNumBytes) {
-					// 为了省修改时间，故这儿还是用的minpts、epsilon而不是opticMinpts、opticEpsilon
-					Global.opticQParams.minpts = mpt;
-					Global.opticQParams.epsilon = eps;
-					Global.maxPidNeighbors4Bytes = numByte / 4;
-					Global.pathTerm2PidNeighborsIndex = Global.getPathTerm2PidNeighborsIndex(numByte);
-					Global.pathPidNeighborLen = Global.getPathPidNeighborLen(numByte);
-					MLog.log("开始创建term_2_pidNeighbors index . . . ");
-					MLog.log("index path : " + Global.pathTerm2PidNeighborsIndex);
-					tTime = System.currentTimeMillis();
-					Term2PidNeighborsIndexBuilder.main(null);
-					MLog.log("用时: " + TimeUtility.getSpendTimeStr(tTime, System.currentTimeMillis()) + "\n");
-					System.out.println();
-				}
-			}
-		}
+//		int h = 10;	// 注意：得先创建h对应的CellidRtreeidOrPidWordsIndex 
+//		Global.sgplInfo = SGPLInfo.getInstance(h);
+//		Global.pathCellidRtreeidOrPidWordsIndex = Global.getPathCellidRtreeidOrPidWordsIndex(Global.rtreeFanout, h);
+//		List<Integer> mpts = new ArrayList<>();
+//		mpts.add(1);
+//		List<Double> epss = new ArrayList<>();
+////		epss.add(0.001);
+////		epss.add(0.0001);
+//		epss.add(0.0003);
+//		List<Integer> maxNumBytes = new ArrayList<>();
+//		maxNumBytes.add(2147483631);
+//		Global.sgplInfo = SGPLInfo.getInstance(h);
+//		for(int mpt : mpts) {
+//			for(double eps : epss) {
+//				for(int numByte : maxNumBytes) {
+//					// 为了省修改时间，故这儿还是用的minpts、epsilon而不是opticMinpts、opticEpsilon
+//					Global.opticQParams.minpts = mpt;
+//					Global.opticQParams.epsilon = eps;
+//					Global.maxPidNeighbors4Bytes = numByte / 4;
+//					Global.pathTerm2PidNeighborsIndex = Global.getPathTerm2PidNeighborsIndex(numByte);
+//					Global.pathPidNeighborLen = Global.getPathPidNeighborLen(numByte);
+//					MLog.log("开始创建term_2_pidNeighbors index . . . ");
+//					MLog.log("index path : " + Global.pathTerm2PidNeighborsIndex);
+//					tTime = System.currentTimeMillis();
+//					Term2PidNeighborsIndexBuilder.main(null);
+//					MLog.log("用时: " + TimeUtility.getSpendTimeStr(tTime, System.currentTimeMillis()) + "\n");
+//					System.out.println();
+//				}
+//			}
+//		}
 		
 		
 		/* building k neighbor dis file */
