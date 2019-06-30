@@ -124,6 +124,9 @@ public class SingleAlgTest {
 		double steepDegree = 0.1;
 		int h = 10;
 		
+		int opticMinpts = 10;
+		double opticEpsilon = 0.001;
+		
 		int numSample = 200;
 		int type = 0;
 		
@@ -136,7 +139,7 @@ public class SingleAlgTest {
 		
 		int maxPidNeighborsBytes = 2147483631;
 		
-		QueryParams qp = new QueryParams(rtreeFanout, alpha, steepDegree, h, 
+		QueryParams qp = new QueryParams(rtreeFanout, alpha, steepDegree, h, opticMinpts, opticEpsilon,
 										numSample, type, k, numWord, minpts, epsilon, 
 										xi, maxPidNeighborsBytes);
 		
@@ -177,8 +180,6 @@ public class SingleAlgTest {
 //		SingleAlgTest.testAlgEuc("AlgEucDisAdvancedOpticsWu2", qParams);
 //		SingleAlgTest.testAlgEuc("AlgEucDisBaseOptics", qParams);
 //		SingleAlgTest.testAlgEuc("AlgEucDisAdvancedOptics", qParams);
-		
-		
 	}
 
 }

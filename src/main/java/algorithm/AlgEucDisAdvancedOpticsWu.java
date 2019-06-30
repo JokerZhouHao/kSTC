@@ -41,11 +41,11 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics {
 	
 	public AlgEucDisAdvancedOpticsWu(QueryParams qp) throws Exception{
 		super(qp);
-		String path = Global.getPathTerm2PidNeighborsIndex(qp.maxPidNeighborsBytes);
+		String path = Global.getPathTerm2PidNeighborsIndex(qp.maxPidNeighborsBytes, qp.opticMinpts, qp.opticEpsilon);
 		term2PNgb = new Term2PidNeighborsIndex(path);
 		term2PNgb.openIndexReader();
 		
-		path = Global.getPathPidNeighborLen(qp.maxPidNeighborsBytes);
+		path = Global.getPathPidNeighborLen(qp.maxPidNeighborsBytes, qp.opticMinpts, qp.opticEpsilon);
 		ngbLens = FileLoader.loadPidNgbLens(path);
 	}
 	

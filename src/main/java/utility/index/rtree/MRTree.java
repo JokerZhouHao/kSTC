@@ -8,6 +8,7 @@ import java.util.List;
 import entity.Node;
 import entity.NodeCollection;
 import entity.QueryParams;
+import entity.fastrange.NgbNodes;
 import spatialindex.rtree.RTree;
 import spatialindex.spatialindex.Point;
 import spatialindex.spatialindex.RWLock;
@@ -235,6 +236,41 @@ public class MRTree extends RTree{
 		if(neighbors.isEmpty())	return null;
 		else return neighbors;
 	}
+	
+	public LinkedList<Node> rangeQueryReDescendNodes(QueryParams qParams, int clusterId, Node centerNode, NodeCollection nodeCol, Point[] allPoints){
+		NgbNodes ngb = new NgbNodes();	
+		LinkedList<Integer> idQueue = new LinkedList<>();
+		idQueue.add(getRoot());
+		int id = 0;
+		int child = 0;
+		spatialindex.rtree.Node rNode = null;
+		Node pNode = null;
+		while(!idQueue.isEmpty()) {
+			id = idQueue.pollFirst();
+			rNode = readNode(id);
+			if(rNode.isLeaf()) {
+				for(child=0; child < rNode.m_children; child++) {
+					if(null != (pNode = nodeCol.get(rNode.m_pIdentifier[child])) &&
+						(pNode.hasInCluster(clusterId) || !pNode.isClassified())) {
+						pNode.disToCenter = centerNode.location.getMinimumDistance(allPoints[rNode.m_pIdentifier[child]]);
+						if(pNode.disToCenter <= qParams.epsilon) {
+							ngb.add(pNode.disToCenter, pNode);
+						}
+					}
+				}
+			} else {
+				for(child=0; child < rNode.m_children; child++) {
+					if(null != (pNode = nodeCol.get(-rNode.m_pIdentifier[child] - 1)) &&
+						centerNode.location.getMinimumDistance(rNode.m_pMBR[child]) <= qParams.epsilon) {
+						idQueue.add(rNode.m_pIdentifier[child]);
+					}
+				}
+			}
+		}
+		if(ngb.size() == 0)	return null;
+		else return ngb.toList();
+	}
+	
 	
 	public List<Node> rangeQuery(Point centerNode, Double radius, Point[] allPoints){
 		List<Node> neighbors = new LinkedList<>();

@@ -290,14 +290,25 @@ public class Global {
 	}
 	
 	public static String getPathTerm2PidNeighborsIndex(int maxPidNeighborsBytes) {
+		return getPathTerm2PidNeighborsIndex(maxPidNeighborsBytes, Global.opticQParams.minpts, Global.opticQParams.epsilon);
+	}
+	
+	public static String getPathTerm2PidNeighborsIndex(int maxPidNeighborsBytes, int opMinpts, double opEps) {
 		return outPath + (String)configProps.get("pathTerm2PidNeighborsIndex") + suffixFile + signNormalized +
-				",opticMinpts=" + String.valueOf(opticQParams.minpts)  + ",opticEpsilon=" + String.valueOf(opticQParams.epsilon) + 
+				",opticMinpts=" + opMinpts  + ",opticEpsilon=" + opEps + 
 				",maxPidNeighborsBytes=" + maxPidNeighborsBytes + File.separator;
 	}
 	
 	public static String getPathPidNeighborLen(int maxPidNeighborsBytes) {
+//		return outPath + (String)configProps.get("filePidNeighborLen") + suffixFile + 
+//				",opticMinpts=" + String.valueOf(opticQParams.minpts) + ",opticEpsilon=" + String.valueOf(opticQParams.epsilon) + 
+//				",maxPidNeighborsBytes=" + maxPidNeighborsBytes;
+		return getPathPidNeighborLen(maxPidNeighborsBytes, Global.opticQParams.minpts, Global.opticQParams.epsilon);
+	}
+	
+	public static String getPathPidNeighborLen(int maxPidNeighborsBytes, int opMinpts, double opEps) {
 		return outPath + (String)configProps.get("filePidNeighborLen") + suffixFile + 
-				",opticMinpts=" + String.valueOf(opticQParams.minpts) + ",opticEpsilon=" + String.valueOf(opticQParams.epsilon) + 
+				",opticMinpts=" + opMinpts + ",opticEpsilon=" + opEps + 
 				",maxPidNeighborsBytes=" + maxPidNeighborsBytes;
 	}
 	

@@ -49,8 +49,8 @@ public class Term2PidNeighborsIndex extends AbstractLuceneIndex{
 			bb.putInt(en.getValue().size());
 			for(Node inn : en.getValue()) {
 				bb.putInt(inn.id);
-				bb.putDouble(inn.disToCenter);
-//				bb.putFloat((float)inn.disToCenter);
+//				bb.putDouble(inn.disToCenter);
+				bb.putFloat((float)inn.disToCenter);
 			}
 		}
 		return bb.array();

@@ -27,6 +27,9 @@ public class QueryParams {
 	public int zorderWidth = 1000;
 	public int zorderHeight = 1000;
 	
+	public int opticMinpts = 1;
+	public double opticEpsilon = 0.001;
+	
 	public int numSample = 0;
 	
 	/**
@@ -52,9 +55,9 @@ public class QueryParams {
 	
 	public RunTimeRecordor runTimeRec = new RunTimeRecordor();
 	
-	private final static String head = "rFanout  alpha  steepD  h   ns   " + 
+	private final static String head = "rFanout  alpha  steepD  h   opMpts  opEps    ns   " + 
 			"t   k     nw  mpts   eps       xi       maxPNeiByte   ";
-	private final static String formatStr = "%-9s%-7s%-8s%-4s%-5s" +
+	private final static String formatStr = "%-9s%-7s%-8s%-4s%-8s%-9s%-5s" +
 			   "%-4s%-6s%-4s%-7s%-10s%-9s%-14s";
 	
 	public QueryParams() {}
@@ -65,7 +68,7 @@ public class QueryParams {
 		this.minpts = minpts;
 	}
 	
-	public QueryParams(int rtreeFanout, double alpha, double steepDegree, int h, 
+	public QueryParams(int rtreeFanout, double alpha, double steepDegree, int h, int opticMinpts, double opticEpsilon,
 			int numSample, int type,
 			int k, int numWord, int minpts, double epsilon, double xi, int maxPidNeighborsBytes) {
 		super();
@@ -76,6 +79,8 @@ public class QueryParams {
 		this.h = h;
 		this.zorderWidth = (int)Math.pow(2, h);
 		this.zorderHeight = this.zorderWidth;
+		this.opticMinpts = opticMinpts;
+		this.opticEpsilon = opticEpsilon;
 		this.numSample = numSample;
 		this.type = type;
 		this.k = k;
@@ -118,7 +123,7 @@ public class QueryParams {
 		System.out.println(head);
 		for(QueryParams qp : qps) {
 			System.out.println(String.format(formatStr, qp.rtreeFanout, qp.alpha, qp.steepDegree,
-					qp.h, qp.numSample,
+					qp.h, qp.opticMinpts, qp.opticEpsilon, qp.numSample,
 					qp.type, qp.k, qp.numWord, qp.minpts,
 					qp.epsilon, qp.xi, qp.maxPidNeighborsBytes));
 		}
@@ -129,7 +134,7 @@ public class QueryParams {
 		System.out.println("Global.rtreeFanout: " + Global.rtreeFanout + "          # 只能通过改config.props文件，来选择rtree");
 		System.out.println(head);
 		System.out.println(String.format(formatStr, qp.rtreeFanout, qp.alpha, qp.steepDegree,
-				qp.h, qp.numSample,
+				qp.h, qp.opticMinpts, qp.opticEpsilon, qp.numSample,
 				qp.type, qp.k, qp.numWord, qp.minpts,
 				qp.epsilon, qp.xi, qp.maxPidNeighborsBytes));
 		System.out.println();
@@ -149,10 +154,11 @@ public class QueryParams {
 			if(line.startsWith("#") || line.trim().equals(""))	continue;
 			arr = line.split(Global.delimiterSpace);
 			qp = new QueryParams(Integer.parseInt(arr[0]), Double.parseDouble(arr[1]), Double.parseDouble(arr[2]), 
-					Integer.parseInt(arr[3]), Integer.parseInt(arr[4]), Integer.parseInt(arr[5]), 
-					Integer.parseInt(arr[6]), Integer.parseInt(arr[7]), Integer.parseInt(arr[8]), 
-					Double.parseDouble(arr[9]), Double.parseDouble(arr[10]),
-					Integer.parseInt(arr[11]));
+					Integer.parseInt(arr[3]), Integer.parseInt(arr[4]), Double.parseDouble(arr[5]),
+					Integer.parseInt(arr[6]), Integer.parseInt(arr[7]), 
+					Integer.parseInt(arr[8]), Integer.parseInt(arr[9]), Integer.parseInt(arr[10]), 
+					Double.parseDouble(arr[11]), Double.parseDouble(arr[12]),
+					Integer.parseInt(arr[13]));
 			qps.add(qp);
 		}
 		br.close();
@@ -160,17 +166,20 @@ public class QueryParams {
 		else return qps;
 	}
 	
-	public static String generateTestQuery(int rtreeFanout, double alpha, double steepDegree, int h, int numSample, int type,
+	public static String generateTestQuery(int rtreeFanout, double alpha, double steepDegree, int h, 
+			int opticMinpts, double  opticEpsilon,
+			int numSample, int type,
 			int k, int numWord, int minpts, double epsilon, double xi, int maxPidNeighborsBytes) {
-		return String.format("%s %s %s %s %s %s %s %s %s %s %s %s", rtreeFanout, alpha, steepDegree, h, 
+		return String.format("%s %s %s %s %s %s %s %s %s %s %s %s %s %s", rtreeFanout, alpha, steepDegree, h, opticMinpts, opticEpsilon, 
 							numSample, type, k, numWord, minpts, epsilon, xi, maxPidNeighborsBytes);
 	}
 	
 	@Override
 	public String toString() {
-		return String.format("rFanout=%s.alpha=%s.steepD=%s.h=%s.ns=%s.t=%s.k=%s.nw=%s.mpts=%s.eps=%s.xi=%s.maxPNeiByte=%s",
+		return String.format("rFanout=%s.alpha=%s.steepD=%s.h=%s.om=%s.oe=%s.ns=%s.t=%s.k=%s.nw=%s.mpts=%s.eps=%s.xi=%s.maxPNeiByte=%s",
 				rtreeFanout, alpha, steepDegree,
-				h, numSample,
+				h, opticMinpts, opticEpsilon,
+				numSample,
 				type, k, numWord, minpts,
 				epsilon, xi, maxPidNeighborsBytes);
 	}
@@ -178,21 +187,21 @@ public class QueryParams {
 	
 	public static void main(String[] args) throws Exception{
 		List<QueryParams> qps = new ArrayList<>();
-		QueryParams qp = new QueryParams(100, 0.3, 0.2, 2, 200, -1, 5, 3, 20, 0.1, 0.01, 50000000);
-		qps.add(qp);
-		qps.add(qp);
-		QueryParams.displays(qps);
-		System.out.println();
-		QueryParams.display(qp);
-		System.out.println();
+		QueryParams qp = new QueryParams(100, 0.3, 0.2, 2, 3, 0.0001, 200, -1, 5, 3, 20, 0.1, 0.01, 50000000);
+//		qps.add(qp);
+//		qps.add(qp);
+//		QueryParams.displays(qps);
+//		System.out.println();
+//		QueryParams.display(qp);
+//		System.out.println();
 		
 		String path = Global.pathResult + "qptest.txt";
 		qps = QueryParams.load(path);
 		QueryParams.displays(qps);
 		System.out.println();
 //		
-		System.out.println(QueryParams.resFileName(qp));
-		System.out.println(qp);
+		System.out.println(QueryParams.resFileName(qps.get(0)));
+		System.out.println(qps.get(0));
 		
 	}
 	

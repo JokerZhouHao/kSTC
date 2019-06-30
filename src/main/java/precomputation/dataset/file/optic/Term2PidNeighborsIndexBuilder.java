@@ -48,6 +48,7 @@ public class Term2PidNeighborsIndexBuilder implements Runnable{
 	private static CellidPidWordsIndex cellidWIndex = null;
 	private static Point[] allLocations = null;
 	private static TInt numDealedTerm = new TInt(0);
+	private static Boolean hasStop = Boolean.FALSE;
 	
 	private String[] allTerms = null;
 	private int start = 0;
@@ -55,6 +56,18 @@ public class Term2PidNeighborsIndexBuilder implements Runnable{
 	private QueryParams qParams = null;
 	private Circle sCircle = null;
 	private String descript = null;
+	
+	public static void reset() {
+		numThread = new TInt(0);
+		numNgbTooLong = new TInt(0);
+		term2PidNeiIndex = null;
+		pidNeighborLenBW = null;
+		sgplInfo = Global.sgplInfo;
+		cellidWIndex = null;
+		allLocations = null;
+		numDealedTerm = new TInt(0);
+		hasStop = Boolean.FALSE;
+	}
 	
 	public Term2PidNeighborsIndexBuilder(String[] allTerms, int start, int end, QueryParams qParams, String pathTerm2PidNei, String pathCellidRtreeidOrPidWordsIndex,
 			String pathPidNeighborLen) throws Exception{
@@ -121,13 +134,13 @@ public class Term2PidNeighborsIndexBuilder implements Runnable{
 			if(0 == numThread.x) {
 				clean();
 				System.out.println("> Over, 共处理" + String.valueOf(allTerms.length) + "个term，numNgbTooLong = " + String.valueOf(numNgbTooLong) + ", 总用时：" + TimeUtility.getGlobalSpendTime());
+				hasStop = Boolean.TRUE;
 			}
 		}
 	}
 	
 	public static Boolean hasStop() throws Exception {
-		if(0 == numThread.x) return Boolean.TRUE;
-		else return Boolean.FALSE;
+		return hasStop;
 	}
 	
 	public void clean() throws Exception{
@@ -184,8 +197,8 @@ public class Term2PidNeighborsIndexBuilder implements Runnable{
 						
 						pidNeighbors.put(centerNode.id, tList);
 						numCur4Bytes += 2;
-//						numCur4Bytes += 2 * tList.size();	// int float
-						numCur4Bytes += 3 * tList.size();	// int double
+//						numCur4Bytes += 3 * tList.size();	// int double
+						numCur4Bytes += 2 * tList.size();	// int float
 						if(numCur4Bytes > Global.maxPidNeighbors4Bytes)	break;
 					}
 					if(numCur4Bytes > Global.maxPidNeighbors4Bytes)	break;
@@ -314,16 +327,7 @@ public class Term2PidNeighborsIndexBuilder implements Runnable{
 	
 	
 	public static void main(String[] args) throws Exception{
-		/********** 重置参数  ******************/ 
-		numThread = new TInt(0);
-		numNgbTooLong = new TInt(0);
-		term2PidNeiIndex = null;
-		pidNeighborLenBW = null;
-		sgplInfo = Global.sgplInfo;
-		cellidWIndex = null;
-		allLocations = null;
-		numDealedTerm = new TInt(0);
-		
+		Term2PidNeighborsIndexBuilder.reset();
 		
 		System.out.println("> starting build term2PidNeighborsIndex . . .");
 		String[] allTerms = FileLoader.loadAllTerms(Global.pathWidTerms);

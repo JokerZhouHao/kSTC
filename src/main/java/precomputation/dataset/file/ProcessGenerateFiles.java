@@ -510,16 +510,18 @@ public class ProcessGenerateFiles {
 //		epss.add(0.001);
 //		epss.add(0.0001);
 		epss.add(0.0003);
-		List<Integer> lens = new ArrayList<>();
-		lens.add(2147483631);
+		List<Integer> maxNumBytes = new ArrayList<>();
+		maxNumBytes.add(2147483631);
 		Global.sgplInfo = SGPLInfo.getInstance(h);
 		for(int mpt : mpts) {
 			for(double eps : epss) {
-				for(int len : lens) {
+				for(int numByte : maxNumBytes) {
+					// 为了省修改时间，故这儿还是用的minpts、epsilon而不是opticMinpts、opticEpsilon
 					Global.opticQParams.minpts = mpt;
 					Global.opticQParams.epsilon = eps;
-					Global.pathTerm2PidNeighborsIndex = Global.getPathTerm2PidNeighborsIndex(len);
-					Global.pathPidNeighborLen = Global.getPathPidNeighborLen(len);
+					Global.maxPidNeighbors4Bytes = numByte / 4;
+					Global.pathTerm2PidNeighborsIndex = Global.getPathTerm2PidNeighborsIndex(numByte);
+					Global.pathPidNeighborLen = Global.getPathPidNeighborLen(numByte);
 					MLog.log("开始创建term_2_pidNeighbors index . . . ");
 					MLog.log("index path : " + Global.pathTerm2PidNeighborsIndex);
 					tTime = System.currentTimeMillis();
