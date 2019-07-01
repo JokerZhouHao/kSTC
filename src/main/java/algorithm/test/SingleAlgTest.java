@@ -135,7 +135,7 @@ public class SingleAlgTest {
 		int rtreeFanout = 50;
 		double alpha = 0.5;
 		double steepDegree = 0.1;
-		int h = 15;
+		int h = 8;
 		
 		int opticMinpts = 1;
 		double opticEpsilon = 0.0001;
@@ -147,8 +147,8 @@ public class SingleAlgTest {
 		int numWord = 0;
 		
 		int minpts = 5;
-		double epsilon = 0.0001;
-		double xi = 0.01;
+		double epsilon = 0.001;
+		double xi = 0.001;
 		
 		int maxPidNeighborsBytes = 2147483631;
 		
@@ -186,12 +186,12 @@ public class SingleAlgTest {
 		
 		qParams.type = 1;
 		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisBase, qParams);
-		qParams.type = 2;
-		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisBaseAdv1, qParams);
-		qParams.type = 3;
-		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisBaseAdv1_2, qParams);
-		qParams.type = 4;
-		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisFastRange, qParams);
+//		qParams.type = 2;
+//		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisBaseAdv1, qParams);
+//		qParams.type = 3;
+//		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisBaseAdv1_2, qParams);
+//		qParams.type = 4;
+//		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisFastRange, qParams);
 		
 //		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisFastRange, qParams);
 		

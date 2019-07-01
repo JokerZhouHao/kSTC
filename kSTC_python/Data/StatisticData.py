@@ -1,4 +1,3 @@
-from utility import Global
 from utility import PathUtility
 from utility.io import IterableReader
 
@@ -67,5 +66,5 @@ class Data:
         return res
 
 
-path = 'D:\\kSTC\\sample_result\\res\\008_测试adv1_2_3—ok\\'
-print(Data.getData(path))
+# path = 'D:\\kSTC\\sample_result\\res\\008_测试adv1_2_3—ok\\'
+# print(Data.getData(path))

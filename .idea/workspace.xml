@@ -2,17 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="69dc0b92-e7a8-42b0-907b-f19107737e1f" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kSTC_python/.idea/python_draw.iml" beforeDir="false" afterPath="$PROJECT_DIR$/kSTC_python/.idea/python_draw.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kSTC_python/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/kSTC_python/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kSTC_python/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/kSTC_python/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kSTC_python/utility/io.py" beforeDir="false" afterPath="$PROJECT_DIR$/kSTC_python/utility/io.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/algorithm/AlgEucDisBase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/algorithm/AlgEucDisBase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/algorithm/AlgEucDisFastRange.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/algorithm/AlgEucDisFastRange.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/algorithm/test/SingleAlgTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/algorithm/test/SingleAlgTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/entity/AlgType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/entity/AlgType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/entity/fastrange/NgbNodes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/entity/fastrange/NgbNodes.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sample/QueryGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sample/QueryGenerator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/test/T1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/test/T1.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -22,7 +13,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file leaf-file-name="PathUtility.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/kSTC_python/utility/PathUtility.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -35,8 +26,8 @@
       <file leaf-file-name="StatisticData.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/kSTC_python/Data/StatisticData.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="679">
-              <caret line="67" lean-forward="true" selection-start-line="67" selection-end-line="67" />
+            <state relative-caret-position="481">
+              <caret line="58" column="45" lean-forward="true" selection-start-line="58" selection-start-column="45" selection-end-line="58" selection-end-column="45" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -163,7 +154,7 @@
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24973656" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24973656" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Python Console" order="7" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32982087" />
@@ -183,11 +174,22 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/kSTC_python/utility/io.py">
-      <provider selected="true" editor-type-id="text-editor" />
+    <entry file="file://$PROJECT_DIR$/kSTC_python/utility/PathUtility.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="638">
+          <caret line="29" column="25" selection-start-line="29" selection-start-column="25" selection-end-line="29" selection-end-column="25" />
+        </state>
+      </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/kSTC_python/draw/DrawSampleResult.py">
-      <provider selected="true" editor-type-id="text-editor" />
+    <entry file="file://$PROJECT_DIR$/kSTC_python/Data/StatisticData.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1430">
+          <caret line="67" lean-forward="true" selection-start-line="67" selection-end-line="67" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/kSTC_python/utility/PathUtility.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -198,8 +200,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/kSTC_python/Data/StatisticData.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="679">
-          <caret line="67" lean-forward="true" selection-start-line="67" selection-end-line="67" />
+        <state relative-caret-position="481">
+          <caret line="58" column="45" lean-forward="true" selection-start-line="58" selection-start-column="45" selection-end-line="58" selection-end-column="45" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
