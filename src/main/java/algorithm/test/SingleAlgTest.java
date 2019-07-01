@@ -190,6 +190,8 @@ public class SingleAlgTest {
 		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisBaseAdv1, qParams);
 		qParams.type = 3;
 		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisBaseAdv1_2, qParams);
+		qParams.type = 4;
+		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisFastRange, qParams);
 		
 //		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisFastRange, qParams);
 		

@@ -12,6 +12,8 @@ class Global:
     pathInput = 'D:\\kSTC\\Dataset\\' + datasetType + '\\[-125.0,28.0],[15.0,60.0]\\input\\'
     pathOutput = 'D:\\kSTC\\Dataset\\' + datasetType + '\\[-125.0,28.0],[15.0,60.0]\\output\\'
 
+    sample_res_base_path = 'D:\\kSTC\\sample_result\\res\\000_dataset\\'
+
     pathImgs = pathInput + 'imgs\\'
 
     pathName = pathInput + 'id_name.txt'
@@ -45,6 +47,11 @@ class IterableReader:
                     continue
                 else:
                     return line[:-1]
+
+
+
+
+
 
 
 # fp = open(Path.pathInput + 'sample.json')

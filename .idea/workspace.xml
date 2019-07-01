@@ -2,7 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="69dc0b92-e7a8-42b0-907b-f19107737e1f" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/target/classes/META-INF/maven/zhou/kSTC/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/META-INF/maven/zhou/kSTC/pom.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kSTC_python/.idea/python_draw.iml" beforeDir="false" afterPath="$PROJECT_DIR$/kSTC_python/.idea/python_draw.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kSTC_python/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/kSTC_python/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kSTC_python/utility/io.py" beforeDir="false" afterPath="$PROJECT_DIR$/kSTC_python/utility/io.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/algorithm/AlgEucDisBase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/algorithm/AlgEucDisBase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/algorithm/AlgEucDisFastRange.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/algorithm/AlgEucDisFastRange.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/algorithm/test/SingleAlgTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/algorithm/test/SingleAlgTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/entity/AlgType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/entity/AlgType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/entity/fastrange/NgbNodes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/entity/fastrange/NgbNodes.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sample/QueryGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sample/QueryGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/test/T1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/test/T1.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -11,8 +21,40 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file leaf-file-name="PathUtility.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/kSTC_python/utility/PathUtility.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="638">
+              <caret line="29" column="25" selection-start-line="29" selection-start-column="25" selection-end-line="29" selection-end-column="25" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="StatisticData.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/kSTC_python/Data/StatisticData.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="679">
+              <caret line="67" lean-forward="true" selection-start-line="67" selection-end-line="67" />
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/kSTC_python/Data/StatisticData.py" />
+      </list>
+    </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-8" />
@@ -31,6 +73,42 @@
             <path>
               <item name="kSTC_code" type="b2602c69:ProjectViewProjectNode" />
               <item name="kSTC_code" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="kSTC_code" type="b2602c69:ProjectViewProjectNode" />
+              <item name="kSTC_code" type="462c0819:PsiDirectoryNode" />
+              <item name="kSTC_python" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="kSTC_code" type="b2602c69:ProjectViewProjectNode" />
+              <item name="kSTC_code" type="462c0819:PsiDirectoryNode" />
+              <item name="kSTC_python" type="462c0819:PsiDirectoryNode" />
+              <item name="Data" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="kSTC_code" type="b2602c69:ProjectViewProjectNode" />
+              <item name="kSTC_code" type="462c0819:PsiDirectoryNode" />
+              <item name="kSTC_python" type="462c0819:PsiDirectoryNode" />
+              <item name="draw" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="kSTC_code" type="b2602c69:ProjectViewProjectNode" />
+              <item name="kSTC_code" type="462c0819:PsiDirectoryNode" />
+              <item name="kSTC_python" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="kSTC_code" type="b2602c69:ProjectViewProjectNode" />
+              <item name="kSTC_code" type="462c0819:PsiDirectoryNode" />
+              <item name="kSTC_python" type="462c0819:PsiDirectoryNode" />
+              <item name="utility" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="kSTC_code" type="b2602c69:ProjectViewProjectNode" />
+              <item name="kSTC_code" type="462c0819:PsiDirectoryNode" />
+              <item name="kSTC_python" type="462c0819:PsiDirectoryNode" />
+              <item name="utility" type="462c0819:PsiDirectoryNode" />
+              <item name="PathUtility.py" type="8704e2dd:PyFileNode" />
             </path>
           </expand>
           <select />
@@ -54,29 +132,79 @@
       </list>
     </option>
   </component>
+  <component name="RunManager">
+    <configuration name="StatisticData" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="kSTC_code" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/kSTC_python/Data" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/kSTC_python/Data/StatisticData.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.StatisticData" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24973656" />
-      <window_info anchor="bottom" id="Version Control" />
-      <window_info anchor="bottom" id="Python Console" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24973656" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Python Console" order="7" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32982087" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="Structure" order="1" weight="0.25" />
-      <window_info anchor="bottom" id="Run" order="2" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="1" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/kSTC_python/utility/io.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/kSTC_python/draw/DrawSampleResult.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/kSTC_python/utility/PathUtility.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="638">
+          <caret line="29" column="25" selection-start-line="29" selection-start-column="25" selection-end-line="29" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/kSTC_python/Data/StatisticData.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="679">
+          <caret line="67" lean-forward="true" selection-start-line="67" selection-end-line="67" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
   </component>
 </project>

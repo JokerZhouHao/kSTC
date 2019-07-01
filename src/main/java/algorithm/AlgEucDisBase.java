@@ -22,6 +22,7 @@ import entity.PNodeCollection;
 import entity.QueryParams;
 import entity.SGPLInfo;
 import entity.SortedClusters;
+import entity.fastrange.NgbNodes;
 import index.CellidPidWordsIndex;
 import index.IdWordsIndex;
 import precomputation.dataset.file.FileLoader;
@@ -38,16 +39,15 @@ import utility.io.TimeUtility;
  */
 public class AlgEucDisBase implements AlgInterface{
 	
-	private Point[] allLocations = null;
+	protected Point[] allLocations = null;
 //	private IdWordsIndex idWordsIndex = null;
-	private CellidPidWordsIndex cellidIndex = null;
-	private MRTree rtree = null;
-	private NoiseRecoder noiseRecoder = new NoiseRecoder();
-	private QueryParams qp = null;
+	protected CellidPidWordsIndex cellidIndex = null;
+	protected MRTree rtree = null;
+	protected NoiseRecoder noiseRecoder = new NoiseRecoder();
+	protected QueryParams qp = null;
 	
-	private SGPLInfo sgplInfo = null;
-	private Circle sCircle = null;
-	private Map<Integer, Integer> tempClusteredCells = null;
+	protected SGPLInfo sgplInfo = null;
+	protected Circle sCircle = null;
 	
 //	public AlgEucDisBase() throws Exception{
 //		allLocations = FileLoader.loadPoints(Global.pathIdNormCoord);
@@ -61,15 +61,14 @@ public class AlgEucDisBase implements AlgInterface{
 //		rtree = MRTree.getInstanceInDisk();
 //	}
 	
+//	public AlgEucDisBase() {}
+	
 	
 	public AlgEucDisBase(QueryParams qp) throws Exception {
 		this.qp = qp;
 		if(qp.type > 1) {
 			this.sgplInfo = qp.sgplInfo;
 			this.sCircle = new Circle(0.0, new double[2], sgplInfo);
-		}
-		if(qp.type == 4) {
-			this.tempClusteredCells = new HashMap<>();
 		}
 		init();
 	}
@@ -82,7 +81,7 @@ public class AlgEucDisBase implements AlgInterface{
 		cellidIndex = new CellidPidWordsIndex(path);
 		cellidIndex.openIndexReader();
 		
-		rtree = MRTree.getInstanceInDisk(Boolean.FALSE);
+		if(this.getClass().equals(AlgEucDisBase.class))	rtree = MRTree.getInstanceInDisk(Boolean.FALSE);
 	}
 	
 	public void free() throws Exception{
@@ -119,11 +118,13 @@ public class AlgEucDisBase implements AlgInterface{
 		qp.runTimeRec.timeSearchTerms = qp.runTimeRec.getTimeSpan();
 		
 		qp.runTimeRec.setFrontTime();
-		PNodeCollection disPNodeCol = nodeCol.getPNodeCollection().sortByDistance();
+//		PNodeCollection disPNodeCol = nodeCol.getPNodeCollection().sortByDistance();
+		PNodeCollection disPNodeCol = new PNodeCollection(nodeCol.getPNodes()).sortByDistance();
 		qp.runTimeRec.timeSortByDistance = qp.runTimeRec.getTimeSpan();
 		
 		qp.runTimeRec.setFrontTime();
-		PNodeCollection scorePNodeCol = nodeCol.getPNodeCollection().copy().sortByScore();
+//		PNodeCollection scorePNodeCol = nodeCol.getPNodeCollection().copy().sortByScore();
+		PNodeCollection scorePNodeCol = new PNodeCollection(nodeCol.getPNodes()).sortByScore();
 		qp.runTimeRec.timeSortByScore = qp.runTimeRec.getTimeSpan();
 		
 		qp.runTimeRec.timeTotalPrepareData = System.nanoTime() - qp.runTimeRec.timeTotalPrepareData;
@@ -221,8 +222,6 @@ public class AlgEucDisBase implements AlgInterface{
 			}
 		}
 			
-//		System.out.println("canSkip: " + canSkip);
-		
 		return canSkip;
 	}
 	
@@ -236,9 +235,6 @@ public class AlgEucDisBase implements AlgInterface{
 	 */
 	private LinkedList<Node> adv2(QueryParams qParams, int clusterId, Node centerNode, Map<Integer, List<Node>> cellid2Nodes, 
 								Map<Integer, Integer> clusteredCells, List<CellSign> availableCellids) {
-//		System.out.println("adv2");
-		
-		
 		LinkedList<Node> coverNodes = new LinkedList<>();
 		List<Node> nds = null;
 		Integer cid = null;
@@ -251,14 +247,26 @@ public class AlgEucDisBase implements AlgInterface{
 				if(coverNodes.size() >= qParams.minpts)	return null;
 			}
 		}
+//		NgbNodes ngb = new NgbNodes();	
 		LinkedList<Node> coverNodes1 = new LinkedList<>();
 		double dis = 0.0;
 		for(Node nd : coverNodes) {
 			if(nd.isClassified() && nd.clusterId != clusterId)	continue;
 			dis = centerNode.location.getMinimumDistance(nd.location);
-			if(dis > qParams.epsilon)	continue;
-			coverNodes1.add(nd);
+			if(dis <= qParams.epsilon) {
+//				if(nd.hasInCluster(clusterId)) {
+//					ngb.add(NgbNodes.signUsedKey, nd);
+//				} else if(!nd.isClassified()) {
+//					ngb.add(dis, nd);
+//				}
+				if(nd.hasInCluster(clusterId) || !nd.isClassified()) {
+					coverNodes1.add(nd);
+				}
+			}
 		}
+//		if(ngb.size() == 0)	return null;
+//		return ngb;
+		if(coverNodes1.isEmpty())	return null;
 		return coverNodes1;
 	}
 	
@@ -312,13 +320,14 @@ public class AlgEucDisBase implements AlgInterface{
 			Map<Integer, List<Node>> cellid2Nodes, Map<Integer, Integer> clusteredCells) throws Exception{
 		List<Node> addedNodes = new ArrayList<>();
 		LinkedList<Node> neighbors = new LinkedList<>();
-		LinkedList<Node> ngb = null;
+		NgbNodes ngb = null;
+		LinkedList<Node> ngbNodes = null;
 		Node centerNode = null;
 		
 		// adv1、adv2
 		List<CellSign> coveredCellids = null;
 		List<CellSign> availableCellids = null;
-		if(qParams.type >= 2) {
+		if(qParams.type >= 2) { 
 			sCircle.center = qNode.location.m_pCoords;
 			coveredCellids = sgplInfo.cover(sCircle);
 			availableCellids = cellHasNode(cellid2Nodes, coveredCellids);
@@ -326,38 +335,41 @@ public class AlgEucDisBase implements AlgInterface{
 			if(qParams.type >= 2 && adv1(cellid2Nodes, clusteredCells, availableCellids))	return null;
 			// adv2
 			if(qParams.type >= 3) {
-				ngb = adv2(qParams, clusterId, qNode, cellid2Nodes, clusteredCells, availableCellids);
-				if(ngb != null) {
+				ngbNodes = adv2(qParams, clusterId, qNode, cellid2Nodes, clusteredCells, availableCellids);
+				if(ngbNodes != null) {
 					qNode.setToNoise();
-					if(signAccessDis)	noiseRecoder.addDisNoise(new NodeNeighbors(qNode, ngb));
-					else noiseRecoder.addScoNoise(new NodeNeighbors(qNode, ngb));
+					if(signAccessDis)	noiseRecoder.addDisNoise(new NodeNeighbors(qNode, ngbNodes));
+					else noiseRecoder.addScoNoise(new NodeNeighbors(qNode, ngbNodes));
 					return null;
 				}
 			}
 		}
 		
 		
-		
 		qp.runTimeRec.setFrontTime();
-		if(qParams.type == 1)	ngb = rtree.rangeQuery(qParams, clusterId, qNode, nodeCol, allLocations);
+		if(qParams.type == 1)	ngbNodes = rtree.rangeQuery(qParams, clusterId, qNode, nodeCol, allLocations);
 		else if(qParams.type == 2 || qParams.type == 3) {
-			ngb = rtree.rangeQueryReDescendNodes(qParams, clusterId, qNode, nodeCol, allLocations);
+			ngbNodes = rtree.rangeQueryReDescendNodes(qParams, clusterId, qNode, nodeCol, allLocations);
 //			ngb = rtree.rangeQuery(qParams, clusterId, qNode, nodeCol, allLocations);
+		} else if(qParams.type == 4) {
+			ngb = fastRange(cellid2Nodes, clusteredCells, qParams, clusterId, qNode, availableCellids);
+			ngbNodes = null;
+			if(ngb != null)	ngbNodes = ngb.toListContainAll();
 		}
 		qp.runTimeRec.numRangeRtree++;
 		qp.runTimeRec.timeRangeRtree += qp.runTimeRec.getTimeSpan();
 		
-		if(null == ngb) {
+		if(null == ngbNodes) {
 			return null;
-		} else if(ngb.size() < qParams.minpts) {
+		} else if(ngbNodes.size() < qParams.minpts) {
 			qNode.setToNoise();
-			if(signAccessDis)	noiseRecoder.addDisNoise(new NodeNeighbors(qNode, ngb));
-			else noiseRecoder.addScoNoise(new NodeNeighbors(qNode, ngb));
+			if(signAccessDis)	noiseRecoder.addDisNoise(new NodeNeighbors(qNode, ngbNodes));
+			else noiseRecoder.addScoNoise(new NodeNeighbors(qNode, ngbNodes));
 			return null;
 		} else {
 			qNode.clusterId = clusterId;
 			addedNodes.add(qNode);
-			for(Node nd : ngb) {
+			for(Node nd : ngbNodes) {
 				if(nd.isNoise()) {
 					addedNodes.add(nd);
 					nd.clusterId = clusterId;
@@ -375,33 +387,39 @@ public class AlgEucDisBase implements AlgInterface{
 				
 				if(qParams.type == 1) {
 					qp.runTimeRec.setFrontTime();
-					ngb = rtree.rangeQuery(qParams, clusterId, centerNode, nodeCol, allLocations);
+					ngbNodes = rtree.rangeQuery(qParams, clusterId, centerNode, nodeCol, allLocations);
 					qp.runTimeRec.numRangeRtree++;
 					qp.runTimeRec.timeRangeRtree += qp.runTimeRec.getTimeSpan();
-				} else if(qParams.type == 2 || qParams.type == 3) {	// adv1、adv2
+				} else if(qParams.type >= 2) {	// adv1、adv2、adv3
 					sCircle.center = centerNode.location.m_pCoords;	// 在executeQuery方法开始已设置radius
 					coveredCellids = sgplInfo.cover(sCircle);
 					availableCellids = cellHasNode(cellid2Nodes, coveredCellids);
 					// adv1
 					if(qParams.type >= 2 && adv1(cellid2Nodes, clusteredCells, availableCellids))	continue;
-					ngb = null;
+					ngbNodes = null;
 					// adv2
 					if(qParams.type >= 3) {
-						ngb = adv2(qParams, clusterId, centerNode, cellid2Nodes, clusteredCells, availableCellids);
+						ngbNodes = adv2(qParams, clusterId, centerNode, cellid2Nodes, clusteredCells, availableCellids);
 					}
-					if(null == ngb) {
+					if(null == ngbNodes) {
 						qp.runTimeRec.setFrontTime();
-						ngb = rtree.rangeQueryReDescendNodes(qParams, clusterId, centerNode, nodeCol, allLocations);
-//						ngb = rtree.rangeQuery(qParams, clusterId, centerNode, nodeCol, allLocations);
+						if(qParams.type == 2 || qParams.type == 3) {
+							ngbNodes = rtree.rangeQueryReDescendNodes(qParams, clusterId, centerNode, nodeCol, allLocations);
+//							ngb = rtree.rangeQuery(qParams, clusterId, centerNode, nodeCol, allLocations);
+						} else if(qParams.type == 4) {
+							ngb = fastRange(cellid2Nodes, clusteredCells, qParams, clusterId, centerNode, availableCellids);
+							ngbNodes = null;
+							if(ngb != null)	ngbNodes = ngb.toListContainAll();
+						}
 						qp.runTimeRec.numRangeRtree++;
 						qp.runTimeRec.timeRangeRtree += qp.runTimeRec.getTimeSpan();
-					}
+					} 
 				}
 				
-                if(ngb == null || ngb.size() < qParams.minpts) {
+                if(ngbNodes == null || ngbNodes.size() < qParams.minpts) {
                     continue;
                 } else {
-					for(Node nd : ngb) {
+					for(Node nd : ngbNodes) {
 						if(nd.isNoise()) {
 							addedNodes.add(nd);
 							nd.clusterId = clusterId;
@@ -419,6 +437,35 @@ public class AlgEucDisBase implements AlgInterface{
 			return new Cluster(clusterId, addedNodes, qp);
 		} else return null;
 	}
+	
+	
+	
+	public NgbNodes fastRange(Map<Integer, List<Node>> cellid2Nodes, Map<Integer, Integer> clusteredCells,
+			QueryParams qParams, int clusterId, Node qNode, List<CellSign> availableCellids){
+		NgbNodes ngb = new NgbNodes();	
+		Integer cid = null;
+		List<Node> nds = null;
+		double dis = 0.0;
+		for(CellSign cs : availableCellids) {
+			if(null != (cid = clusteredCells.get(cs.getId())) && cid != clusterId)	continue;
+			nds = cellid2Nodes.get(cs.getId());
+			for(Node nd : nds) {
+				dis = qNode.location.getMinimumDistance(nd.location);
+				if(dis <= qParams.epsilon) {
+					if(nd.hasInCluster(clusterId)) {
+						ngb.add(NgbNodes.signUsedKey, nd);;
+					} else if(!nd.isClassified()){
+						ngb.add(dis, nd);
+					}
+				}
+			}
+		}
+		if(ngb.size() == 0)	return null;
+		return ngb;
+	}
+	
+	
+	
 	
 	/**
 	 * @param args

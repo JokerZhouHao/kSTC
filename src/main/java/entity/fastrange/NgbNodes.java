@@ -49,6 +49,14 @@ public class NgbNodes {
 		return nds;
 	}
 	
+	public LinkedList<Node> toListContainAll(){
+		LinkedList<Node> nds = new LinkedList<>();
+		for(Entry<Double, LinkedList<Node>> en : nodes.entrySet()) {
+			nds.addAll(en.getValue());
+		}
+		return nds;
+	}
+	
 	public int size() {
 		return size;
 	}

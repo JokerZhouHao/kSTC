@@ -10,7 +10,12 @@ import index.optic.NeighborsNode;
 import utility.DatasetType;
 import utility.MComparator;
 
+class A1{}
+class A2 extends A1{}
+
 public class T1 {
+	
+	
 	public static void main(String[] args) {
 //		System.out.println(Path.getBasePath());
 //		System.out.println(DatasetType.values()[0]);
@@ -52,6 +57,8 @@ public class T1 {
 		
 //		System.out.println(Math.pow(2, 10000));
 		
-		System.out.println(Integer.MAX_VALUE);
+//		System.out.println(Integer.MAX_VALUE);
+		A2 a2 = new A2();
+		System.out.println(a2.getClass().equals(A2.class));
 	}
 }

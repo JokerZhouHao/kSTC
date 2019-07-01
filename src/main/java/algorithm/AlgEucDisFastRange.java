@@ -42,17 +42,17 @@ import utility.io.TimeUtility;
  * @author ZhouHao
  * @since 2018年11月16日
  */
-public class AlgEucDisFastRange implements AlgInterface{
+public class AlgEucDisFastRange extends AlgEucDisBase{
 	
-	private Point[] allLocations = null;
-	private CellidPidWordsIndex cellidWIndex = null;
-	private NoiseRecoder noiseRecoder = new NoiseRecoder();
-	private SGPLInfo sgplInfo = null;
-//	private Circle sCircle = new Circle(0.0, new double[2]);
-	private Circle sCircle = null;
+//	private Point[] allLocations = null;
+//	private CellidPidWordsIndex cellidWIndex = null;
+//	private NoiseRecoder noiseRecoder = new NoiseRecoder();
+//	private SGPLInfo sgplInfo = null;
+////	private Circle sCircle = new Circle(0.0, new double[2]);
+//	private Circle sCircle = null;
 	
 	private Map<Integer, Integer> tempClusteredCells = new HashMap<>();
-	private QueryParams qp = null;
+//	private QueryParams qp = null;
 	
 	
 //	public AlgEucDisFastRange() throws Exception{
@@ -67,24 +67,25 @@ public class AlgEucDisFastRange implements AlgInterface{
 	
 	
 	public AlgEucDisFastRange(QueryParams qp) throws Exception {
-		this.sgplInfo = qp.sgplInfo;
-		sCircle = new Circle(0.0, new double[2], sgplInfo);
-		this.qp = qp;
-		init();
+		super(qp);
+//		this.sgplInfo = qp.sgplInfo;
+//		sCircle = new Circle(0.0, new double[2], sgplInfo);
+//		this.qp = qp;
+//		init();
 	}
 	
-	private void init() throws Exception{
-		if(Global.allLocations == null)	allLocations = FileLoader.loadPoints(Global.pathIdNormCoord);
-		else allLocations = Global.allLocations;
-		
-		String path =  Global.getPathCellidRtreeidOrPidWordsIndex(qp.rtreeFanout, qp.h);
-		cellidWIndex = new CellidPidWordsIndex(path);
-		cellidWIndex.openIndexReader();
-	}
+//	private void init() throws Exception{
+//		if(Global.allLocations == null)	allLocations = FileLoader.loadPoints(Global.pathIdNormCoord);
+//		else allLocations = Global.allLocations;
+//		
+//		String path =  Global.getPathCellidRtreeidOrPidWordsIndex(qp.rtreeFanout, qp.h);
+//		cellidIndex = new CellidPidWordsIndex(path);
+//		cellidIndex.openIndexReader();
+//	}
 	
-	public void free() throws Exception{
-		cellidWIndex.close();
-	}
+//	public void free() throws Exception{
+//		cellidIndex.close();
+//	}
 	
 	/**
 	 * excute query
@@ -107,7 +108,19 @@ public class AlgEucDisFastRange implements AlgInterface{
 //		sCircle.radius = qParams.epsilon + Global.zorderOffset;	// 处理圆刚好压线的问题
 		sCircle.radius = qParams.epsilon;
 //		Map<Integer, List<Node>> cellid2Nodes = cellidWIndex.searchWords(qParams, allLocations);
-		Cellid2Nodes cid2nds = cellidWIndex.searchWordsReCellid2Nodes(qParams, allLocations);
+		
+//		NodeCollection nodeCol = cellidIndex.searchWordsReNodeCol(qParams, allLocations);
+//		if(nodeCol == null) {
+//			qp.runTimeRec.timeTotal = 0;
+//			qp.runTimeRec.timeTotalPrepareData = 0;
+//			return null;
+//		}
+//		Cellid2Nodes cid2nds = new Cellid2Nodes();
+//		for(Node nd : nodeCol.getPNodes()) {
+//			cid2nds.add(nd);
+//		}
+		
+		Cellid2Nodes cid2nds = cellidIndex.searchWordsReCellid2Nodes(qParams, allLocations);
 		if(null == cid2nds) {
 			qp.runTimeRec.timeTotal = 0;
 			qp.runTimeRec.timeTotalPrepareData = 0;
@@ -125,10 +138,12 @@ public class AlgEucDisFastRange implements AlgInterface{
 		
 		qp.runTimeRec.setFrontTime();
 		PNodeCollection disPNodeCol = new PNodeCollection(cid2nds.pNodes).sortByDistance();
+//		PNodeCollection disPNodeCol = nodeCol.getPNodeCollection().sortByDistance();
 		qp.runTimeRec.timeSortByDistance = qp.runTimeRec.getTimeSpan();
 		
 		qp.runTimeRec.setFrontTime();
 		PNodeCollection scorePNodeCol = new PNodeCollection(cid2nds.pNodes).sortByScore();
+//		PNodeCollection scorePNodeCol = nodeCol.getPNodeCollection().copy().sortByScore();
 		qp.runTimeRec.timeSortByScore = qp.runTimeRec.getTimeSpan();
 		
 		qp.runTimeRec.timeTotalPrepareData = System.nanoTime() - qp.runTimeRec.timeTotalPrepareData;
@@ -162,7 +177,9 @@ public class AlgEucDisFastRange implements AlgInterface{
 				else noiseRecoder.addScoNoise(new NodeNeighbors(curNode, curNode.neighbors));
 				continue;
 			}
-			cluster = getCluster(cid2nds.cellid2Nodes, clusteredCells, qParams, curClusterId, curNode, signAccessDis);
+//			cluster = getCluster(cid2nds.cellid2Nodes, clusteredCells, qParams, curClusterId, curNode, signAccessDis);
+			cluster = super.getCluster(qParams, curClusterId, curNode, null, signAccessDis, 
+										cid2nds.cellid2Nodes, clusteredCells);
 			qp.runTimeRec.numGetCluster++;
 			if(null != cluster) {
 				sClusters.add(cluster);
