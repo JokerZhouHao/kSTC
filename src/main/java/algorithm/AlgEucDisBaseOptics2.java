@@ -37,7 +37,7 @@ import utility.io.IOUtility;
  * @author ZhouHao
  * @since 2018年12月4日
  */
-public class AlgEucDisBaseOptics implements AlgInterface{
+public class AlgEucDisBaseOptics2 implements AlgInterface{
 	
 	protected Point[] allLocations = null;
 	protected CellidPidWordsIndex cellidWIndex = null;
@@ -59,7 +59,7 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 //	}
 	
 	
-	public AlgEucDisBaseOptics(QueryParams qp) throws Exception {
+	public AlgEucDisBaseOptics2(QueryParams qp) throws Exception {
 		this.sgplInfo = qp.sgplInfo;
 		sCircle = new Circle(0.0, new double[2], sgplInfo);
 		this.qp = qp;
@@ -118,12 +118,7 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 		qp.runTimeRec.timeOpticFunc = System.nanoTime() - qp.runTimeRec.timeOpticFunc;
 		
 		qp.runTimeRec.timeExcuteQueryFunc = System.nanoTime();
-		SortedClusters sc = null;
-		if(this.getClass().equals(AlgEucDisBaseOptics.class)) {
-			sc = excuteQuery(qParams, pathOrderedFile, cid2nds.cellid2Nodes, sortedNodes);
-		} else if(this.getClass().equals(AlgEucDisBaseOpticsWu.class)) {
-			sc = excuteQueryByWu(qParams, pathOrderedFile, cid2nds.pNodes, sortedNodes);
-		}
+		SortedClusters sc = excuteQueryByWu(qParams, pathOrderedFile, cid2nds.pNodes, sortedNodes);
 		qp.runTimeRec.timeExcuteQueryFunc = System.nanoTime() - qp.runTimeRec.timeExcuteQueryFunc;
 		
 		qp.runTimeRec.timeTotalPrepareData = qp.runTimeRec.timeSearchTerms + qp.runTimeRec.timeSortByDistance + 

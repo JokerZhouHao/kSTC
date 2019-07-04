@@ -10,72 +10,12 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="PathUtility.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/utility/PathUtility.py">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="DrawKNNNeighborDis.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/draw/DrawKNNNeighborDis.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="373">
-              <caret line="22" column="18" lean-forward="true" selection-start-line="22" selection-start-column="18" selection-end-line="22" selection-end-column="18" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="StatisticData.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Data/StatisticData.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1540">
-              <caret line="70" lean-forward="true" selection-start-line="70" selection-end-line="70" />
-              <folding>
-                <element signature="e#0#31#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Global.py" pinned="false" current-in-tab="false">
-        <entry file="file://D:/nowMask/KnowledgeBase/orginal_code_maven/python_draw_graph/utility/Global.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="220">
-              <caret line="10" column="43" lean-forward="true" selection-start-line="10" selection-start-column="43" selection-end-line="10" selection-end-column="43" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DBpediaDraw20190612.py" pinned="false" current-in-tab="false">
-        <entry file="file://D:/nowMask/KnowledgeBase/orginal_code_maven/python_draw_graph/figure/DBpediaDraw20190612.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="266">
-              <caret line="1049" column="75" lean-forward="true" selection-start-line="1049" selection-start-column="75" selection-end-line="1049" selection-end-column="75" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="orginaldata.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/draw/orginaldata.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="278">
-              <caret line="434" column="81" lean-forward="true" selection-start-line="434" selection-start-column="81" selection-end-line="434" selection-end-column="81" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
-        <entry file="file://C:/install/python36_64/Lib/site-packages/matplotlib/__init__.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="130">
-              <caret line="1435" column="4" selection-start-line="1435" selection-start-column="4" selection-end-line="1435" selection-end-column="4" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DrawSampleResult.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/draw/DrawSampleResult.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="308">
-              <caret line="35" lean-forward="true" selection-start-line="35" selection-end-line="35" />
+            <state relative-caret-position="176">
+              <caret line="113" lean-forward="true" selection-start-line="113" selection-end-line="113" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
               </folding>
@@ -100,7 +40,9 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://D:/nowMask/KnowledgeBase/orginal_code_maven/python_draw_graph/figure/DBpediaDraw20190612.py" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/draw/DrawKNNNeighborDis.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/draw/DrawSampleResult.py" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/draw/orginaldata.py" root0="SKIP_INSPECTION" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -127,16 +69,17 @@
         <option value="D:/nowMask/KnowledgeBase/orginal_code_maven/python_draw_graph/Data/StatisticData.py" />
         <option value="D:/nowMask/KnowledgeBase/orginal_code_maven/python_draw_graph/figure/test.py" />
         <option value="$PROJECT_DIR$/utility/PathUtility.py" />
-        <option value="$PROJECT_DIR$/utility/io.py" />
         <option value="D:/nowMask/KnowledgeBase/orginal_code_maven/python_draw_graph/figure/YagoDraw20190612.py" />
         <option value="D:/nowMask/KnowledgeBase/orginal_code_maven/python_draw_graph/figure/DBpediaDraw20190612.py" />
         <option value="$PROJECT_DIR$/Data/StatisticData.py" />
+        <option value="$PROJECT_DIR$/utility/io.py" />
         <option value="$PROJECT_DIR$/draw/orginaldata.py" />
         <option value="$PROJECT_DIR$/draw/DrawSampleResult.py" />
+        <option value="$PROJECT_DIR$/draw/DrawKNNNeighborDis.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="359" />
     <option name="y" value="96" />
     <option name="width" value="1366" />
@@ -175,36 +118,6 @@
             <path>
               <item name="kSTC_python" type="b2602c69:ProjectViewProjectNode" />
               <item name="python_draw" type="47feb1d3:ProjectViewModuleNode" />
-              <item name="kSTC_python" type="462c0819:PsiDirectoryNode" />
-              <item name="draw" type="462c0819:PsiDirectoryNode" />
-              <item name="DrawSampleResult.py" type="8704e2dd:PyFileNode" />
-            </path>
-            <path>
-              <item name="kSTC_python" type="b2602c69:ProjectViewProjectNode" />
-              <item name="python_draw" type="47feb1d3:ProjectViewModuleNode" />
-              <item name="kSTC_python" type="462c0819:PsiDirectoryNode" />
-              <item name="draw" type="462c0819:PsiDirectoryNode" />
-              <item name="DrawSampleResult.py" type="8704e2dd:PyFileNode" />
-              <item name="Bar" type="dd8bbb05:PyElementNode" />
-            </path>
-            <path>
-              <item name="kSTC_python" type="b2602c69:ProjectViewProjectNode" />
-              <item name="python_draw" type="47feb1d3:ProjectViewModuleNode" />
-              <item name="kSTC_python" type="462c0819:PsiDirectoryNode" />
-              <item name="draw" type="462c0819:PsiDirectoryNode" />
-              <item name="orginaldata.py" type="8704e2dd:PyFileNode" />
-            </path>
-            <path>
-              <item name="kSTC_python" type="b2602c69:ProjectViewProjectNode" />
-              <item name="python_draw" type="47feb1d3:ProjectViewModuleNode" />
-              <item name="kSTC_python" type="462c0819:PsiDirectoryNode" />
-              <item name="draw" type="462c0819:PsiDirectoryNode" />
-              <item name="orginaldata.py" type="8704e2dd:PyFileNode" />
-              <item name="Scatter" type="dd8bbb05:PyElementNode" />
-            </path>
-            <path>
-              <item name="kSTC_python" type="b2602c69:ProjectViewProjectNode" />
-              <item name="python_draw" type="47feb1d3:ProjectViewModuleNode" />
               <item name="python_draw_graph" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -212,29 +125,6 @@
               <item name="python_draw" type="47feb1d3:ProjectViewModuleNode" />
               <item name="python_draw_graph" type="462c0819:PsiDirectoryNode" />
               <item name="figure" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="kSTC_python" type="b2602c69:ProjectViewProjectNode" />
-              <item name="python_draw" type="47feb1d3:ProjectViewModuleNode" />
-              <item name="python_draw_graph" type="462c0819:PsiDirectoryNode" />
-              <item name="figure" type="462c0819:PsiDirectoryNode" />
-              <item name="DBpediaDraw20190612.py" type="8704e2dd:PyFileNode" />
-            </path>
-            <path>
-              <item name="kSTC_python" type="b2602c69:ProjectViewProjectNode" />
-              <item name="python_draw" type="47feb1d3:ProjectViewModuleNode" />
-              <item name="python_draw_graph" type="462c0819:PsiDirectoryNode" />
-              <item name="figure" type="462c0819:PsiDirectoryNode" />
-              <item name="DBpediaDraw20190612.py" type="8704e2dd:PyFileNode" />
-              <item name="Bar" type="dd8bbb05:PyElementNode" />
-            </path>
-            <path>
-              <item name="kSTC_python" type="b2602c69:ProjectViewProjectNode" />
-              <item name="python_draw" type="47feb1d3:ProjectViewModuleNode" />
-              <item name="python_draw_graph" type="462c0819:PsiDirectoryNode" />
-              <item name="figure" type="462c0819:PsiDirectoryNode" />
-              <item name="DBpediaDraw20190612.py" type="8704e2dd:PyFileNode" />
-              <item name="LineChart" type="dd8bbb05:PyElementNode" />
             </path>
           </expand>
           <select />
@@ -266,8 +156,8 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.DrawSampleResult">
-    <configuration name="DBpediaDraw20190612" type="PythonConfigurationType" factoryName="Python" temporary="true">
+  <component name="RunManager" selected="Python.DrawKNNNeighborDis">
+    <configuration name="DrawKNNNeighborDis" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="python_draw" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -275,11 +165,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="D:/nowMask/KnowledgeBase/orginal_code_maven/python_draw_graph/figure" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/draw" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="D:/nowMask/KnowledgeBase/orginal_code_maven/python_draw_graph/figure/DBpediaDraw20190612.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/draw/DrawKNNNeighborDis.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -358,19 +248,19 @@
       <option name="MODULE_MODE" value="false" />
     </configuration>
     <list>
-      <item itemvalue="Python.DBpediaDraw20190612" />
       <item itemvalue="Python.StatisticData" />
       <item itemvalue="Python.YagoDraw20190612" />
       <item itemvalue="Python.DrawSampleResult" />
       <item itemvalue="Python.orginaldata" />
+      <item itemvalue="Python.DrawKNNNeighborDis" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.DrawKNNNeighborDis" />
         <item itemvalue="Python.DrawSampleResult" />
         <item itemvalue="Python.orginaldata" />
         <item itemvalue="Python.StatisticData" />
         <item itemvalue="Python.YagoDraw20190612" />
-        <item itemvalue="Python.DBpediaDraw20190612" />
       </list>
     </recent_temporary>
   </component>
@@ -378,13 +268,13 @@
     <configuration />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18387777" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15700738" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Python Console" order="8" weight="0.32947367" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.16105263" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.25157896" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.26526317" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info id="Structure" order="1" weight="0.25" />
@@ -418,21 +308,17 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="16" />
+      <option name="time" value="18" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/draw/orginaldata.py">
+    <entry file="file://$PROJECT_DIR$/draw/DrawSampleResult.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3542">
-          <caret line="161" column="24" lean-forward="true" selection-start-line="161" selection-start-column="24" selection-end-line="161" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/utility/myplt.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1936">
-          <caret line="88" column="37" selection-start-line="88" selection-start-column="12" selection-end-line="88" selection-end-column="37" />
+        <state relative-caret-position="2992">
+          <caret line="140" column="18" lean-forward="true" selection-start-line="140" selection-start-column="18" selection-end-line="140" selection-end-column="18" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -674,13 +560,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://C:/install/python36_64/Lib/site-packages/matplotlib/axes/_axes.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="89210">
-          <caret line="4099" column="8" selection-start-line="4099" selection-start-column="8" selection-end-line="4099" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/utility/myplt.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
@@ -692,13 +571,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="440">
           <caret line="27" selection-start-line="27" selection-end-line="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/utility/io.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="22">
-          <caret line="31" column="8" selection-start-line="31" selection-start-column="8" selection-end-line="31" selection-end-column="8" />
         </state>
       </provider>
     </entry>
@@ -730,20 +602,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/utility/PathUtility.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="373">
-          <caret line="22" column="18" lean-forward="true" selection-start-line="22" selection-start-column="18" selection-end-line="22" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Data/StatisticData.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1540">
           <caret line="70" lean-forward="true" selection-start-line="70" selection-end-line="70" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -756,18 +618,22 @@
     </entry>
     <entry file="file://D:/nowMask/KnowledgeBase/orginal_code_maven/python_draw_graph/figure/DBpediaDraw20190612.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="1049" column="75" lean-forward="true" selection-start-line="1049" selection-start-column="75" selection-end-line="1049" selection-end-column="75" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="328">
+          <caret line="320" column="49" lean-forward="true" selection-start-line="320" selection-start-column="49" selection-end-line="320" selection-end-column="49" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/draw/orginaldata.py">
+    <entry file="file://$PROJECT_DIR$/utility/PathUtility.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="278">
-          <caret line="434" column="81" lean-forward="true" selection-start-line="434" selection-start-column="81" selection-end-line="434" selection-end-column="81" />
+        <state relative-caret-position="272">
+          <caret line="22" column="18" lean-forward="true" selection-start-line="22" selection-start-column="18" selection-end-line="22" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/install/python36_64/Lib/site-packages/matplotlib/axes/_axes.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="201">
+          <caret line="1294" lean-forward="true" selection-start-line="1294" selection-end-line="1294" />
         </state>
       </provider>
     </entry>
@@ -778,10 +644,37 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/utility/io.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="264">
+          <caret line="12" column="98" selection-start-line="12" selection-start-column="98" selection-end-line="12" selection-end-column="98" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/draw/orginaldata.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="8910">
+          <caret line="415" column="117" selection-start-line="415" selection-start-column="117" selection-end-line="415" selection-end-column="117" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/draw/DrawSampleResult.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="35" lean-forward="true" selection-start-line="35" selection-end-line="35" />
+        <state relative-caret-position="44">
+          <caret line="306" column="17" lean-forward="true" selection-start-line="306" selection-start-column="17" selection-end-line="306" selection-end-column="17" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/draw/DrawKNNNeighborDis.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="113" lean-forward="true" selection-start-line="113" selection-end-line="113" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
           </folding>

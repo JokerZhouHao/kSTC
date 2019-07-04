@@ -249,7 +249,7 @@ public class Global {
 //							",maxPidNeighborsBytes=" + (String)configProps.get("maxPidNeighborsBytes");
 		pathPidNeighborLen = getPathPidNeighborLen(Integer.parseInt((String)configProps.get("maxPidNeighborsBytes")));
 		
-		pathOrderObjects = outPath + (String)configProps.get("fileOrderObjects") + suffixFile;
+		pathOrderObjects = outPath + "res" + File.separator + (String)configProps.get("fileOrderObjects") + suffixFile;
 		pathSample = inputPath + "sample" + File.separator;
 		pathResult = inputPath + "result" + File.separator;
 		
@@ -397,7 +397,11 @@ public class Global {
 			
 			Global.initRTreeParameters();
 			
-			Global.allLocations = FileLoader.loadPoints(Global.pathIdNormCoord);
+			try {
+				Global.allLocations = FileLoader.loadPoints(Global.pathIdNormCoord);
+			} catch (Exception e) {
+				System.out.println("Global load allLocations fail !");
+			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();

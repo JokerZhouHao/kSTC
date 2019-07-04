@@ -10,7 +10,7 @@ class Global:
     #### ([-125.0,28.0],[15.0,60.0])
     datasetType = 'yelp_academic_dataset_business'
     pathInput = 'D:\\kSTC\\Dataset\\' + datasetType + '\\[-125.0,28.0],[15.0,60.0]\\input\\'
-    pathOutput = 'D:\\kSTC\\Dataset\\' + datasetType + '\\[-125.0,28.0],[15.0,60.0]\\output\\'
+    pathOutput = 'D:\\kSTC\\Dataset\\' + datasetType + '\\[-125.0,28.0],[15.0,60.0]\\output\\res\\'
 
     sample_res_base_path = 'D:\\kSTC\\sample_result\\res\\000_dataset\\'
 

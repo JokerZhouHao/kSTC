@@ -386,10 +386,10 @@ pathCoord = Global.pathCoord + '[normalized]'
 # Scatter.draw_result(pathCoord, pathResultAlgEucFast, s=20, show=True, title=pathResultAlgEucFast, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
 
 ##############   optic wu #############
-# pathResultAlgEucBaseOpticsWu = Global.pathOutput + 'result_ecu_base_optics_wurFanout=50.alpha=0.5.steepD=0.1.h=10.ns=200.t=0.k=10.nw=1.mpts=5.eps=0.001.xi=0.001.maxPNeiByte=2147483631'
+# pathResultAlgEucBaseOpticsWu = Global.pathOutput + 'result_ecu_base_optics_rFanout=50.alpha=0.5.steepD=0.1.h=8.om=1.oe=1.0E-4.ns=200.t=4.k=100000.nw=1.mpts=5.eps=0.001.xi=0.001.maxPNeiByte=2147483631'
 # Scatter.draw_result(pathCoord, pathResultAlgEucBaseOpticsWu, s=20, show=True, title=pathResultAlgEucBaseOpticsWu, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
 #
-# pathResultAlgEucBaseOpticsWu = Global.pathOutput + 'result_ecu_base_optics_wurFanout=50.alpha=0.5.steepD=0.1.h=10.ns=200.t=0.k=10000.nw=1.mpts=5.eps=0.001.xi=0.001.maxPNeiByte=2147483631'
+# pathResultAlgEucBaseOpticsWu = Global.pathOutput + 'result_ecu_base_optics_wu_rFanout=50.alpha=0.5.steepD=0.1.h=8.om=1.oe=1.0E-4.ns=200.t=4.k=100000.nw=1.mpts=5.eps=0.001.xi=0.001.maxPNeiByte=2147483631'
 # Scatter.draw_result(pathCoord, pathResultAlgEucBaseOpticsWu, s=20, show=True, title=pathResultAlgEucBaseOpticsWu, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
 #
 # pathResultAlgEucBaseOpticsWu = Global.pathOutput + 'result_ecu_base_optics_wurFanout=50.alpha=0.5.steepD=0.1.h=10.ns=200.t=0.k=10.nw=1.mpts=5.eps=1.0E-4.xi=1.0E-4.maxPNeiByte=2147483631'
@@ -405,11 +405,15 @@ pathCoord = Global.pathCoord + '[normalized]'
 # Scatter.draw_result(pathCoord, pathResultAlgEucAdvancedOpticsWu, s=20, show=True, title=pathResultAlgEucAdvancedOpticsWu, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
 
 ##############   optic #############
-# pathResultAlgEucBaseOptics = Global.pathOutput + 'result_ecu_base_optics.txt'
-# Scatter.draw_result(pathCoord, pathResultAlgEucBaseOptics, s=50, show=True, title=pathResultAlgEucBaseOptics, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
+# pathResultAlgEucBaseOptics = Global.pathOutput + 'result_ecu_base_optics_rFanout=50.alpha=0.5.steepD=0.1.h=8.om=1.oe=1.0E-4.ns=200.t=4.k=100000.nw=1.mpts=5.eps=0.001.xi=0.001.maxPNeiByte=2147483631'
+# Scatter.draw_result(pathCoord, pathResultAlgEucBaseOptics, s=10, show=True, title=pathResultAlgEucBaseOptics, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
 
-# pathResultAlgEucAdvancedOptics = Global.pathOutput + 'result_ecu_advanced_optics.txt'
-# Scatter.draw_result(pathCoord, pathResultAlgEucAdvancedOptics, s=10, show=True, title=pathResultAlgEucAdvancedOptics)
+# pathResultAlgEucBaseOptics = Global.pathOutput + 'result_ecu_base_optics_rFanout=50.alpha=0.5.steepD=0.3.h=8.om=1.oe=1.0E-4.ns=200.t=4.k=100000.nw=1.mpts=5.eps=0.001.xi=0.001.maxPNeiByte=2147483631'
+# Scatter.draw_result(pathCoord, pathResultAlgEucBaseOptics, s=10, show=True, title=pathResultAlgEucBaseOptics, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
+
+
+pathResultAlgEucAdvancedOptics = Global.pathOutput + 'result_ecu_base_optics_wu_rFanout=50.alpha=0.5.steepD=0.1.h=8.om=1.oe=1.0E-4.ns=200.t=4.k=100000.nw=1.mpts=5.eps=0.001.xi=0.001.maxPNeiByte=2147483631'
+Scatter.draw_result(pathCoord, pathResultAlgEucAdvancedOptics, s=10, show=True, title=pathResultAlgEucAdvancedOptics)
 
 
 
@@ -428,26 +432,51 @@ pathCoord = Global.pathCoord + '[normalized]'
 ########## draw_reachability_dis_cluster ########
 # path_reach_dis = Global.pathOutput + 'order_objects.obj([-112.41,33.46],[-111.9,33.68])_AlgEucDisAdvancedOpticsWu'
 # pathResultAlgEucFast = Global.pathOutput + 'result_ecu_fast.txt'
-# # 将base的结果显示在optic的distance图上
+# # # 将base的结果显示在optic的distance图上
 # Line.draw_reachability_dis_base(path_reach_dis, pathResultAlgEucFast, s=1, title=pathResultAlgEucFast, max_y=0.01)
 
 
-# path_reach_dis = Global.pathOutput + 'order_objects.obj_AlgEucDisAdvancedOpticsWu'
-# pathResultAlgEucAdvancedOpticsWu = Global.pathOutput + 'result_ecu_advanced_optics_wu.txt'
+# path_reach_dis = Global.pathOutput + 'order_objects.obj_AlgEucDisBaseOpticsWu_rFanout=50.alpha=0.5.steepD=0.1.h=8.om=1.oe=1.0E-4.ns=200.t=4.k=100000.nw=1.mpts=5.eps=0.001.xi=0.001.maxPNeiByte=2147483631'
+# pathResultAlgEucAdvancedOpticsWu = Global.pathOutput + 'result_ecu_base_optics_wu_rFanout=50.alpha=0.5.steepD=0.1.h=8.om=1.oe=1.0E-4.ns=200.t=4.k=100000.nw=1.mpts=5.eps=0.001.xi=0.001.maxPNeiByte=2147483631'
 # # 将optic的结果显示在distance图上
-# Line.draw_reachability_dis_cluster(path_reach_dis, pathResultAlgEucAdvancedOpticsWu, s=1, title=pathResultAlgEucAdvancedOpticsWu, max_y=0.0002)
-
-
+# Line.draw_reachability_dis_cluster(path_reach_dis, pathResultAlgEucAdvancedOpticsWu, s=1, title=pathResultAlgEucAdvancedOpticsWu, max_y=0.001)
+#
+# path_reach_dis = Global.pathOutput + 'order_objects.obj_AlgEucDisBaseOptics_rFanout=50.alpha=0.5.steepD=0.1.h=8.om=1.oe=1.0E-4.ns=200.t=4.k=100000.nw=1.mpts=5.eps=0.001.xi=0.001.maxPNeiByte=2147483631'
+# pathResultAlgEucAdvancedOpticsWu = Global.pathOutput + 'result_ecu_base_optics_rFanout=50.alpha=0.5.steepD=0.1.h=8.om=1.oe=1.0E-4.ns=200.t=4.k=100000.nw=1.mpts=5.eps=0.001.xi=0.001.maxPNeiByte=2147483631'
+# # 将optic的结果显示在distance图上
+# Line.draw_reachability_dis_cluster(path_reach_dis, pathResultAlgEucAdvancedOpticsWu, s=1, title=pathResultAlgEucAdvancedOpticsWu, max_y=0.001)
 
 
 ########## draw k nearest distance ########
-k_paths = []
-k_paths.append(Global.pathOutput + 'KNNNeighborDis_3.txt')
-k_paths.append(Global.pathOutput + 'KNNNeighborDis_5.txt')
-k_paths.append(Global.pathOutput + 'KNNNeighborDis_10.txt')
-k_paths.append(Global.pathOutput + 'KNNNeighborDis_50.txt')
-k_paths.append(Global.pathOutput + 'KNNNeighborDis_100.txt')
-Scatter.draw_k_nearest_distance(k_paths, s=1, title="KNNNeighborDis")
+# k_paths = []
+# k_paths.append(Global.pathOutput + 'KNNNeighborDis_3.txt')
+# k_paths.append(Global.pathOutput + 'KNNNeighborDis_5.txt')
+# k_paths.append(Global.pathOutput + 'KNNNeighborDis_10.txt')
+# k_paths.append(Global.pathOutput + 'KNNNeighborDis_50.txt')
+# k_paths.append(Global.pathOutput + 'KNNNeighborDis_100.txt')
+# Scatter.draw_k_nearest_distance(k_paths, s=1, title="KNNNeighborDis")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

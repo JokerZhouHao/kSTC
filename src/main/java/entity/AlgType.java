@@ -5,6 +5,9 @@ public enum AlgType {
 	AlgEucDisBaseAdv1,
 	AlgEucDisBaseAdv1_2,
 	AlgEucDisFastRange,
+	
+	AlgEucDisBaseOptics,
+	
 	AlgEucDisBaseOpticsWu,
-	AlgEucDisAdvancedOpticsWu
+	AlgEucDisAdvancedOpticsWu,
 }

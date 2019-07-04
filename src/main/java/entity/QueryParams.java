@@ -4,8 +4,10 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import algorithm.AlgEucDisAdvancedOpticsWu;
 import algorithm.AlgEucDisBase;
@@ -150,6 +152,7 @@ public class QueryParams {
 	
 	public static List<QueryParams> load(String path) throws Exception {
 		List<QueryParams> qps = new ArrayList<>();
+		Set<QueryParams> hasAddQp = new HashSet<>();
 		QueryParams qp = null;
 		BufferedReader br = IOUtility.getBR(path);
 		String line = null;
@@ -163,7 +166,13 @@ public class QueryParams {
 					Integer.parseInt(arr[8]), Integer.parseInt(arr[9]), Integer.parseInt(arr[10]), 
 					Double.parseDouble(arr[11]), Double.parseDouble(arr[12]),
 					Integer.parseInt(arr[13]));
-			qps.add(qp);
+			if(!hasAddQp.contains(qp)) {
+				qps.add(qp);
+				hasAddQp.add(qp);
+			} else {
+				System.out.println(qp);
+			}
+			
 		}
 		br.close();
 		if(qps.isEmpty())	return null;
@@ -178,6 +187,74 @@ public class QueryParams {
 							numSample, type, k, numWord, minpts, epsilon, xi, maxPidNeighborsBytes);
 	}
 	
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		long temp;
+		temp = Double.doubleToLongBits(alpha);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(epsilon);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + h;
+		result = prime * result + k;
+		result = prime * result + maxPidNeighborsBytes;
+		result = prime * result + minpts;
+		result = prime * result + numSample;
+		result = prime * result + numWord;
+		temp = Double.doubleToLongBits(opticEpsilon);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + opticMinpts;
+		result = prime * result + rtreeFanout;
+		temp = Double.doubleToLongBits(steepDegree);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + type;
+		temp = Double.doubleToLongBits(xi);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		QueryParams other = (QueryParams) obj;
+		if (Double.doubleToLongBits(alpha) != Double.doubleToLongBits(other.alpha))
+			return false;
+		if (Double.doubleToLongBits(epsilon) != Double.doubleToLongBits(other.epsilon))
+			return false;
+		if (h != other.h)
+			return false;
+		if (k != other.k)
+			return false;
+		if (maxPidNeighborsBytes != other.maxPidNeighborsBytes)
+			return false;
+		if (minpts != other.minpts)
+			return false;
+		if (numSample != other.numSample)
+			return false;
+		if (numWord != other.numWord)
+			return false;
+		if (Double.doubleToLongBits(opticEpsilon) != Double.doubleToLongBits(other.opticEpsilon))
+			return false;
+		if (opticMinpts != other.opticMinpts)
+			return false;
+		if (rtreeFanout != other.rtreeFanout)
+			return false;
+		if (Double.doubleToLongBits(steepDegree) != Double.doubleToLongBits(other.steepDegree))
+			return false;
+		if (type != other.type)
+			return false;
+		if (Double.doubleToLongBits(xi) != Double.doubleToLongBits(other.xi))
+			return false;
+		return true;
+	}
+
 	@Override
 	public String toString() {
 		return String.format("rFanout=%s.alpha=%s.steepD=%s.h=%s.om=%s.oe=%s.ns=%s.t=%s.k=%s.nw=%s.mpts=%s.eps=%s.xi=%s.maxPNeiByte=%s",
@@ -206,7 +283,6 @@ public class QueryParams {
 //		
 		System.out.println(QueryParams.resFileName(qps.get(0)));
 		System.out.println(qps.get(0));
-		
 	}
 	
 }

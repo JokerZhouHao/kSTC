@@ -42,6 +42,7 @@ public class ZipBase64Reader {
 				zipFile = new ZipFile(new File(filePath));
 				Enumeration<ZipArchiveEntry> enu = zipFile.getEntries();
 				ZipArchiveEntry zae = null;
+				
 				boolean sign = false;
 				while(enu.hasMoreElements()) {
 					zae = enu.nextElement();
@@ -60,6 +61,7 @@ public class ZipBase64Reader {
 			}
 			zais = new ZipArchiveInputStream(new BufferedInputStream(new FileInputStream(new File(filePath))));;
 			curZipEntry = zais.getNextZipEntry();
+			
 			bufferedReader = new BufferedReader(new InputStreamReader(zais));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -108,8 +110,8 @@ public class ZipBase64Reader {
 	
 	public static void main(String[] args) throws Exception{
 		
-		String path = "E:\\mask\\kSTC\\DataSet\\yelp_dataset\\yelp_dataset.tar.gz";
-		ZipBase64Reader rs = new ZipBase64Reader(path, "yelp_academic_dataset_business.json");
+		String path = "D:\\kSTC\\Dataset\\places_dump_20110628\\places_dump_20110628.zip";
+		ZipBase64Reader rs = new ZipBase64Reader(path, "places_dump_BD.geojson.gz");
 		System.out.println(rs.readLine());
 //		System.out.println(rs.readLine());
 //		System.out.println(rs.readLine());
