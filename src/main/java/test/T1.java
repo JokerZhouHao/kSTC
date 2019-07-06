@@ -1,6 +1,7 @@
 package test;
 
 import java.util.HashSet;
+import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -58,7 +59,12 @@ public class T1 {
 //		System.out.println(Math.pow(2, 10000));
 		
 //		System.out.println(Integer.MAX_VALUE);
-		A2 a2 = new A2();
-		System.out.println(a2.getClass().equals(A2.class));
+//		A2 a2 = new A2();
+//		System.out.println(a2.getClass().equals(A2.class));
+		
+		PriorityQueue<Integer> heap = new PriorityQueue<>();
+		heap.add(4);
+		heap.add(2);
+		System.out.println(heap.poll());
 	}
 }

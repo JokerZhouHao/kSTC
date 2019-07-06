@@ -92,18 +92,26 @@ class Scatter:
         return marker
 
     @staticmethod
-    def draw_orginal_coord(path, s=1, marker='o', show=True, title='title', pathBgImg = None, xlim=None, ylim=None):
+    def draw_orginal_coord(path, s=1, marker='o', show=True, title='title', pathBgImg = None, xlim=None, ylim=None, scala = 10000000000):
         scatter = Scatter(title=title, xlim=xlim, ylim=ylim, pathBgImg = pathBgImg)
 
         allCoords = [[], []]
         reader = IterableReader(path)
         i = 0
+        recAccCoords = set()
         for line in reader:
             coords = line.split(Global.delimiterLevel1)[1].split(Global.delimiterSpace)
-            allCoords[0].append(float(coords[0]))
-            allCoords[1].append(float(coords[1]))
+            lon = float(coords[0])
+            lon = int(lon * scala) / float(scala)
+            lat = float(coords[1])
+            lat = int(lat * scala) / float(scala)
+            if lon * lat in recAccCoords:   continue
+            else: recAccCoords.add(lon * lat)
+            allCoords[0].append(lon)
+            allCoords[1].append(lat)
             i = i + 1
         scatter.draw_scatter(allCoords, s=s, marker=marker, c='#AFEEEE')
+        print("num coord: " + str(i))
         if show:
             scatter.show()
         return scatter
@@ -358,7 +366,8 @@ class Line:
 # pathBgImg = Global.pathImgs + 'LonLat^-112.41,33.46 -111.90,33.68[gray].png'
 # pathBgImg = Global.pathImgs + 'test.png'
 # pathCoord = Global.pathCoord + '([-112.41,33.46],[-111.9,33.68])[normalized]'
-# Scatter.draw_orginal_coord(pathCoord, s=20, show=False)
+pathCoord = 'D:\\kSTC\\Dataset\\places_dump_20110628\\id_coord_longtitude_latitude.txt'
+Scatter.draw_orginal_coord(pathCoord, s=20, show=False, scala=10)
 
 ###########################  path ##########################################
 ############   ([-112.41,33.46],[-111.9,33.68])[normalized]  path ##########
@@ -412,8 +421,8 @@ pathCoord = Global.pathCoord + '[normalized]'
 # Scatter.draw_result(pathCoord, pathResultAlgEucBaseOptics, s=10, show=True, title=pathResultAlgEucBaseOptics, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
 
 
-pathResultAlgEucAdvancedOptics = Global.pathOutput + 'result_ecu_base_optics_wu_rFanout=50.alpha=0.5.steepD=0.1.h=8.om=1.oe=1.0E-4.ns=200.t=4.k=100000.nw=1.mpts=5.eps=0.001.xi=0.001.maxPNeiByte=2147483631'
-Scatter.draw_result(pathCoord, pathResultAlgEucAdvancedOptics, s=10, show=True, title=pathResultAlgEucAdvancedOptics)
+# pathResultAlgEucAdvancedOptics = Global.pathOutput + 'result_ecu_base_optics_wu_rFanout=50.alpha=0.5.steepD=0.1.h=8.om=1.oe=1.0E-4.ns=200.t=4.k=100000.nw=1.mpts=5.eps=0.001.xi=0.001.maxPNeiByte=2147483631'
+# Scatter.draw_result(pathCoord, pathResultAlgEucAdvancedOptics, s=10, show=True, title=pathResultAlgEucAdvancedOptics)
 
 
 

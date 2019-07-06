@@ -3,6 +3,7 @@ package io;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.zip.GZIPInputStream;
 
@@ -12,6 +13,11 @@ public class GzReader {
 	
 	public GzReader(String path) throws Exception{
 		gis = new GZIPInputStream(new BufferedInputStream(new FileInputStream(path)));
+		br = new BufferedReader(new InputStreamReader(gis));
+	}
+	
+	public GzReader(InputStream in) throws Exception{
+		gis = new GZIPInputStream(new BufferedInputStream(in));
 		br = new BufferedReader(new InputStreamReader(gis));
 	}
 	

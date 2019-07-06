@@ -11,11 +11,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="DrawKNNNeighborDis.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/draw/DrawKNNNeighborDis.py">
+      <file leaf-file-name="orginaldata.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/draw/orginaldata.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="176">
-              <caret line="113" lean-forward="true" selection-start-line="113" selection-end-line="113" />
+            <state relative-caret-position="353">
+              <caret line="371" column="76" lean-forward="true" selection-start-line="371" selection-start-column="76" selection-end-line="371" selection-end-column="76" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
               </folding>
@@ -73,9 +73,9 @@
         <option value="D:/nowMask/KnowledgeBase/orginal_code_maven/python_draw_graph/figure/DBpediaDraw20190612.py" />
         <option value="$PROJECT_DIR$/Data/StatisticData.py" />
         <option value="$PROJECT_DIR$/utility/io.py" />
-        <option value="$PROJECT_DIR$/draw/orginaldata.py" />
         <option value="$PROJECT_DIR$/draw/DrawSampleResult.py" />
         <option value="$PROJECT_DIR$/draw/DrawKNNNeighborDis.py" />
+        <option value="$PROJECT_DIR$/draw/orginaldata.py" />
       </list>
     </option>
   </component>
@@ -115,17 +115,6 @@
               <item name="kSTC_python" type="462c0819:PsiDirectoryNode" />
               <item name="draw" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="kSTC_python" type="b2602c69:ProjectViewProjectNode" />
-              <item name="python_draw" type="47feb1d3:ProjectViewModuleNode" />
-              <item name="python_draw_graph" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="kSTC_python" type="b2602c69:ProjectViewProjectNode" />
-              <item name="python_draw" type="47feb1d3:ProjectViewModuleNode" />
-              <item name="python_draw_graph" type="462c0819:PsiDirectoryNode" />
-              <item name="figure" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -156,7 +145,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.DrawKNNNeighborDis">
+  <component name="RunManager" selected="Python.orginaldata">
     <configuration name="DrawKNNNeighborDis" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="python_draw" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -256,9 +245,9 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.orginaldata" />
         <item itemvalue="Python.DrawKNNNeighborDis" />
         <item itemvalue="Python.DrawSampleResult" />
-        <item itemvalue="Python.orginaldata" />
         <item itemvalue="Python.StatisticData" />
         <item itemvalue="Python.YagoDraw20190612" />
       </list>
@@ -269,12 +258,11 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15700738" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Python Console" order="8" weight="0.32947367" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.25157896" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.25263157" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.26526317" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info id="Structure" order="1" weight="0.25" />
@@ -289,16 +277,16 @@
     <layout-to-restore>
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1264489" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.26842105" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.26526317" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Python Console" order="8" weight="0.32947367" />
     </layout-to-restore>
@@ -316,9 +304,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2992">
           <caret line="140" column="18" lean-forward="true" selection-start-line="140" selection-start-column="18" selection-end-line="140" selection-end-column="18" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -651,30 +636,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/draw/orginaldata.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="8910">
-          <caret line="415" column="117" selection-start-line="415" selection-start-column="117" selection-end-line="415" selection-end-column="117" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/draw/DrawSampleResult.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="44">
           <caret line="306" column="17" lean-forward="true" selection-start-line="306" selection-start-column="17" selection-end-line="306" selection-end-column="17" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/draw/DrawKNNNeighborDis.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="113" lean-forward="true" selection-start-line="113" selection-end-line="113" />
+        <state relative-caret-position="636">
+          <caret line="125" lean-forward="true" selection-start-line="125" selection-end-line="125" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/draw/orginaldata.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="353">
+          <caret line="371" column="76" lean-forward="true" selection-start-line="371" selection-start-column="76" selection-end-line="371" selection-end-column="76" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
           </folding>

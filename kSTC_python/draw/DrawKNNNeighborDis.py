@@ -123,19 +123,6 @@ class Line:
 # Line.draw_k_nearest_distance(k_paths, title="KNNNeighborDis", fName="KNNNeighborDis.pdf")
 
 
-str = '1、甲状腺偏大'
-print(str[str.index('、') + 1:])
-
-
-
-
-
-
-
-
-
-
-
 
 
 
