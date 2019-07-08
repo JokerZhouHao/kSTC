@@ -157,7 +157,7 @@ public class SingleAlgTest {
 		
 		int minpts = 5;
 		double epsilon = 0.001;
-		double xi = 0.001;
+		double xi = 0.01;
 		
 		int maxPidNeighborsBytes = 2147483631;
 		
@@ -176,8 +176,8 @@ public class SingleAlgTest {
 //		words.add("Breakfast".toLowerCase());
 //		words.add("Sandwiches".toLowerCase());
 //		words.add("Good".toLowerCase());
-//		words.add("Bars".toLowerCase());
-		sWords.add("university".toLowerCase());
+		sWords.add("Bars".toLowerCase());
+//		sWords.add("university".toLowerCase());
 		
 		qp.numWord = sWords.size();
 		

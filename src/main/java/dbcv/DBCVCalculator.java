@@ -28,9 +28,14 @@ public class DBCVCalculator {
 	public V2ClusterCollection v2ClusCol = null;
 	public String path = null;
 	public Point[] coords = Global.allLocations;
+	public final static double INVALID_DBCV = Double.MAX_VALUE; 
+	private double dbcv = INVALID_DBCV;
+	private boolean hasCalDSCOrDSPC = Boolean.FALSE;
+	private int numTotalNode = 0;
 	
-	public DBCVCalculator(String path) throws Exception{
+	public DBCVCalculator(String path, int numTotalNode) throws Exception{
 		this.path = path;
+		this.numTotalNode = numTotalNode;
 		load();
 	}
 	
@@ -61,7 +66,13 @@ public class DBCVCalculator {
 		br.close();
 	}
 	
+	/**
+	 * calDSCOrDSPC
+	 * @throws Exception
+	 */
 	private void calDSCOrDSPC() throws Exception {
+		if(hasCalDSCOrDSPC)	return;
+		
 		int numProcessor = Runtime.getRuntime().availableProcessors();
 //		int numProcessor = 1;
 		ArrayBlockingQueue<Object> queue = new ArrayBlockingQueue<>(numProcessor);
@@ -90,27 +101,57 @@ public class DBCVCalculator {
 		while(!queue.isEmpty()) {
 			Thread.sleep(2000);
 		}
+		
+		hasCalDSCOrDSPC = Boolean.TRUE;
 	}
 	
-	public double DBCV() {
-		return 1.0;
+	/**
+	 * 计算VC
+	 * @param i
+	 * @return
+	 * @throws Exception
+	 */
+	private double VC(int i) throws Exception{
+		double min = Double.MAX_VALUE;
+		for(int j=0; j < cluss.size(); j++) {
+			if(i == j)	continue;
+			min = min <= v2ClusCol.get(i, j).getDSPC() ? min : v2ClusCol.get(i, j).getDSPC();
+		}
+		double dsc = cluss.get(i).getDSC();
+		return (min - dsc) / (min >= dsc ? min : dsc);
 	}
 	
+	/**
+	 * 计算DBCV
+	 * @return
+	 * @throws Exception
+	 */
+	public double DBCV() throws Exception{
+		if(dbcv != INVALID_DBCV)	return dbcv;
+		if(!hasCalDSCOrDSPC) throw new Exception("从未调用calDSCOrDSPC方法，请至少提前调用一次calDSCOrDSPC方法");
+		dbcv = 0.0;
+		for(int i=0; i<cluss.size(); i++) {
+			dbcv += cluss.get(i).numNode() * VC(i);
+		}
+		dbcv /= numTotalNode;
+		return dbcv;
+	}
 	
+	public static double DBCV(String path, int numTotalNode) throws Exception{
+		DBCVCalculator cal = new DBCVCalculator(path, numTotalNode);
+		cal.calDSCOrDSPC();
+		return cal.DBCV();
+	}
 	
 	public static void main(String[] args) throws Exception {
-		String path1 = Global.outPath + "res" + File.separator + 
-				"result_ecu_base_optics_wu_rFanout=50.alpha=0.5.steepD=0.3.h=8.om=1.oe=1.0E-4.ns=200.t=4.k=100000.nw=1.mpts=5.eps=0.001.xi=0.001.maxPNeiByte=2147483631";
-		DBCVCalculator cal1 = new DBCVCalculator(path1);
 		
-		cal1.calDSCOrDSPC();
+		String path = Global.outPath + "res" + File.separator + 
+				"result_ecu_base_optics_rFanout=50.alpha=0.5.steepD=0.3.h=8.om=1.oe=1.0E-4.ns=200.t=4.k=100000.nw=1.mpts=5.eps=0.001.xi=0.01.maxPNeiByte=2147483631";
+		System.out.println(path + "\n" + DBCVCalculator.DBCV(path, 188523) + "\n");
 		
-		ArrayBlockingQueue<Integer> queue = new ArrayBlockingQueue<>(23);
-		queue.add(1);
+		path = Global.outPath + "res" + File.separator + 
+				"result_ecu_base_optics_wu_rFanout=50.alpha=0.5.steepD=0.3.h=8.om=1.oe=1.0E-4.ns=200.t=4.k=100000.nw=1.mpts=5.eps=0.001.xi=0.01.maxPNeiByte=2147483631";
+		System.out.println(path + "\n" + DBCVCalculator.DBCV(path, 188523) + "\n");
 		
-		Object obj = new VCluster();
-		System.out.println(obj.getClass());
-		
-		System.out.println(Global.allLocations);
 	}
 }

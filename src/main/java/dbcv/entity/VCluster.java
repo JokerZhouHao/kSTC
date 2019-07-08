@@ -60,6 +60,10 @@ public class VCluster {
 		return DSC;
 	}
 	
+	public int numNode() {
+		return nds.size();
+	}
+	
 	public static void main(String[] args) throws Exception {
 		Point[] coords = {
 				new Point(new double[]{0, 0}),
