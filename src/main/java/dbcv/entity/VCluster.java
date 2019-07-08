@@ -18,7 +18,7 @@ public class VCluster {
 	public List<CNode> nds = new ArrayList<>();
 	public VGraph graph = null;
 	
-	protected VCluster() {}
+	public VCluster() {}
 	
 	public VCluster(Point[] coords, int id, List<CNode> nds) {
 		this.coords = coords;
@@ -31,7 +31,6 @@ public class VCluster {
 		clus.coords = coords;
 		clus.id = id;
 		clus.DSC = DSC;
-		clus.nds = new ArrayList<>();
 		for(CNode nd : nds) {
 			clus.nds.add(nd.copy());
 		}
@@ -57,7 +56,8 @@ public class VCluster {
 		if(DSC != Double.MAX_VALUE)	return DSC;
 		calAllCoreDis();
 		graph = new VGraph(coords, nds);
-		return graph.maxWeightInMST();
+		DSC = graph.maxWeightInMST();
+		return DSC;
 	}
 	
 	public static void main(String[] args) throws Exception {
@@ -98,6 +98,6 @@ public class VCluster {
 				System.out.println(clusCol.get(i, j).getDSPC());
 			}
 		}
-		
+		System.out.println();
 	}
 }

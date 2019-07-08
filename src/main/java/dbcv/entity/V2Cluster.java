@@ -12,8 +12,8 @@ public class V2Cluster extends VCluster {
 	public VCluster clus2 = null;
 	
 	public V2Cluster(VCluster clus1, VCluster clus2) {
-		this.clus1 = clus1;
-		this.clus2 = clus2;
+		this.clus1 = clus1.copy();
+		this.clus2 = clus2.copy();
 	}
 	
 	private void calAllCoreDis() {
