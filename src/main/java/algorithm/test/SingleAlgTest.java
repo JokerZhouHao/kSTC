@@ -12,6 +12,7 @@ import algorithm.AlgEucDisBase;
 import algorithm.AlgEucDisBaseOptics;
 import algorithm.AlgEucDisBaseOpticsWu;
 import algorithm.AlgEucDisFastRange;
+import dbcv.DBCVCalculator;
 import entity.AlgType;
 import entity.QueryParams;
 import entity.SortedClusters;
@@ -131,6 +132,9 @@ public class SingleAlgTest {
 		if(null != sClusters) {
 			IOUtility.writeSortedClusters(resPath, qParams, sClusters);
 			System.out.println("共簇：" + sClusters.getClusters().size());
+			
+			// DBCV
+			System.out.println("DBCV: " + new DBCVCalculator(sClusters, (int)qParams.runTimeRec.numNid).DBCV());
 		}
 	}
 	

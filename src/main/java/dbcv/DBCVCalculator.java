@@ -12,8 +12,12 @@ import dbcv.entity.CNode;
 import dbcv.entity.V2Cluster;
 import dbcv.entity.V2ClusterCollection;
 import dbcv.entity.VCluster;
+import entity.Cluster;
+import entity.Node;
+import entity.SortedClusters;
 import spatialindex.spatialindex.Point;
 import utility.Global;
+import utility.SystemInfoUtility;
 import utility.io.IOUtility;
 
 /**
@@ -38,6 +42,22 @@ public class DBCVCalculator {
 		this.numTotalNode = numTotalNode;
 		load();
 	}
+	
+	public DBCVCalculator(SortedClusters sClu, int numTotalNode) throws Exception {
+		this.numTotalNode = numTotalNode;
+		cluss = new ArrayList<>();
+		int cid = -1;
+		List<CNode> nds = null;
+		for(Cluster clu : sClu.getClusters()) {
+			cid++;
+			nds = new ArrayList<>();
+			cluss.add(new VCluster(coords, cid, nds));
+			for(Node nd : clu.getPNodes()) {
+				nds.add(new CNode(coords, nd.orderId, nd.id));
+			}
+		}
+	}
+	
 	
 	/**
 	 * 读取文件
@@ -73,8 +93,9 @@ public class DBCVCalculator {
 	private void calDSCOrDSPC() throws Exception {
 		if(hasCalDSCOrDSPC)	return;
 		
-		int numProcessor = Runtime.getRuntime().availableProcessors();
-//		int numProcessor = 1;
+		int numProcessor = 56;
+		if(SystemInfoUtility.isWindow())	numProcessor = 4;
+		
 		ArrayBlockingQueue<Object> queue = new ArrayBlockingQueue<>(numProcessor);
 		DSCOrDSPCCalculator cals[] = new DSCOrDSPCCalculator[numProcessor];
 		for(int i=0; i<numProcessor; i++) {
@@ -128,7 +149,7 @@ public class DBCVCalculator {
 	 */
 	public double DBCV() throws Exception{
 		if(dbcv != INVALID_DBCV)	return dbcv;
-		if(!hasCalDSCOrDSPC) throw new Exception("从未调用calDSCOrDSPC方法，请至少提前调用一次calDSCOrDSPC方法");
+		if(!hasCalDSCOrDSPC)	calDSCOrDSPC();
 		dbcv = 0.0;
 		for(int i=0; i<cluss.size(); i++) {
 			dbcv += cluss.get(i).numNode() * VC(i);
@@ -139,7 +160,11 @@ public class DBCVCalculator {
 	
 	public static double DBCV(String path, int numTotalNode) throws Exception{
 		DBCVCalculator cal = new DBCVCalculator(path, numTotalNode);
-		cal.calDSCOrDSPC();
+		return cal.DBCV();
+	}
+	
+	public static double DBCV(SortedClusters sClu, int numTotalNode) throws Exception{
+		DBCVCalculator cal = new DBCVCalculator(sClu, numTotalNode);
 		return cal.DBCV();
 	}
 	
