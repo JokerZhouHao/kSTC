@@ -15,7 +15,7 @@ class Scatter:
     markers = ['4', 's', '^', '+', '.']
 
     index_marker = 0
-    index_colors = -1
+    index_colors = 0
 
     def __init__(self, fig=None, xs=None, ys=None, xlim=None, ylim=None, title='title', pathBgImg = None, yscale = 'linear', markerscale = 1):
         if fig is None:
@@ -92,6 +92,14 @@ class Scatter:
         return marker
 
     @staticmethod
+    def color():
+        if Scatter.index_colors >= len(Scatter.colors):
+            Scatter.index_colors = 0
+        color = Scatter.colors[Scatter.index_colors]
+        Scatter.index_colors += 1
+        return color
+
+    @staticmethod
     def draw_orginal_coord(path, s=1, marker='o', show=True, title='title', pathBgImg = None, xlim=None, ylim=None, scala = 10000000000):
         scatter = Scatter(title=title, xlim=xlim, ylim=ylim, pathBgImg = pathBgImg)
 
@@ -162,7 +170,7 @@ class Scatter:
                 coords = line.split(Global.delimiterLevel1)[2].split(Global.delimiterSpace)
                 allCoords[0].append(float(coords[0]))
                 allCoords[1].append(float(coords[1]))
-        scatter.draw_scatter(allCoords, s=s, marker=Scatter.marker())
+        scatter.draw_scatter(allCoords, s=s, marker=Scatter.marker(), c=Scatter.color())
         # scatter.draw_scatter(allCoords, s=s)
 
         scatter.draw_scatter(centerCoords, s=s, marker='*')
@@ -366,7 +374,9 @@ class Line:
 # pathBgImg = Global.pathImgs + 'LonLat^-112.41,33.46 -111.90,33.68[gray].png'
 # pathBgImg = Global.pathImgs + 'test.png'
 # pathCoord = Global.pathCoord + '([-112.41,33.46],[-111.9,33.68])[normalized]'
-pathCoord = 'D:\\kSTC\\Dataset\\places_dump_20110628\\id_coord_longtitude_latitude.txt'
+# pathCoord = 'D:\\kSTC\\Dataset\\places_dump_20110628\\id_coord_longtitude_latitude.txt'
+pathCoord = 'D:\\kSTC\\Dataset\\meetup\\id_coord_longtitude_latitude.txt'
+
 Scatter.draw_orginal_coord(pathCoord, s=20, show=False, scala=10)
 
 ###########################  path ##########################################
@@ -391,12 +401,12 @@ pathCoord = Global.pathCoord + '[normalized]'
 # pathResultAlgEucBase = Global.pathOutput + 'result_ecu_base.txt'
 # Scatter.draw_result(pathCoord, pathResultAlgEucBase, s=20, show=True, title=pathResultAlgEucBase, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
 # #
-# pathResultAlgEucFast = Global.pathOutput + 'result_ecu_fast.txt'
-# Scatter.draw_result(pathCoord, pathResultAlgEucFast, s=20, show=True, title=pathResultAlgEucFast, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
+# pathResultAlgEucFast = Global.pathOutput + 'result_ecu_fast_rFanout=50.alpha=0.5.steepD=0.1.h=8.om=1.oe=1.0E-4.ns=200.t=4.k=100000.nw=2.mpts=10.eps=1.0E-4.xi=1.0E-4.maxPNeiByte=2147483631'
+# Scatter.draw_result(pathCoord, pathResultAlgEucFast, s=15, show=True, title=pathResultAlgEucFast, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
 
 ##############   optic wu #############
-# pathResultAlgEucBaseOpticsWu = Global.pathOutput + 'result_ecu_base_optics_rFanout=50.alpha=0.5.steepD=0.1.h=8.om=1.oe=1.0E-4.ns=200.t=4.k=100000.nw=1.mpts=5.eps=0.001.xi=0.001.maxPNeiByte=2147483631'
-# Scatter.draw_result(pathCoord, pathResultAlgEucBaseOpticsWu, s=20, show=True, title=pathResultAlgEucBaseOpticsWu, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
+# pathResultAlgEucBaseOpticsWu = Global.pathOutput + 'result_ecu_base_optics_wu_rFanout=50.alpha=0.5.steepD=0.1.h=8.om=1.oe=1.0E-4.ns=200.t=4.k=100000.nw=2.mpts=10.eps=1.0E-4.xi=1.0E-4.maxPNeiByte=2147483631'
+# Scatter.draw_result(pathCoord, pathResultAlgEucBaseOpticsWu, s=15, show=True, title=pathResultAlgEucBaseOpticsWu, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
 #
 # pathResultAlgEucBaseOpticsWu = Global.pathOutput + 'result_ecu_base_optics_wu_rFanout=50.alpha=0.5.steepD=0.1.h=8.om=1.oe=1.0E-4.ns=200.t=4.k=100000.nw=1.mpts=5.eps=0.001.xi=0.001.maxPNeiByte=2147483631'
 # Scatter.draw_result(pathCoord, pathResultAlgEucBaseOpticsWu, s=20, show=True, title=pathResultAlgEucBaseOpticsWu, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])

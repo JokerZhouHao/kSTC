@@ -44,6 +44,20 @@ public class FileLoader {
 		return names;
 	}
 	
+	public static Set<String> loadSetNames(String fp) throws Exception{
+		IterableBufferReader<String> ibr = IOUtility.getIBW(fp);
+		Set<String> names = new HashSet<>();
+		String[] arr = null;
+		for(String line : ibr) {
+			if(line.startsWith(Global.delimiterPound)) {
+			} else {
+				arr = line.split(Global.delimiterLevel1);
+				names.add(arr[1].trim());
+			}
+		}
+		return names;
+	}
+	
 	/**
 	 * notice : record sort is longitude, latitude
 	 * @param fp

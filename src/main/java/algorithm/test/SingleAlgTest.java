@@ -134,7 +134,7 @@ public class SingleAlgTest {
 			System.out.println("共簇：" + sClusters.getClusters().size());
 			
 			// DBCV
-			System.out.println("DBCV: " + new DBCVCalculator(sClusters, (int)qParams.runTimeRec.numNid).DBCV());
+//			System.out.println("DBCV: " + new DBCVCalculator(sClusters, (int)qParams.runTimeRec.numNid).DBCV());
 		}
 	}
 	
@@ -147,7 +147,7 @@ public class SingleAlgTest {
 		
 		int rtreeFanout = 50;
 		double alpha = 0.5;
-		double steepDegree = 0.3;
+		double steepDegree = 0.1;
 		int h = 8;
 		
 		int opticMinpts = 1;
@@ -159,9 +159,9 @@ public class SingleAlgTest {
 		int k = 100000;
 		int numWord = 0;
 		
-		int minpts = 5;
-		double epsilon = 0.001;
-		double xi = 0.01;
+		int minpts = 10;
+		double epsilon = 0.0001;
+		double xi = 0.0001;
 		
 		int maxPidNeighborsBytes = 2147483631;
 		
@@ -175,13 +175,15 @@ public class SingleAlgTest {
 		double[] loca = {0.7, 0.7};
 		location = new Point(loca);
 		
-//		words.add("Coffee".toLowerCase());
-//		words.add("Tea".toLowerCase());
-//		words.add("Breakfast".toLowerCase());
-//		words.add("Sandwiches".toLowerCase());
-//		words.add("Good".toLowerCase());
-		sWords.add("Bars".toLowerCase());
+//		sWords.add("Coffee".toLowerCase());
+//		sWords.add("Tea".toLowerCase());
+//		sWords.add("Breakfast".toLowerCase());
+//		sWords.add("Sandwiches".toLowerCase());
+//		sWords.add("Good".toLowerCase());
+//		sWords.add("Bars".toLowerCase());
 //		sWords.add("university".toLowerCase());
+		sWords.add("kids".toLowerCase());
+		sWords.add("Restaurants".toLowerCase());
 		
 		qp.numWord = sWords.size();
 		
@@ -203,15 +205,15 @@ public class SingleAlgTest {
 //		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisBaseAdv1, qParams);
 //		qParams.type = 3;
 //		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisBaseAdv1_2, qParams);
-//		qParams.type = 4;
-//		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisFastRange, qParams);
+		qParams.type = 4;
+		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisFastRange, qParams);
 		
 //		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisFastRange, qParams);
 		
 		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisBaseOpticsWu, qParams);
 //		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisAdvancedOpticsWu, qParams);
 		
-		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisBaseOptics, qParams);
+//		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisBaseOptics, qParams);
 //		SingleAlgTest.testAlgEuc("AlgEucDisAdvancedOptics", qParams);
 //		SingleAlgTest.testAlgEuc("AlgEucDisAdvancedOpticsWu2", qParams);
 	}
