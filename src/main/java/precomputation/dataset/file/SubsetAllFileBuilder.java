@@ -21,7 +21,8 @@ public class SubsetAllFileBuilder {
 //		Json2StringFile.main(null);
 //		([-125.0,28.0],[15.0,60.0])
 //		Rectangle subRect = new Rectangle(-112.41,33.46, -111.90,33.68);
-		Rectangle subRect = new Rectangle(-125,28, 15,60);
+//		Rectangle subRect = new Rectangle(-125,28, 15,60);
+		Rectangle subRect = new Rectangle(-160,-90, 180,70);
 		/***************** 提取某范围内的数据文件 *************************************/
 //		if(!Global.subDataSetPath.contains(subRect.toString())) {
 //			throw new Exception("提取出的子集" + subRect.toString() + "所放文件夹" + Global.subDataSetPath + "命名与子集范围不同");
@@ -42,8 +43,8 @@ public class SubsetAllFileBuilder {
 		
 		
 		/***************** 生成  cellid---pidOrRtreeid---words 索引 ****************/
-		String pathCellidRtreeidOrPidWordsIndex = Global.pathCellidRtreeidOrPidWordsIndex;
-		ProcessGenerateFiles.buildCellidRtreeidOrPidWordsIndex(pathCellidRtreeidOrPidWordsIndex);
+//		String pathCellidRtreeidOrPidWordsIndex = Global.pathCellidRtreeidOrPidWordsIndex;
+//		ProcessGenerateFiles.buildCellidRtreeidOrPidWordsIndex(pathCellidRtreeidOrPidWordsIndex);
 		
 		
 		/* ========================= 以下是 AlgEucDisAdvancedOptics 需用到的文件  ==================================== */
@@ -57,10 +58,10 @@ public class SubsetAllFileBuilder {
 			 * 注意：文件term_2_pid_neighbors_len.txt记录的是包含term的所有pid的neighbors转化为二进制文件后的长度（Byte）
 			 ***************************************************/
 		// 生成 wid_terms 供并行生成索引使用
-		String pathWidTerms = Global.pathWidTerms;
-		ProcessGenerateFiles.generateWidTermsFile(pathWidTerms);
+//		String pathWidTerms = Global.pathWidTerms;
+//		ProcessGenerateFiles.generateWidTermsFile(pathWidTerms);
 		// 生成索引
-		Term2PidNeighborsIndexBuilder.main(null);
+//		Term2PidNeighborsIndexBuilder.main(null);
 		
 	}
 }

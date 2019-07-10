@@ -67,6 +67,7 @@ public class SampleChooser {
 			sampCoords[1] = RandomNumGenerator.getRandomCoordDouble(coords[id][1]);
 			
 			List<String> words = LuceneUtility.getTerms(txts[id]);
+			if(words == null || words.isEmpty())	continue;	
 			words = new ArrayList<>(new HashSet<>(words));	// 去重
 			if(words.size() < sampWords.length)	continue;
 			for(int i=0; i<sampWords.length; i++) {
@@ -114,7 +115,7 @@ public class SampleChooser {
 		nws.add(1);
 //		nws.add(2);
 //		nws.add(3);
-		nws.add(4);
+//		nws.add(4);
 //		nws.add(5);
 		for(int nw : nws) {
 			SampleChooser.chooseSample(500, nw);

@@ -1,6 +1,7 @@
 package utility.index.rtree;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,6 +21,7 @@ import spatialindex.storagemanager.MemoryStorageManager;
 import spatialindex.storagemanager.PropertySet;
 import spatialindex.storagemanager.TreeLRUBuffer;
 import utility.Global;
+import utility.MLog;
 import utility.io.IOUtility;
 
 /**
@@ -300,6 +302,15 @@ public class MRTree extends RTree{
 		}
 		if(neighbors.isEmpty())	return null;
 		else return neighbors;
+	}
+	
+	public void writeRtreeInfo(String path) throws Exception{
+		BufferedWriter bw = IOUtility.getBW(path);
+		bw.write("root: " + rtree.getRoot() + "\n");
+		bw.write("height: " + rtree.getTreeHeight() + "\n");
+		bw.write("NumNode: " + rtree.m_stats.getNumberOfNodes() + "\n");
+		bw.write("NumData: " + rtree.m_stats.getNumberOfData() + "\n");
+		bw.close();
 	}
 	
 	public RWLock getM_RWLock() {

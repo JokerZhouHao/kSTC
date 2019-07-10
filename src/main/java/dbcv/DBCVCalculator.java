@@ -48,12 +48,13 @@ public class DBCVCalculator {
 		cluss = new ArrayList<>();
 		int cid = -1;
 		List<CNode> nds = null;
+		int id = 0;
 		for(Cluster clu : sClu.getClusters()) {
 			cid++;
 			nds = new ArrayList<>();
 			cluss.add(new VCluster(coords, cid, nds));
 			for(Node nd : clu.getPNodes()) {
-				nds.add(new CNode(coords, nd.orderId, nd.id));
+				nds.add(new CNode(coords, id++, nd.id));
 			}
 		}
 	}
@@ -71,6 +72,7 @@ public class DBCVCalculator {
 		int cid = -1;
 		List<CNode> nds = null;
 		String line = null;
+		int id = 0;
 		while(null != (line = br.readLine())) {
 			if(line.startsWith("Cluster")) {
 				cid++;
@@ -79,9 +81,9 @@ public class DBCVCalculator {
 				continue;
 			}
 			String[] arr = line.split(Global.delimiterLevel1);
-			int nid = Integer.parseInt(arr[0]);
+//			int nid = Integer.parseInt(arr[0]);
 			int oid = Integer.parseInt(arr[1]);
-			nds.add(new CNode(coords, nid, oid));
+			nds.add(new CNode(coords, id++, oid));
 		}
 		br.close();
 	}
@@ -94,7 +96,7 @@ public class DBCVCalculator {
 		if(hasCalDSCOrDSPC)	return;
 		
 		int numProcessor = 56;
-		if(SystemInfoUtility.isWindow())	numProcessor = 4;
+//		if(SystemInfoUtility.isWindow())	numProcessor = 4;
 		
 		ArrayBlockingQueue<Object> queue = new ArrayBlockingQueue<>(numProcessor);
 		DSCOrDSPCCalculator cals[] = new DSCOrDSPCCalculator[numProcessor];

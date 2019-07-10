@@ -134,7 +134,7 @@ public class SingleAlgTest {
 			System.out.println("共簇：" + sClusters.getClusters().size());
 			
 			// DBCV
-//			System.out.println("DBCV: " + new DBCVCalculator(sClusters, (int)qParams.runTimeRec.numNid).DBCV());
+			System.out.println("DBCV: " + new DBCVCalculator(sClusters, (int)qParams.runTimeRec.numNid).DBCV());
 		}
 	}
 	
@@ -159,7 +159,7 @@ public class SingleAlgTest {
 		int k = 100000;
 		int numWord = 0;
 		
-		int minpts = 10;
+		int minpts = 5;
 		double epsilon = 0.0001;
 		double xi = 0.0001;
 		
@@ -191,11 +191,75 @@ public class SingleAlgTest {
 		return qp;
 	}
 	
+	
+	/**
+	 * get QueryParams1
+	 * @return
+	 * @throws Exception
+	 */
+	public static QueryParams getQParams1() throws Exception{
+		
+		int rtreeFanout = 50;
+		double alpha = 0.5;
+		double steepDegree = 0.1;
+		int h = 10;
+		
+		int opticMinpts = 1;
+		double opticEpsilon = 0.0001;
+		
+		int numSample = 200;
+		int type = 4;
+		
+		int k = 5000;
+		int numWord = 0;
+		
+		int minpts = 5;
+		double epsilon = 0.0001;
+		double xi = 0.0001;
+		
+		int maxPidNeighborsBytes = 2147483631;
+		
+		QueryParams qp = new QueryParams(rtreeFanout, alpha, steepDegree, h, opticMinpts, opticEpsilon,
+										numSample, type, k, numWord, minpts, epsilon, 
+										xi, maxPidNeighborsBytes);
+		
+		Point location = null;
+		List<String> sWords = new ArrayList<>();
+		
+		double[] loca = {0.3589707404532504, 0.5086343276350553};
+		location = new Point(loca);
+		
+//		sWords.add("Coffee".toLowerCase());
+//		sWords.add("Tea".toLowerCase());
+//		sWords.add("Breakfast".toLowerCase());
+//		sWords.add("Sandwiches".toLowerCase());
+//		sWords.add("Good".toLowerCase());
+//		sWords.add("Bars".toLowerCase());
+//		sWords.add("university".toLowerCase());
+		sWords.add("unit".toLowerCase());
+		sWords.add("9".toLowerCase());
+		
+		qp.numWord = sWords.size();
+		
+		qp.setCoordAndSWords(location, sWords);
+		return qp;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	public static void main(String[] args) throws Exception{
 		System.out.println(Global.inputPath);
 		System.out.println(Global.outPath);
 		System.out.println();
 		
+//		QueryParams qParams = SingleAlgTest.getQParams();
 		QueryParams qParams = SingleAlgTest.getQParams();
 		QueryParams.display(qParams);
 		
@@ -208,12 +272,10 @@ public class SingleAlgTest {
 		qParams.type = 4;
 		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisFastRange, qParams);
 		
-//		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisFastRange, qParams);
-		
 		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisBaseOpticsWu, qParams);
 //		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisAdvancedOpticsWu, qParams);
 		
-//		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisBaseOptics, qParams);
+		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisBaseOptics, qParams);
 //		SingleAlgTest.testAlgEuc("AlgEucDisAdvancedOptics", qParams);
 //		SingleAlgTest.testAlgEuc("AlgEucDisAdvancedOpticsWu2", qParams);
 	}

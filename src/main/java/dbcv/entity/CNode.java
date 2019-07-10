@@ -5,12 +5,15 @@ import java.util.Collections;
 import java.util.List;
 
 import spatialindex.spatialindex.Point;
+import utility.Global;
 
 public class CNode {
 	public Point[] coords = null;
 	public Integer id = -1;
 	public int orgId = -1;
 	protected double coreDis = 0.0;
+	
+	private Boolean signHasCalCoreDis = Boolean.FALSE;
 	
 	public CNode() {}
 	
@@ -30,26 +33,31 @@ public class CNode {
 	}
 	
 	public double calCoreDist(double d, List<CNode>... ndss) {
+		signHasCalCoreDis = Boolean.TRUE;
 		List<Double> distances = new ArrayList<>();
 		coreDis = 0.0;
 		for(List<CNode> nds : ndss) {
 			for(CNode nd : nds) {
 				// 过滤掉距离为0的
 				double dis = minDistance(nd);
-				if(dis != 0.0)	distances.add(dis);
+//				if(dis != 0.0)	distances.add(dis);
+				distances.add(dis);
 			}
 		}
+		if(distances.isEmpty())	return 0.0;
 		Collections.sort(distances);
 		
 		for(int i = 0; i < distances.size(); i++) {
+			if(Global.isZero(distances.get(i)))	continue;
 			coreDis += Math.pow(1 / distances.get(i), d);
 		}
-		coreDis = Math.pow(coreDis / (distances.size()), -1 / d);
+		if(coreDis == 0.0)	return 0.0;
+		coreDis = Math.pow(coreDis / (distances.size() - 1), -1 / d);
 		return coreDis;
 	}
 	
 	public double coreDist() throws Exception{
-		if(coreDis == 0.0)	throw new Exception("必须至少调用一次calCoreDist方法后，才能调用coreDist方法");
+		if(!signHasCalCoreDis)	throw new Exception("必须至少调用一次calCoreDist方法后，才能调用coreDist方法");
 		return coreDis;
 	}
 	

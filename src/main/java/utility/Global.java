@@ -140,6 +140,11 @@ public class Global {
 	
 	private static Properties propsGlobal = null;
 	
+	public static void displayInputOutputPath() {
+		System.out.println(Global.inputPath);
+		System.out.println(Global.outPath);
+	}
+	
 	// initBasePath
 	public static void initBasePath() throws Exception{
 		basePath = getBasePath();

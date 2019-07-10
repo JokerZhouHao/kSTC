@@ -442,14 +442,15 @@ public class ProcessGenerateFiles {
 //		ProcessGenerateFiles.generateIdTermsFile(pathIdTerms);
 		
 		/* used generate rtree */
-//		String placeFile = Global.pathIdCoord + Global.signNormalized;
-//		String treeFile = Global.rtreePath;
-//		ProcessGenerateFiles.buildRTree(placeFile, treeFile, Global.rtreeFanout, Global.rtreeBufferSize, Global.rtreePageSize);
-//		MRTree rtree = MRTree.getInstanceInDisk();
-//		MLog.log("root: " + rtree.getRoot());
-//		MLog.log("height: " + rtree.getTreeHeight());
-//		MLog.log("NumNode: " + rtree.m_stats.getNumberOfNodes());
-//		MLog.log("NumData: " + rtree.m_stats.getNumberOfData() + "\n");
+		String placeFile = Global.pathIdCoord + Global.signNormalized;
+		String treeFile = Global.rtreePath;
+		ProcessGenerateFiles.buildRTree(placeFile, treeFile, Global.rtreeFanout, Global.rtreeBufferSize, Global.rtreePageSize);
+		MRTree rtree = MRTree.getInstanceInDisk();
+		rtree.writeRtreeInfo(treeFile + ".info");
+		MLog.log("root: " + rtree.getRoot());
+		MLog.log("height: " + rtree.getTreeHeight());
+		MLog.log("NumNode: " + rtree.m_stats.getNumberOfNodes());
+		MLog.log("NumData: " + rtree.m_stats.getNumberOfData() + "\n");
 		
 		/* set error stream */
 //		PrintStream ps = new PrintStream(new File(Global.pathTestFile));
@@ -471,9 +472,9 @@ public class ProcessGenerateFiles {
 //		hs.add(4);
 //		hs.add(6);
 //		hs.add(8);
-//		hs.add(10);
-//		hs.add(12);
-//		hs.add(14);
+		hs.add(10);
+		hs.add(12);
+		hs.add(14);
 		hs.add(15);
 		for(int h : hs) {
 			String pathCellidRtreeidOrPidWordsIndex = Global.getPathCellidRtreeidOrPidWordsIndex(Global.rtreeFanout, h);

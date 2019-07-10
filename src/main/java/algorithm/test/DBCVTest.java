@@ -4,6 +4,7 @@ import java.util.List;
 
 import algorithm.AlgEucDisBaseOptics;
 import algorithm.AlgEucDisBaseOpticsWu;
+import algorithm.AlgEucDisFastRange;
 import algorithm.AlgInterface;
 import dbcv.DBCVCalculator;
 import entity.QueryParams;
@@ -29,7 +30,7 @@ public class DBCVTest {
 	private final static String formatHead = "%-" + numSpace + "s";
 	private final static String formatDouble = "%-1." + (numSpace - 4) + "f";
 	
-	private AlgInterface[] algs = new AlgInterface[2]; 
+	private AlgInterface[] algs = new AlgInterface[3]; 
 	
 	public DBCVTest(String path, int numEachGroup) throws Exception{
 		this.numEachGroup = numEachGroup;
@@ -65,8 +66,9 @@ public class DBCVTest {
 		for(int i=0; i<algs.length; i++) {
 			if(algs[i] != null)	algs[i].free();
 		}
-		algs[0] = new AlgEucDisBaseOptics(qp);
-		algs[1] = new AlgEucDisBaseOpticsWu(qp);
+		algs[0] = new AlgEucDisFastRange(qp);
+		algs[1] = new AlgEucDisBaseOptics(qp);
+		algs[2] = new AlgEucDisBaseOpticsWu(qp);
 	}
 	
 	public void calDBCV() throws Exception{
@@ -80,13 +82,19 @@ public class DBCVTest {
 				double[] tempDV = new double[algs.length];
 				int k=0;
 				for(; k<algs.length; k++) {
+					
+					
+					MLog.log(qps.get(i).numWord + " " + j + " " + k + " ");
+					
+					
+					
 					qp.runTimeRec = new RunTimeRecordor();
 					qp.setCoordAndSWords(samples.get(j).coords, samples.get(j).sWords);
 					SortedClusters sClu = algs[k].excuteQuery(qp);
 					if(sClu == null)	break;
 					tempDV[k] = DBCVCalculator.DBCV(sClu, (int)qp.runTimeRec.numNid);
 					if(Double.isNaN(tempDV[k]))	break;
-					MLog.log(i + " " + j + " " + k + " " + sClu.getSize() + " " + tempDV[k]);
+					MLog.log(qps.get(i).numWord + " " + j + " " + k + " " + sClu.getSize() + " " + tempDV[k]);
 				}
 				if(k == algs.length) {
 					num++;
@@ -123,13 +131,12 @@ public class DBCVTest {
 	
 	public static void main(String[] args) throws Exception {
 //		System.out.println(String.format("%-1.5f", 0.00000001));
-		
+		Global.displayInputOutputPath();
 		String path = Global.sampleResultPath + "dbcvtest.txt";
 		int numEachGroup = 1;
 		if(args.length > 0)		numEachGroup = Integer.parseInt(args[0]);
 		MLog.log("NumEachGrop: " + numEachGroup);
 		DBCVTest.displayDBCV(path, numEachGroup);
-		
 	}
 	
 }
