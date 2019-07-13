@@ -20,6 +20,14 @@ public class T1 {
 //		System.out.println(Double.isNaN(0.0/0.0));
 //		System.out.println(1/0.000000000000000000001);
 		
+		String line = "\nss";
+		line = line.replace('\n', ' ');
+		System.out.println(line);
+		
 		System.out.println("23,23".replaceAll(",", " "));
+		
+		
+		float a = 1.123456789f;
+		System.out.println(a);
 	}
 }

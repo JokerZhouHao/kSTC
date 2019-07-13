@@ -149,8 +149,8 @@ public class MRTree extends RTree{
 			Region r = new Region(f1, f2);
 			rtree.insertData(null, r, id);
 
-			if (cntLines % 10000 == 0)
-				System.out.println(cntLines + " places inserted");
+			if (cntLines % 100000 == 0)
+				MLog.log(cntLines + " places inserted");
 		}
 
 		long end = System.currentTimeMillis();

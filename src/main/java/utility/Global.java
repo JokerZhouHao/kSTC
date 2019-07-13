@@ -28,7 +28,7 @@ public class Global {
 //	public static Map<Integer, Node> pid2Node = null;
 //	public static List<Node> nodes = null;
 	
-	
+	public final static int NUM_THREAD_CAL_DBCV = 56;
 	
 	/**
 	 * 各种标志
@@ -39,7 +39,7 @@ public class Global {
 	
 	public static Point[] allLocations = null;
 	
-	public static final double minPositiveDouble = 0.000000000001;
+	public static final double minPositiveDouble = 0.0000000001;
 	
 	public static final long globalStartTime = System.currentTimeMillis();
 	
@@ -140,9 +140,10 @@ public class Global {
 	
 	private static Properties propsGlobal = null;
 	
-	public static void displayInputOutputPath() {
-		System.out.println(Global.inputPath);
-		System.out.println(Global.outPath);
+	public static void displayInputOutputPath() throws Exception{
+		MLog.log(Global.inputPath);
+		MLog.log(Global.outPath);
+		Thread.sleep(10000);
 	}
 	
 	// initBasePath

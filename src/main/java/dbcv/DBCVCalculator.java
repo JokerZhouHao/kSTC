@@ -37,6 +37,9 @@ public class DBCVCalculator {
 	private boolean hasCalDSCOrDSPC = Boolean.FALSE;
 	private int numTotalNode = 0;
 	
+	private final static long THRESHOLD_OVER_TIME = 3 * 60 * 1000;
+	
+	
 	public DBCVCalculator(String path, int numTotalNode) throws Exception{
 		this.path = path;
 		this.numTotalNode = numTotalNode;
@@ -95,7 +98,7 @@ public class DBCVCalculator {
 	private void calDSCOrDSPC() throws Exception {
 		if(hasCalDSCOrDSPC)	return;
 		
-		int numProcessor = 56;
+		int numProcessor = Global.NUM_THREAD_CAL_DBCV;
 //		if(SystemInfoUtility.isWindow())	numProcessor = 4;
 		
 		ArrayBlockingQueue<Object> queue = new ArrayBlockingQueue<>(numProcessor);

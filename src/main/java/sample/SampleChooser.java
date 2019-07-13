@@ -113,10 +113,10 @@ public class SampleChooser {
 	public static void main(String[] args) throws Exception {
 		List<Integer> nws = new ArrayList<>();
 		nws.add(1);
-//		nws.add(2);
-//		nws.add(3);
-//		nws.add(4);
-//		nws.add(5);
+		nws.add(2);
+		nws.add(3);
+		nws.add(4);
+		nws.add(5);
 		for(int nw : nws) {
 			SampleChooser.chooseSample(500, nw);
 		}

@@ -82,19 +82,32 @@ public class DBCVTest {
 				double[] tempDV = new double[algs.length];
 				int k=0;
 				for(; k<algs.length; k++) {
-					
-					
-					MLog.log(qps.get(i).numWord + " " + j + " " + k + " ");
-					
-					
-					
 					qp.runTimeRec = new RunTimeRecordor();
 					qp.setCoordAndSWords(samples.get(j).coords, samples.get(j).sWords);
 					SortedClusters sClu = algs[k].excuteQuery(qp);
 					if(sClu == null)	break;
+					MLog.logNoln(qps.get(i).numWord + " " + j + " " + k + " " + sClu.getSize());
+					
+					if(Global.inputPath.contains("yelp_academic") && sClu.getSize() >= 750) {
+						System.out.println(" Size >= 750");
+						break;	// 避免计算时间过长 yelp_buss
+					}
+					if(Global.inputPath.contains("meetup") && sClu.getSize() >= 200) {
+						System.out.println(" Size >= 200");
+						break;	// 避免计算时间过长 meetup
+					}
+					if(Global.inputPath.contains("places_dump") && sClu.getSize() >= 500) {
+						System.out.println(" Size >= 500");
+						break;	// 避免计算时间过长 places_dump
+					}
+					
 					tempDV[k] = DBCVCalculator.DBCV(sClu, (int)qp.runTimeRec.numNid);
-					if(Double.isNaN(tempDV[k]))	break;
-					MLog.log(qps.get(i).numWord + " " + j + " " + k + " " + sClu.getSize() + " " + tempDV[k]);
+					if(Double.isNaN(tempDV[k])) {
+						System.out.println(" NaN");
+						break;
+					}
+					
+					System.out.println(" " + tempDV[k]);
 				}
 				if(k == algs.length) {
 					num++;
@@ -135,7 +148,7 @@ public class DBCVTest {
 		String path = Global.sampleResultPath + "dbcvtest.txt";
 		int numEachGroup = 1;
 		if(args.length > 0)		numEachGroup = Integer.parseInt(args[0]);
-		MLog.log("NumEachGrop: " + numEachGroup);
+		MLog.log("NumEachGroup: " + numEachGroup);
 		DBCVTest.displayDBCV(path, numEachGroup);
 	}
 	

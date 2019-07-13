@@ -80,7 +80,7 @@ class Line:
 
     def drawLine(self, xs, ys, label, linewidth=1, linestyle=None, marker=None, markersize=2, dashes=None):
         self.ax.plot(xs, ys, label=label,
-                     linewidth=linewidth, color='black',
+                     linewidth=linewidth,
                      marker=marker, markersize=markersize,
                      dashes=dashes)
 
@@ -88,7 +88,8 @@ class Line:
     @staticmethod
     def draw_k_nearest_distance(file_paths, title='title', fName='test.pdf'):
         upRate = 1000000000
-        myline = Line(title, fName=fName, yscale='log', ylim=[1, upRate], xs=[-10000, 50000, 100000, 150000, 200000])
+        # myline = Line(title, fName=fName, yscale='log', ylim=[1, upRate], xs=[-10000, 0, 50000, 100000, 180000])
+        myline = Line(title, fName=fName, yscale='log', ylim=[1, upRate], xs=[-1000, 0, 5000, 10000, 20000])
         for file_path in file_paths:
             allCoords = [[], []]
             reader = IterableReader(file_path)
@@ -114,13 +115,16 @@ class Line:
 
 
 ########## draw k nearest distance ########
-# k_paths = []
-# k_paths.append(Global.pathOutput + 'KNNNeighborDis_3.txt')
-# k_paths.append(Global.pathOutput + 'KNNNeighborDis_5.txt')
-# k_paths.append(Global.pathOutput + 'KNNNeighborDis_10.txt')
-# k_paths.append(Global.pathOutput + 'KNNNeighborDis_50.txt')
-# k_paths.append(Global.pathOutput + 'KNNNeighborDis_100.txt')
-# Line.draw_k_nearest_distance(k_paths, title="KNNNeighborDis", fName="KNNNeighborDis.pdf")
+
+Global.pathOutput = 'D:\kSTC\Dataset\meetup\[-160.0,-90.0],[180.0,70.0]\output\\'
+# Global.pathOutput = 'D:\kSTC\Dataset\meetup\[-160.0,-90.0],[180.0,70.0]_RepeatCoord\output\\'
+k_paths = []
+k_paths.append(Global.pathOutput + 'KNNNeighborDis_3.txt')
+k_paths.append(Global.pathOutput + 'KNNNeighborDis_5.txt')
+k_paths.append(Global.pathOutput + 'KNNNeighborDis_10.txt')
+k_paths.append(Global.pathOutput + 'KNNNeighborDis_50.txt')
+k_paths.append(Global.pathOutput + 'KNNNeighborDis_100.txt')
+Line.draw_k_nearest_distance(k_paths, title="KNNNeighborDis", fName="KNNNeighborDis.pdf")
 
 
 

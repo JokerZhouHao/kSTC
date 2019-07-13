@@ -134,21 +134,21 @@ public class SingleAlgTest {
 			System.out.println("共簇：" + sClusters.getClusters().size());
 			
 			// DBCV
-			System.out.println("DBCV: " + new DBCVCalculator(sClusters, (int)qParams.runTimeRec.numNid).DBCV());
+//			System.out.println("DBCV: " + new DBCVCalculator(sClusters, (int)qParams.runTimeRec.numNid).DBCV());
 		}
 	}
 	
 	/**
-	 * get QueryParams
+	 * get QParamsYelpBussCase
 	 * @return
 	 * @throws Exception
 	 */
-	public static QueryParams getQParams() throws Exception{
+	public static QueryParams getQParamsYelpBussCase() throws Exception{
 		
 		int rtreeFanout = 50;
 		double alpha = 0.5;
 		double steepDegree = 0.1;
-		int h = 8;
+		int h = 10;
 		
 		int opticMinpts = 1;
 		double opticEpsilon = 0.0001;
@@ -159,7 +159,7 @@ public class SingleAlgTest {
 		int k = 100000;
 		int numWord = 0;
 		
-		int minpts = 5;
+		int minpts = 20;
 		double epsilon = 0.0001;
 		double xi = 0.0001;
 		
@@ -197,7 +197,7 @@ public class SingleAlgTest {
 	 * @return
 	 * @throws Exception
 	 */
-	public static QueryParams getQParams1() throws Exception{
+	public static QueryParams getQParamsMeetup() throws Exception{
 		
 		int rtreeFanout = 50;
 		double alpha = 0.5;
@@ -214,8 +214,8 @@ public class SingleAlgTest {
 		int numWord = 0;
 		
 		int minpts = 5;
-		double epsilon = 0.0001;
-		double xi = 0.0001;
+		double epsilon = 0.01;
+		double xi = 0.01;
 		
 		int maxPidNeighborsBytes = 2147483631;
 		
@@ -226,7 +226,7 @@ public class SingleAlgTest {
 		Point location = null;
 		List<String> sWords = new ArrayList<>();
 		
-		double[] loca = {0.3589707404532504, 0.5086343276350553};
+		double[] loca = {0.09712398229829364, 0.16236140314671882};
 		location = new Point(loca);
 		
 //		sWords.add("Coffee".toLowerCase());
@@ -236,8 +236,10 @@ public class SingleAlgTest {
 //		sWords.add("Good".toLowerCase());
 //		sWords.add("Bars".toLowerCase());
 //		sWords.add("university".toLowerCase());
-		sWords.add("unit".toLowerCase());
-		sWords.add("9".toLowerCase());
+		sWords.add("health".toLowerCase());
+		sWords.add("food".toLowerCase());
+//		sWords.add("interested".toLowerCase());
+//		sWords.add("share".toLowerCase());
 		
 		qp.numWord = sWords.size();
 		
@@ -245,14 +247,55 @@ public class SingleAlgTest {
 		return qp;
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
+	public static QueryParams getQParams() throws Exception{
+		
+		int rtreeFanout = 50;
+		double alpha = 0.5;
+		double steepDegree = 0.1;
+		int h = 10;
+		
+		int opticMinpts = 1;
+		double opticEpsilon = 0.0001;
+		
+		int numSample = 200;
+		int type = 4;
+		
+		int k = 5000;
+		int numWord = 0;
+		
+		int minpts = 5;
+		double epsilon = 0.001;
+		double xi = 0.001;
+		
+		int maxPidNeighborsBytes = 2147483631;
+		
+		QueryParams qp = new QueryParams(rtreeFanout, alpha, steepDegree, h, opticMinpts, opticEpsilon,
+										numSample, type, k, numWord, minpts, epsilon, 
+										xi, maxPidNeighborsBytes);
+		
+		Point location = null;
+		List<String> sWords = new ArrayList<>();
+		
+		double[] loca = {0.09712398229829364, 0.16236140314671882};
+		location = new Point(loca);
+		
+//		sWords.add("Coffee".toLowerCase());
+//		sWords.add("Tea".toLowerCase());
+//		sWords.add("Breakfast".toLowerCase());
+//		sWords.add("Sandwiches".toLowerCase());
+//		sWords.add("Good".toLowerCase());
+//		sWords.add("Bars".toLowerCase());
+//		sWords.add("university".toLowerCase());
+		sWords.add("Retail".toLowerCase());
+		sWords.add("Goods".toLowerCase());
+//		sWords.add("interested".toLowerCase());
+//		sWords.add("share".toLowerCase());
+		
+		qp.numWord = sWords.size();
+		
+		qp.setCoordAndSWords(location, sWords);
+		return qp;
+	}
 	
 	public static void main(String[] args) throws Exception{
 		System.out.println(Global.inputPath);
@@ -260,7 +303,7 @@ public class SingleAlgTest {
 		System.out.println();
 		
 //		QueryParams qParams = SingleAlgTest.getQParams();
-		QueryParams qParams = SingleAlgTest.getQParams();
+		QueryParams qParams = SingleAlgTest.getQParamsYelpBussCase();
 		QueryParams.display(qParams);
 		
 //		qParams.type = 1;
@@ -272,12 +315,13 @@ public class SingleAlgTest {
 		qParams.type = 4;
 		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisFastRange, qParams);
 		
-		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisBaseOpticsWu, qParams);
-//		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisAdvancedOpticsWu, qParams);
-		
-		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisBaseOptics, qParams);
+//		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisBaseOptics, qParams);
 //		SingleAlgTest.testAlgEuc("AlgEucDisAdvancedOptics", qParams);
 //		SingleAlgTest.testAlgEuc("AlgEucDisAdvancedOpticsWu2", qParams);
+		
+//		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisBaseOpticsWu, qParams);
+//		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisAdvancedOpticsWu, qParams);
+		
 	}
 
 }

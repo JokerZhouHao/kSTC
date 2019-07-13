@@ -5,7 +5,7 @@ package utility;
  * @author ZhouHao
  * @since 2019年6月25日
  */
-public class GeoDisUtility {
+public class GeoDisUtilityYelpbuss {
 	private static final int GEODIS_2_1LNG = 111000;
 	private static final double TOTAL_LNG = 140;
 	private static final double TOTAL_GEODIS = GEODIS_2_1LNG * TOTAL_LNG;
@@ -32,9 +32,9 @@ public class GeoDisUtility {
 	
 	
 	public static void main(String[] args) {
-//		dis2GeoDis(0.001);
-		dis2GeoDis(0.0001);
 		dis2GeoDis(0.001);
+		dis2GeoDis(0.0001);
+		dis2GeoDis(0.00005);
 		
 		float f = (float)1/3;
 		System.out.println(f);

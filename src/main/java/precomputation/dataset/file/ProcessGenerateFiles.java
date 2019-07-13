@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -18,6 +19,7 @@ import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 
 import entity.Cell;
 import entity.CellCollection;
+import entity.Fre2Term;
 import entity.KSortedCollection;
 import entity.Rectangle;
 import entity.SGPLInfo;
@@ -161,6 +163,35 @@ public class ProcessGenerateFiles {
 		}
 		bw.close();
 		IOUtility.setFirstLine(pathWidTerms, Global.delimiterPound + String.valueOf(wid));
+		System.out.println("> Over.");
+	}
+	
+	public static void generateTermFrequencyFile(String pathTermFre) throws Exception{
+		System.out.println("> start generate file " + pathTermFre);
+		String[] allTxts = FileLoader.loadText(Global.pathOrgId2Text);
+		Map<String, Integer> term2fre = new HashMap<>();
+		Integer tempFre = 0;
+		List<String> terms = null;
+		for(int i=0; i<allTxts.length; i++) {
+			terms = LuceneUtility.getTerms(allTxts[i]);
+			if(terms == null)	continue;
+			for(String st : terms) {
+				if(null == (tempFre = term2fre.get(st)))	term2fre.put(st, 1);
+				else term2fre.put(st, tempFre + 1);
+			}
+		}
+		List<Fre2Term> fres = new ArrayList<>();
+		for(Map.Entry<String, Integer> en : term2fre.entrySet()) {
+			fres.add(new Fre2Term(en.getValue(), en.getKey()));
+		}
+		Collections.sort(fres);
+		
+		BufferedWriter bw = IOUtility.getBW(pathTermFre);
+		bw.write(Global.delimiterPound + fres.size() + "\n");
+		for(Fre2Term f : fres) {
+			bw.write(f.toString() + "\n");
+		}
+		bw.close();
 		System.out.println("> Over.");
 	}
 	
@@ -422,12 +453,8 @@ public class ProcessGenerateFiles {
 	}
 	
 	public static void main(String[] args) throws Exception{
-		MLog.log(Global.inputPath);
-		MLog.log(Global.outPath);
-		Thread.sleep(10000);
-		long tTime = 0;
+		Global.displayInputOutputPath();
 		long startTime = System.currentTimeMillis();
-		
 		
 		/*********************  alg ecu dis dbscan starting *******************************/ 
 		/* generateIdWidsFile */
@@ -464,18 +491,22 @@ public class ProcessGenerateFiles {
 //		String pathCellidpidWordsIndex = Global.pathCellidPidWordsIndex;
 //		ProcessGenerateFiles.buildCellidPidWordsIndex(pathCellidpidWordsIndex);
 		
-		
+		/* generateTermFrequencyFile */
+//		String pathTermFrequency = Global.datasetPath + "term_frequency.txt";
+//		generateTermFrequencyFile(pathTermFrequency);
 		
 		
 		/* used	 building cellid rtreeid pid words index */
 		List<Integer> hs = new ArrayList<>();
 //		hs.add(4);
-//		hs.add(6);
-//		hs.add(8);
+		hs.add(6);
+		hs.add(8);
 		hs.add(10);
 		hs.add(12);
 		hs.add(14);
-		hs.add(15);
+		hs.add(16);
+		hs.add(18);
+		hs.add(20);
 		for(int h : hs) {
 			String pathCellidRtreeidOrPidWordsIndex = Global.getPathCellidRtreeidOrPidWordsIndex(Global.rtreeFanout, h);
 			ProcessGenerateFiles.buildCellidRtreeidOrPidWordsIndex(pathCellidRtreeidOrPidWordsIndex, 
@@ -532,12 +563,6 @@ public class ProcessGenerateFiles {
 //				}
 //			}
 //		}
-		
-		
-		/* building k neighbor dis file */
-//		int k = 20;
-//		String pathKNeighborDis = Global.outPath + String.valueOf(k) + Global.signKNeighborDis;
-//		ProcessGenerateFiles.generateKNeighborDisFile(pathKNeighborDis, k);
 		
 		MLog.log("Over，总用时: " + TimeUtility.getSpendTimeStr(startTime, System.currentTimeMillis()));
 	}

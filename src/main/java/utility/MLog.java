@@ -5,6 +5,10 @@ public class MLog {
 		System.out.println("[" + TimeUtility.getTime() + "] " + info);
 	}
 	
+	public static synchronized void logNoln(String info) {
+		System.out.print("[" + TimeUtility.getTime() + "] " + info);
+	}
+	
 	public static synchronized void blackLine() {
 		System.out.println();
 	}

@@ -189,7 +189,10 @@ public class AlgEucDisBase implements AlgInterface{
 		qp.runTimeRec.numCluster = sClusters.getSize();
 		qp.runTimeRec.timeTotalGetCluster = System.nanoTime() - qp.runTimeRec.timeTotalGetCluster;
 		qp.runTimeRec.timeTotal = System.nanoTime() - qp.runTimeRec.timeTotal;
-		if(0 == sClusters.getSize())	qp.runTimeRec.topKScore = 0;
+		if(0 == sClusters.getSize()) {
+			qp.runTimeRec.topKScore = 0;
+			return null;
+		}
 		else qp.runTimeRec.topKScore = sClusters.getLastScore();
 		return sClusters;
 	}

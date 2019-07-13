@@ -136,6 +136,8 @@ public class Zip2StringFile {
 	 * @throws Exception
 	 */
 	public void transToFile() throws Exception {
+		Global.displayInputOutputPath();
+		
 		long startTime = System.currentTimeMillis();
 		MLog.log("start transfer json file to three files . . .");
 		
@@ -152,7 +154,7 @@ public class Zip2StringFile {
 			JSONObject jo = JSON.parseObject(line);
 			idNameWriter.write(counter, getId(jo));
 			idCoordWriter.write(counter, getLonLat(jo));
-			idTextWriter.write(counter, getText(jo));
+			idTextWriter.write(counter, getText(jo).replaceAll("\n", " "));
 			counter++;
 		}
 		idNameWriter.close();

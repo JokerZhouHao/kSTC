@@ -1,5 +1,6 @@
 package precomputation.dataset.file;
 
+import entity.Rectangle;
 import utility.Global;
 
 /**
@@ -24,8 +25,62 @@ public class CoordInfoExtractor {
 		System.out.println("RightUp: " + ru[0] + ", " + ru[1]);
 	}
 	
+	
+	public static void showNumObjectInRect(String fp, Rectangle rect) throws Exception{
+		double[][] allCoords = FileLoader.loadCoords(fp);
+		int num = 0;
+		for(int i=0; i<allCoords.length; i++) {
+			if(rect.contain(allCoords[i][0], allCoords[i][1]))	num++;
+		}
+		System.out.println("NumObjectIn " + rect + ": " + num);
+	}
+	
+	public static void showOrginalCoord(Rectangle rect, double[][] coords) {
+		double spanLon = rect.eastNorthLont - rect.westSouthLont;
+		double spanLat = rect.eastNorthLat - rect.westSouthLat;
+		for(double[] cod : coords) {
+			System.out.println("normal coord: " + cod[0] + " " + cod[1]);
+			cod[0] = rect.westSouthLont + cod[0] * spanLon;
+			cod[1] = rect.westSouthLat + cod[1] * spanLat;
+			System.out.println("orginal coord: " + cod[0] + " " + cod[1]);
+			System.out.println("orginal coord: " + cod[1] + "," + cod[0] + '\n');
+		}
+	}
+	
+	
 	public static void main(String[] args) throws Exception {
-		String fp = Global.pathOrgId2Coord;
-		CoordInfoExtractor.showLBAndRU(fp);
+		
+//		String fp = Global.pathOrgId2Coord;
+//		CoordInfoExtractor.showLBAndRU(fp);
+		
+//		String fp = Global.pathOrgId2Coord;
+//		showNumObjectInRect(fp, new Rectangle(-130, 30, -65, 45));	// 美国
+//		showNumObjectInRect(fp, new Rectangle(-114, 31, -108, 37));
+		
+//		xlim = [0.31042, 0.31086]
+//		ylim = [0.4200, 0.4210]
+		Rectangle rect = new Rectangle(-125, 28, 15, 60);
+		double[][] coords = {{0.31042, 0.4200},
+				{0.31086, 0.4210}
+		};
+		showOrginalCoord(rect, coords);
+		
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

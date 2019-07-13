@@ -120,14 +120,22 @@ public class FileLoader {
 		String[] arr = null;
 		int start = 0;
 		int id = 0;
+		String line0 = null;
 		for(String line : ibr) {
 			if(line.startsWith(Global.delimiterPound)) {
 				texts = new String[Integer.parseInt(line.split(Global.delimiterPound)[1].trim())];
 			} else {
 				start = line.indexOf(Global.delimiterLevel1);
+				
+				if(start == -1) {
+					System.out.println(line0);
+				}
+				
 				id = Integer.parseInt(line.substring(0, start));
 				start += Global.delimiterLevel1.length();
 				texts[id] = line.substring(start);
+				
+				line0 = line;
 			}
 		}
 		return texts;

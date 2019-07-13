@@ -44,7 +44,7 @@ public class Rectangle {
 	}
 	
 	public static void main(String[] args) throws Exception{
-		Rectangle rec = new Rectangle(30, 10, 90, 50);
+		Rectangle rec = new Rectangle(-180, -90, 180, 90);
 		System.out.println(rec);
 	}
 }
