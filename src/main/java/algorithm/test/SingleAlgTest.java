@@ -96,37 +96,6 @@ public class SingleAlgTest {
 			break;
 		}
 		
-//		if(algName.equals("base")) {
-//			System.out.println("----------------------- AlgEucDisBase ----------------------");
-//			sClusters = SingleAlgTest.eucBase.excuteQuery(qParams);
-//			resPath = Global.outPath + "result_ecu_base.txt";
-//		} else if(algName.equals("fast")) {
-//			System.out.println("----------------------- AlgEucDisFastRange ----------------------");
-//			sClusters = SingleAlgTest.eucFast.excuteQuery(qParams);
-//			resPath = Global.outPath + "result_ecu_fast.txt";
-//		} else if(algName.equals("AlgEucDisBaseOptics")) {
-//			System.out.println("----------------------- AlgEucDisBaseOptics ----------------------");
-//			sClusters = SingleAlgTest.eucBaseOptics.excuteQuery(qParams, Global.pathOrderObjects + "_AlgEucDisBaseOptics");
-//			resPath = Global.outPath + "result_ecu_base_optics.txt";
-//		} else if(algName.equals("AlgEucDisBaseOpticsWu")) {
-//			System.out.println("----------------------- AlgEucDisBaseOpticsWu ----------------------");
-//			sClusters = SingleAlgTest.eucBaseOpticsWu.excuteQuery(qParams, Global.pathOrderObjects + "_AlgEucDisBaseOpticsWu");
-////			sClusters = AlgTest.eucBaseOpticsWu.excuteQuery(qParams, null);
-//			resPath = Global.outPath + "result_ecu_base_optics_wu.txt";
-//		} else if(algName.equals("AlgEucDisAdvancedOptics")) {
-//			System.out.println("----------------------- AlgEucDisAdvancedOptics ----------------------");
-//			sClusters = SingleAlgTest.eucAdvancedOptics.excuteQuery(qParams, Global.pathOrderObjects + "_AlgEucDisAdvancedOptics");
-//			resPath = Global.outPath + "result_ecu_advanced_optics.txt";
-//		} else if(algName.equals("AlgEucDisAdvancedOpticsWu")) {
-//			System.out.println("----------------------- AlgEucDisAdvancedOpticsWu ----------------------");
-//			sClusters = SingleAlgTest.eucAdvancedOpticsWu.excuteQuery(qParams, Global.pathOrderObjects + "_AlgEucDisAdvancedOpticsWu");
-//			resPath = Global.outPath + "result_ecu_advanced_optics_wu.txt";
-//		} else if(algName.equals("AlgEucDisAdvancedOpticsWu2")) {
-//			System.out.println("----------------------- AlgEucDisAdvancedOpticsWu2 ----------------------");
-//			sClusters = SingleAlgTest.eucAdvancedOpticsWu2.excuteQuery(qParams, Global.pathOrderObjects + "_AlgEucDisAdvancedOpticsWu2");
-//			resPath = Global.outPath + "result_ecu_advanced_optics_wu2.txt";
-//		}
-		
 		System.out.println("用时：" + TimeUtility.getGlobalSpendMilTime() + "ms");
 		
 		if(null != sClusters) {

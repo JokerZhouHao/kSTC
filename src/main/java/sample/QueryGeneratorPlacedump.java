@@ -10,7 +10,7 @@ import entity.QueryParams;
  * @author ZhouHao
  * @since 2019年6月24日
  */
-public class QueryGenerator {
+public class QueryGeneratorPlacedump {
 	public static void one() {
 		int rtreeFanout = 50;
 		double alpha = 0.5;
@@ -58,7 +58,7 @@ public class QueryGenerator {
 //		types.add(12);
 		
 		int k = 5000;
-		int numWord = 1;
+		int numWord = 2;
 		
 		int minpts = 5;
 		double epsilon = 0.00003;
@@ -289,7 +289,7 @@ public class QueryGenerator {
 	
 	public static void main(String[] args) {
 //		one();
-//		oneGroup();
+		oneGroup();
 		
 		/*********************   dbscan  *********************/
 //		dbscanNumWord();

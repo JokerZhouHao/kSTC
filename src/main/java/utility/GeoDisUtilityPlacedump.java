@@ -7,9 +7,9 @@ package utility;
  */
 public class GeoDisUtilityPlacedump {
 	private static final int GEODIS_2_1LNG = 111000;
-	private static final double TOTAL_LNG = 6;
+	private static final double TOTAL_LNG = 360;
 	private static final double TOTAL_GEODIS = GEODIS_2_1LNG * TOTAL_LNG;
-	private static final double ANGLE = 34 / 180.0 * Math.PI;
+	private static final double ANGLE = 45 / 180.0 * Math.PI;
 	
 	private static final String signGeoDis = "GeoDis";
 	private static final String signDis = "Dis";
@@ -33,8 +33,10 @@ public class GeoDisUtilityPlacedump {
 	
 	public static void main(String[] args) {
 //		dis2GeoDis(0.001);
-		dis2GeoDis(0.001);
 //		dis2GeoDis(0.001);
+		dis2GeoDis(0.00005);
+		
+		geoDis2dis(1000);
 		
 	}
 }

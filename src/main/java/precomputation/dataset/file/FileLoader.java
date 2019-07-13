@@ -29,6 +29,12 @@ import utility.io.LuceneUtility;
  * @since 2018年11月6日
  */
 public class FileLoader {
+	/**
+	 * 加载idname文件
+	 * @param fp
+	 * @return
+	 * @throws Exception
+	 */
 	public static String[] loadNames(String fp) throws Exception{
 		IterableBufferReader<String> ibr = IOUtility.getIBW(fp);
 		String[] names = null;
@@ -44,6 +50,12 @@ public class FileLoader {
 		return names;
 	}
 	
+	/**
+	 * 加载name set
+	 * @param fp
+	 * @return
+	 * @throws Exception
+	 */
 	public static Set<String> loadSetNames(String fp) throws Exception{
 		IterableBufferReader<String> ibr = IOUtility.getIBW(fp);
 		Set<String> names = new HashSet<>();
@@ -383,6 +395,26 @@ public class FileLoader {
 		}
 		br.close();
 		return c2p;
+	}
+	
+	/**
+	 * 加载cell2nids
+	 * @param sgpl
+	 * @return
+	 */
+	public static Map<Integer, List<Integer>> loadCell2Nids(SGPLInfo sgpl){
+		Map<Integer, List<Integer>> cell2nids = new HashMap<>();
+		int cellid = 0;
+		List<Integer> nids = null;
+		for(int i=0; i<Global.allLocations.length; i++) {
+			cellid = sgpl.getZOrderId(Global.allLocations[i].m_pCoords);
+			if(null == (nids = cell2nids.get(cellid))) {
+				nids = new ArrayList<>();
+				cell2nids.put(cellid, nids);
+			}
+			nids.add(i);
+		}
+		return cell2nids;
 	}
 	
 	public static void main(String[] args) throws Exception{

@@ -45,7 +45,10 @@ public class SubsetAllFileBuilder {
 		
 //		placedump20110628
 //		Rectangle subRect = new Rectangle(-114, 31, -108, 37);	// 亚利桑那州
-		Rectangle subRect = new Rectangle(-180, -90, 180, 90);
+//		Rectangle subRect = new Rectangle(-180, -90, 180, 90);
+		
+//		test_dataset
+		Rectangle subRect = new Rectangle(0, 0, 1, 1);
 		
 		/***************** 提取某范围内的数据文件 *************************************/
 		if(!Global.subDataSetPath.contains(subRect.toString())) {

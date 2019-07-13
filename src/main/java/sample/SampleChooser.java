@@ -111,6 +111,8 @@ public class SampleChooser {
 	}
 	
 	public static void main(String[] args) throws Exception {
+		Global.displayInputOutputPath();
+		
 		List<Integer> nws = new ArrayList<>();
 		nws.add(1);
 		nws.add(2);

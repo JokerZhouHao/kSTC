@@ -7,6 +7,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import entity.Node;
+import entity.Rectangle;
 import index.optic.NeighborsNode;
 import utility.DatasetType;
 import utility.MComparator;
@@ -19,6 +20,9 @@ public class T1 {
 	public static void main(String[] args) {
 //		System.out.println(Double.isNaN(0.0/0.0));
 //		System.out.println(1/0.000000000000000000001);
+		
+		Rectangle subRect = new Rectangle(0, 1, 0, 1);
+		System.out.println(subRect);
 		
 		String line = "\nss";
 		line = line.replace('\n', ' ');

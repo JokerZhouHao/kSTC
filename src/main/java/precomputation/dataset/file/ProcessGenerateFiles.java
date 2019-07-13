@@ -497,22 +497,22 @@ public class ProcessGenerateFiles {
 		
 		
 		/* used	 building cellid rtreeid pid words index */
-		List<Integer> hs = new ArrayList<>();
-//		hs.add(4);
-		hs.add(6);
-		hs.add(8);
-		hs.add(10);
-		hs.add(12);
-		hs.add(14);
-		hs.add(16);
-		hs.add(18);
-		hs.add(20);
-		for(int h : hs) {
-			String pathCellidRtreeidOrPidWordsIndex = Global.getPathCellidRtreeidOrPidWordsIndex(Global.rtreeFanout, h);
-			ProcessGenerateFiles.buildCellidRtreeidOrPidWordsIndex(pathCellidRtreeidOrPidWordsIndex, 
-								 SGPLInfo.getInstance(h));
-			System.out.println();
-		}
+//		List<Integer> hs = new ArrayList<>();
+////		hs.add(4);
+//		hs.add(6);
+//		hs.add(8);
+//		hs.add(10);
+//		hs.add(12);
+//		hs.add(14);
+//		hs.add(16);
+//		hs.add(18);
+//		hs.add(20);
+//		for(int h : hs) {
+//			String pathCellidRtreeidOrPidWordsIndex = Global.getPathCellidRtreeidOrPidWordsIndex(Global.rtreeFanout, h);
+//			ProcessGenerateFiles.buildCellidRtreeidOrPidWordsIndex(pathCellidRtreeidOrPidWordsIndex, 
+//								 SGPLInfo.getInstance(h));
+//			System.out.println();
+//		}
 		
 		
 		

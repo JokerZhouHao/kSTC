@@ -3,6 +3,7 @@ package utility;
 import java.util.Comparator;
 
 import entity.Cluster;
+import entity.Id2Distance;
 import entity.Node;
 
 public class MComparator<T> implements Comparator<T> {
@@ -52,6 +53,12 @@ public class MComparator<T> implements Comparator<T> {
 			if(d1 > d2) return -1;
 			else if(d1==d2)	return 0;
 			else return 1;
+		} else if(o1 instanceof Id2Distance) {
+			Id2Distance i2d1 = (Id2Distance)o1;
+			Id2Distance i2d2 = (Id2Distance)o2;
+			if(i2d1.distance > i2d2.distance)	return 1;
+			else if(i2d1.distance == i2d2.distance)	return 0;
+			else return -1;
 		}
 		return 0;
 	}

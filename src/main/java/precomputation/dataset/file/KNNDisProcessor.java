@@ -95,9 +95,9 @@ public class KNNDisProcessor implements Runnable{
 		List<Integer> ks = new ArrayList<>();
 		ks.add(3);
 		ks.add(5);
-		ks.add(10);
-		ks.add(50);
-		ks.add(100);
+//		ks.add(10);
+//		ks.add(50);
+//		ks.add(100);
 		long start = System.currentTimeMillis();
 		MLog.log("开始计算" + ks + " KNNDis . . . ");
 		for(int k : ks) {
