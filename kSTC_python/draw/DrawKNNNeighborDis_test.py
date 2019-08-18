@@ -72,6 +72,28 @@ class Line:
             if self.ylim != None:
                 self.ax.set_ylim(self.ylim)
 
+        # 设置x轴对应txt
+        self.xTxts = ['0', '', '', '', '1e6', '', '', '', '2e6', '', '']
+        xaxis = self.ax.get_xaxis()
+        x_labels = xaxis.get_ticklabels()
+        for i in range(len(x_labels)):
+            pos = x_labels[i].get_position()
+            x_labels[i].set_position(pos)
+            x_labels[i].set_verticalalignment('top')
+            x_labels[i].set_text(self.xTxts[i-1])
+        xaxis.set_ticklabels(x_labels)
+
+        # 设置y轴对应txt
+        self.yTxts = ['0', '1.4e-2', '1.4e-1', '1.4', '1.4e1', '1.4e2', '1.4e3', '1.4e4', '1.4e5', '1.4e6', '1.4e6', '1.4e7']
+        yaxis = self.ax.get_yaxis()
+        y_labels = yaxis.get_ticklabels()
+        for i in range(len(y_labels)):
+            pos = y_labels[i].get_position()
+            y_labels[i].set_position(pos)
+            # y_labels[i].set_verticalalignment('top')
+            y_labels[i].set_text(self.yTxts[i-1])
+        yaxis.set_ticklabels(y_labels)
+
         interactive(True)
         plt.show()
 
@@ -80,7 +102,7 @@ class Line:
 
     def drawLine(self, xs, ys, label, linewidth=1, linestyle=None, marker=None, markersize=2, dashes=None):
         self.ax.plot(xs, ys, label=label,
-                     linewidth=linewidth,
+                     linewidth=linewidth, color='black',
                      marker=marker, markersize=markersize,
                      dashes=dashes)
 
@@ -88,8 +110,7 @@ class Line:
     @staticmethod
     def draw_k_nearest_distance(file_paths, title='title', fName='test.pdf'):
         upRate = 1000000000
-        # myline = Line(title, fName=fName, yscale='log', ylim=[1, upRate], xs=[-10000, 0, 50000, 100000, 180000])
-        myline = Line(title, fName=fName, yscale='log', ylim=[1, upRate], xs=[-1000, 0, 5000, 10000, 20000])
+        myline = Line(title, fName=fName, yscale='log', ylim=[1, upRate], xlabel='number of object', ylable='distance (m)')
         for file_path in file_paths:
             allCoords = [[], []]
             reader = IterableReader(file_path)
@@ -115,9 +136,7 @@ class Line:
 
 
 ########## draw k nearest distance ########
-
-# Global.pathOutput = 'D:\kSTC\Dataset\meetup\[-160.0,-90.0],[180.0,70.0]\output\\'
-Global.pathOutput = 'D:\kSTC\Dataset\meetup\[-160.0,-90.0],[180.0,70.0]_RepeatCoord\output\\'
+Global.pathOutput = 'D:\kSTC\Dataset\places_dump_20110628\[-125.0,31.2],[-109.0,42.2]\output\\'
 k_paths = []
 k_paths.append(Global.pathOutput + 'KNNNeighborDis_3.txt')
 k_paths.append(Global.pathOutput + 'KNNNeighborDis_5.txt')

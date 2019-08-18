@@ -250,24 +250,24 @@ public class QueryGenerator {
 		int rtreeFanout = 50;
 		double alpha = 0.5;
 		double steepDegree = 0.1;
-		int h = 14;
+		int h = 10;
 		
 		int opticMinpts = 1;
 		double opticEpsilon = 0.0001;
 		
-		int numSample = 100;
+		int numSample = 200;
 		List<Integer> types = new ArrayList<>();
-		types.add(11);
-		types.add(12);
+//		types.add(11);
+		types.add(4);
 		
-		int k = 10;
+		int k = 100000;
 		List<Integer> numWords = new ArrayList<>();
 		numWords.add(1);
 		numWords.add(2);
 		numWords.add(3);
 		numWords.add(4);
 		
-		int minpts = 50;
+		int minpts = 5;
 		
 		double epsilon = 0.0001;
 		
@@ -286,6 +286,83 @@ public class QueryGenerator {
 	}
 	
 	
+	public static void dbcvYelpbuss() {
+		int rtreeFanout = 50;
+		double alpha = 0.5;
+		double steepDegree = 0.1;
+		int h = 10;
+		
+		int opticMinpts = 1;
+		double opticEpsilon = 0.0001;
+		
+		int numSample = 200;
+		List<Integer> types = new ArrayList<>();
+//		types.add(11);
+		types.add(4);
+		
+		int k = 100000;
+		List<Integer> numWords = new ArrayList<>();
+		numWords.add(1);
+		numWords.add(2);
+		numWords.add(3);
+		numWords.add(4);
+		
+		int minpts = 5;
+		
+		double epsilon = 0.0001;
+		
+		double xi = 0.0001;
+		
+		int maxPidNeighborsBytes = 2147483631;
+		
+		for(int type : types) {
+			for(int numWord : numWords) {
+				System.out.println(QueryParams.generateTestQuery(rtreeFanout, alpha, steepDegree, h, 
+						opticMinpts, opticEpsilon, numSample, type, k, numWord, minpts, 
+						epsilon, xi, maxPidNeighborsBytes));
+			}
+			System.out.println();
+		}
+	}
+	
+	public static void dbcvArizona() {
+		int rtreeFanout = 50;
+		double alpha = 0.5;
+		double steepDegree = 0.1;
+		int h = 10;
+		
+		int opticMinpts = 1;
+		double opticEpsilon = 0.001;
+		
+		int numSample = 400;
+		List<Integer> types = new ArrayList<>();
+//		types.add(11);
+		types.add(4);
+		
+		int k = 5000;
+		List<Integer> numWords = new ArrayList<>();
+		numWords.add(1);
+		numWords.add(2);
+		numWords.add(3);
+		numWords.add(4);
+		
+		int minpts = 5;
+		
+		double epsilon = 0.001;
+		
+		double xi = 0.001;
+		
+		int maxPidNeighborsBytes = 2147483631;
+		
+		for(int type : types) {
+			for(int numWord : numWords) {
+				System.out.println(QueryParams.generateTestQuery(rtreeFanout, alpha, steepDegree, h, 
+						opticMinpts, opticEpsilon, numSample, type, k, numWord, minpts, 
+						epsilon, xi, maxPidNeighborsBytes));
+			}
+			System.out.println();
+		}
+	}
 	
 	public static void main(String[] args) {
 //		one();
@@ -299,5 +376,9 @@ public class QueryGenerator {
 		
 		/*********************   optic  *********************/
 //		opticNumWord();
+		
+		/*********************   dbcv  *********************/
+//		dbcvYelpbuss();
+		dbcvArizona();
 	}
 }

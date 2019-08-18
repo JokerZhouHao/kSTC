@@ -156,7 +156,7 @@ public class KNNDisProcessorBigdataset implements Runnable{
 	 * @throws Exception
 	 */
 	public static void calKNNDistance(List<Integer> ks, int h, double radiusInit) throws Exception{
-		MLog.log("start cal " + ks + " KNNDistance . . . ");
+		MLog.log("start cal ks = " + ks + ", h = " + h + " radiusInit = " + radiusInit + " ,KNNDistance . . . ");
 		long startTime = System.currentTimeMillis();
 		int numThread = 4;
 		if(Global.inputPath.contains("places_dump"))	numThread = 80;
@@ -202,6 +202,6 @@ public class KNNDisProcessorBigdataset implements Runnable{
 		Collections.sort(ks);
 //		calKNNDistance(ks, 10, 0.0005);	// yelp_buss
 //		calKNNDistance(ks, 4, 0.1);		// test_dataset
-		calKNNDistance(ks, 16, 0.00005);
+		calKNNDistance(ks, 12, 0.0007);
 	}
 }

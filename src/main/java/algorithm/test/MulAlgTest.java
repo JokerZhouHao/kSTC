@@ -36,6 +36,7 @@ public class MulAlgTest {
 			System.exit(0);
 		}
 		long startTime = System.currentTimeMillis();
+		Global.displayInputOutputPath();
 		
 		int numThread = Integer.parseInt(args[0]);
 		String queryPath = Global.sampleResultPath + args[1];

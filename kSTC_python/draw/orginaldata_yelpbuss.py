@@ -265,9 +265,10 @@ class Line:
     colors = ['red', 'blue', 'green']
     index_colors = -1
 
-    def __init__(self, fig=None, xs=None, ys=None, title='title', max_y = None):
+    def __init__(self, fig=None, xs=None, ys=None, title='title', max_y = None, xlim = None):
         if fig is None:
-            self.fig = plt.figure(random.randint(1, 10000), figsize=(10.1023, 6.5), tight_layout=True)
+            # self.fig = plt.figure(random.randint(1, 10000), figsize=(10.1023, 6.5), tight_layout=True)
+            self.fig = plt.figure(random.randint(1, 10000), figsize=(8, 6.5), tight_layout=True)
         else:
             self.fig = fig
         # self.fig = plt.figure(random.randint(1, 10000))
@@ -290,6 +291,8 @@ class Line:
         else:
             self.max_y = None
 
+        self.xlim = xlim
+
         plt.rcParams['font.size'] = 20
         if fig is None:
             self.ax = self.fig.add_subplot(111)
@@ -311,6 +314,9 @@ class Line:
 
         if self.max_y is not None:
             self.ax.set_ylim(0, self.max_y)
+
+        if self.xlim is not None:
+            self.ax.set_xlim(self.xlim)
         # self.ax.set_yticks(self.ys)
         # self.ax.set_yscale('log')
         # self.ax.set_xscale('log')
@@ -346,8 +352,8 @@ class Line:
 
     # 将optic的结果显示在distance图上
     @staticmethod
-    def draw_reachability_dis_cluster(dis_path, result_path, s=1, show=True, title='title', max_y=None):
-        lines = Line(title=title, max_y=max_y)
+    def draw_reachability_dis_cluster(dis_path, result_path, s=1, show=True, title='title', max_y=None, xlim = None):
+        lines = Line(title=title, max_y=max_y, xlim=xlim)
 
         # 画所有的dis
         allCoords = [[], []]
@@ -369,7 +375,8 @@ class Line:
                 continue
             elif line.startswith('Cluster'):
                 if len(clusterCoords) != 0:
-                    lines.draw_line(clusterCoords, s=s, c='red')
+                    # lines.draw_line(clusterCoords, s=s, c='red')
+                    lines.draw_line(clusterCoords, s=s)
                 clusterCoords = [[], []]
             elif line.startswith('cluster_num'):
                 continue
@@ -377,7 +384,8 @@ class Line:
                 orderId = int(line.split(Global.delimiterLevel1)[0])
                 clusterCoords[0].append(allCoords[0][orderId])
                 clusterCoords[1].append(allCoords[1][orderId])
-        lines.draw_line(clusterCoords, s=s, c='red')
+        # lines.draw_line(clusterCoords, s=s, c='red')
+        lines.draw_line(clusterCoords, s=s)
         if show:
             lines.show()
         return lines
@@ -458,21 +466,24 @@ ylim = [0, 1]
 # xlim = [0.0909, 0.0926]
 # ylim = [0.1740, 0.1775]
 
-xlim = [0.31042, 0.31086]
-ylim = [0.4200, 0.4210]
+# xlim = [0.31042, 0.31086]
+# ylim = [0.4200, 0.4210]
 
 
 # xlim = [0.09137, 0.09155]
 # ylim = [0.1769, 0.1773]
 
+# xlim = [0.069249, 0.069267]
+# ylim = [0.253121, 0.253156]
+
 ##############   dbscan #############
 # pathResultAlgEucBase = Global.pathOutput + 'result_ecu_base.txt'
 # Scatter.draw_result(pathCoord, pathResultAlgEucBase, s=20, show=True, title=pathResultAlgEucBase, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
 # #
-# pathResultAlgEucFast = Global.pathOutput + 'result_ecu_fast_rFanout=50.alpha=0.5.steepD=0.1.h=10.om=1.oe=1.0E-4.ns=200.t=4.k=100000.nw=2.mpts=20.eps=1.0E-4.xi=1.0E-4.maxPNeiByte=2147483631'
-# Scatter.draw_result(pathCoord, pathResultAlgEucFast, s=150, show=True, title=pathResultAlgEucFast, pathBgImg=pathBgImg,
-#                     xlim=xlim, ylim=ylim, showXY=False,
-#                     fName='yelp_case_dbscan_minpts20.pdf')
+pathResultAlgEucFast = Global.pathOutput + 'result_ecu_fast_rFanout=50.alpha=0.5.steepD=0.1.h=10.om=1.oe=1.0E-4.ns=200.t=4.k=100000.nw=2.mpts=20.eps=1.0E-4.xi=1.0E-4.maxPNeiByte=2147483631'
+Scatter.draw_result(pathCoord, pathResultAlgEucFast, s=150, show=True, title=pathResultAlgEucFast, pathBgImg=pathBgImg,
+                    xlim=xlim, ylim=ylim, showXY=False,
+                    fName='yelp_case_dbscan_minpts20.pdf')
 #
 # pathResultAlgEucFast = Global.pathOutput + 'result_ecu_fast_rFanout=50.alpha=0.5.steepD=0.1.h=10.om=1.oe=1.0E-4.ns=200.t=4.k=100000.nw=2.mpts=10.eps=1.0E-4.xi=1.0E-4.maxPNeiByte=2147483631'
 # Scatter.draw_result(pathCoord, pathResultAlgEucFast, s=150, show=True, title=pathResultAlgEucFast, pathBgImg=pathBgImg,
@@ -491,11 +502,23 @@ Scatter.draw_result(pathCoord, pathResultAlgEucBaseOptics, s=150, show=True, tit
                     fName='yelp_case_optic_minpts5.pdf')
 
 ##############   optic wu #############
-pathResultAlgEucBaseOpticsWu = Global.pathOutput + 'result_ecu_base_optics_wu_rFanout=50.alpha=0.5.steepD=0.1.h=10.om=1.oe=1.0E-4.ns=200.t=4.k=100000.nw=2.mpts=5.eps=1.0E-4.xi=1.0E-4.maxPNeiByte=2147483631'
-Scatter.draw_result(pathCoord, pathResultAlgEucBaseOpticsWu, s=150, show=True, title=pathResultAlgEucBaseOpticsWu, pathBgImg=pathBgImg,
-                    xlim=xlim, ylim=ylim, showXY=False,
-                    fName='yelp_case_opticwu_minpts5.pdf')
+# pathResultAlgEucBaseOpticsWu = Global.pathOutput + 'result_ecu_base_optics_wu_rFanout=50.alpha=0.5.steepD=0.1.h=10.om=1.oe=1.0E-4.ns=200.t=4.k=100000.nw=2.mpts=5.eps=1.0E-4.xi=1.0E-4.maxPNeiByte=2147483631'
+# Scatter.draw_result(pathCoord, pathResultAlgEucBaseOpticsWu, s=150, show=True, title=pathResultAlgEucBaseOpticsWu, pathBgImg=pathBgImg,
+#                     xlim=xlim, ylim=ylim, showXY=False,
+#                     fName='yelp_case_opticwu_minpts5.pdf')
 #
+
+############## down and up area #######
+# pathResultAlgEucBaseOpticsWu = Global.pathOutput + 'down_more_up1.txt'
+# Scatter.draw_result(pathCoord, pathResultAlgEucBaseOpticsWu, s=150, show=True, title=pathResultAlgEucBaseOpticsWu,
+#                     xlim=xlim, ylim=ylim, showXY=False,
+#                     fName='down_more_up.pdf')
+
+# pathResultAlgEucBaseOpticsWu = Global.pathOutput + 'down_up.txt'
+# Scatter.draw_result(pathCoord, pathResultAlgEucBaseOpticsWu, s=150, show=True, title=pathResultAlgEucBaseOpticsWu,
+#                     xlim=xlim, ylim=ylim, showXY=False,
+#                     fName='down_up.pdf')
+
 # pathResultAlgEucBaseOpticsWu = Global.pathOutput + 'result_ecu_base_optics_wu_rFanout=50.alpha=0.5.steepD=0.1.h=8.om=1.oe=1.0E-4.ns=200.t=4.k=100000.nw=1.mpts=5.eps=0.001.xi=0.001.maxPNeiByte=2147483631'
 # Scatter.draw_result(pathCoord, pathResultAlgEucBaseOpticsWu, s=20, show=True, title=pathResultAlgEucBaseOpticsWu, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
 #
@@ -544,15 +567,22 @@ Scatter.draw_result(pathCoord, pathResultAlgEucBaseOpticsWu, s=150, show=True, t
 
 
 # #     将optic的结果显示在distance图上
-# path_reach_dis = Global.pathOutput + 'order_objects.obj_AlgEucDisBaseOpticsWu_rFanout=50.alpha=0.5.steepD=0.1.h=14.om=1.oe=1.0E-4.ns=200.t=4.k=100000.nw=2.mpts=5.eps=1.0E-4.xi=1.0E-4.maxPNeiByte=2147483631'
-# pathResultAlgEucAdvancedOpticsWu = Global.pathOutput + 'result_ecu_base_optics_rFanout=50.alpha=0.5.steepD=0.1.h=14.om=1.oe=1.0E-4.ns=200.t=4.k=100000.nw=2.mpts=5.eps=1.0E-4.xi=1.0E-4.maxPNeiByte=2147483631'
+# Global.pathOutput = 'D:\kSTC\Dataset\yelp_academic_dataset_business\[-125.0,28.0],[15.0,60.0]_ReaptCoord\output\\res\\'
+# path_reach_dis = Global.pathOutput + 'order_AlgEucDisBaseOptics_rFanout=50.alpha=0.5.steepD=0.1.h=10.om=1.oe=1.0E-4.ns=200.t=4.k=100000.nw=2.mpts=3.eps=1.0E-4.xi=1.0E-4.maxPNeiByte=2147483631'
+# pathResultAlgEucAdvancedOpticsWu = Global.pathOutput + 'result_ecu_base_optics_rFanout=50.alpha=0.5.steepD=0.1.h=10.om=1.oe=1.0E-4.ns=200.t=4.k=100000.nw=2.mpts=3.eps=1.0E-4.xi=1.0E-4.maxPNeiByte=2147483631'
 # Line.draw_reachability_dis_cluster(path_reach_dis, pathResultAlgEucAdvancedOpticsWu, s=1, title=pathResultAlgEucAdvancedOpticsWu, max_y=0.0002)
-#
+
 
 # #     将optic_wu的结果显示在distance图上
-# path_reach_dis = Global.pathOutput + 'order_objects.obj_AlgEucDisBaseOpticsWu_rFanout=50.alpha=0.5.steepD=0.1.h=14.om=1.oe=1.0E-4.ns=200.t=4.k=100000.nw=2.mpts=5.eps=1.0E-4.xi=1.0E-4.maxPNeiByte=2147483631'
-# pathResultAlgEucAdvancedOpticsWu = Global.pathOutput + 'result_ecu_base_optics_wu_rFanout=50.alpha=0.5.steepD=0.1.h=14.om=1.oe=1.0E-4.ns=200.t=4.k=100000.nw=2.mpts=5.eps=1.0E-4.xi=1.0E-4.maxPNeiByte=2147483631'
+path_reach_dis = Global.pathOutput + 'order_AlgEucDisBaseOpticsWu_rFanout=50.alpha=0.5.steepD=0.1.h=10.om=1.oe=1.0E-4.ns=200.t=4.k=100000.nw=2.mpts=10.eps=1.0E-4.xi=1.0E-4.maxPNeiByte=2147483631'
+pathResultAlgEucAdvancedOpticsWu = Global.pathOutput + 'result_ecu_base_optics_wu_rFanout=50.alpha=0.5.steepD=0.1.h=10.om=1.oe=1.0E-4.ns=200.t=4.k=100000.nw=2.mpts=10.eps=1.0E-4.xi=1.0E-4.maxPNeiByte=2147483631'
 # Line.draw_reachability_dis_cluster(path_reach_dis, pathResultAlgEucAdvancedOpticsWu, s=1, title=pathResultAlgEucAdvancedOpticsWu, max_y=0.0002)
+######### down more up
+# Line.draw_reachability_dis_cluster(path_reach_dis, pathResultAlgEucAdvancedOpticsWu, s=10, title=pathResultAlgEucAdvancedOpticsWu, max_y=0.000045, xlim = [942.5, 952.5])
+# Line.draw_reachability_dis_cluster(path_reach_dis, pathResultAlgEucAdvancedOpticsWu, s=10, title=pathResultAlgEucAdvancedOpticsWu, max_y=0.00006, xlim = [3620.5, 3634.5])
+
+######### down up
+# Line.draw_reachability_dis_cluster(path_reach_dis, pathResultAlgEucAdvancedOpticsWu, s=10, title=pathResultAlgEucAdvancedOpticsWu, max_y=0.00004, xlim = [2539.5, 2547.5])
 
 
 ########## draw k nearest distance ########

@@ -6,20 +6,30 @@ from matplotlib import interactive
 import numpy as np
 import random
 import matplotlib.image as img
+from utility import PathUtility
+import matplotlib as mpl
 
 import matplotlib.cm as cm
 import matplotlib.mlab as mlab
 
 class Scatter:
-    colors = ['#6b8ba4', 'b', '#7f2b0a', '#e50000', '#ffcfdc', '#06470c', '#15b01a', '#c7fdb5', '#516572', '#6b8ba4', '#a2cffe', '#e6daa6']
-    markers = ['4', 's', '^', '+', '.']
+    colors = ['#FF1493', '#0000FF', '#00BFFF', '#8B658B', '#008B8B', '#8B008B', '#00BFFF', '#FF00FF', '#FF4500']
+    # colors = ['#6b8ba4']
+    markers = ['o', 'v', 's', 'p', 'P']
 
     index_marker = 0
     index_colors = 0
 
-    def __init__(self, fig=None, xs=None, ys=None, xlim=None, ylim=None, title='title', pathBgImg = None, yscale = 'linear', markerscale = 1):
+    def __init__(self, fig=None, xs=None, ys=None, xlim=None, ylim=None, title='title', pathBgImg = None, yscale = 'linear',
+                 showXY = True,
+                 markerscale = 1, fName = 'test.pdf'):
+
+        plt.rcParams['axes.ymargin'] = 0
+        plt.rcParams['axes.autolimit_mode'] = 'round_numbers'
+
         if fig is None:
-            self.fig = plt.figure(random.randint(1, 10000), figsize=(10.1023, 6.5), tight_layout=True)
+            # self.fig = plt.figure(random.randint(1, 10000), figsize=(10.1023, 6.5), tight_layout=True)
+            self.fig = plt.figure(random.randint(1, 10000), figsize=(8, 6.5), tight_layout=True)
         else:
             self.fig = fig
         # self.fig = plt.figure(random.randint(1, 10000))
@@ -38,23 +48,28 @@ class Scatter:
         self.ylim = ylim
         self.pathBgImg = pathBgImg
 
+        self.showXY = showXY
+
+        self.fpath = PathUtility.figure_path() + fName
+
         plt.rcParams['font.size'] = 20
+        plt.subplots_adjust(left=0, right=1, bottom=0, top=1)
+        plt.margins(0)
         if fig is None:
             self.ax = self.fig.add_subplot(111)
+
+        # plt.setp(self.ax.get_xaxis().get_offset_text(), visible=False)
+        # plt.setp(self.ax.get_yaxis().get_offset_text(), visible=False)
 
 
     def draw_scatter(self, points, s=1, marker='o', c=None, label = None):
         # self.ax.scatter(points[0], points[1], s=s, marker=marker, c=(random.uniform(0, 1), random.uniform(0, 1), random.uniform(0, 1)))
-        Scatter.index_colors = Scatter.index_colors + 1
+        # Scatter.index_colors = Scatter.index_colors + 1
         # self.ax.scatter(points[0], points[1], s=s, marker=marker, c = Scatter.colors[Scatter.index_colors])
-        if c is None:
-            self.ax.scatter(points[0], points[1], s=s, marker=marker, label=label)
-        else:
-            self.ax.scatter(points[0], points[1], s=s, marker=marker, c=c, label=label)
+        self.ax.scatter(points[0], points[1], s=s, marker=marker, c=c, label=label)
 
     def show(self):
-        self.ax.legend(loc=2, prop={'size': 15}, markerscale = self.markerscale)
-
+        # self.ax.legend(loc=2, prop={'size': 15}, markerscale = self.markerscale)
         if self.xs != None:
             self.ax.set_xticks(self.xs)
             self.ax.set_xlim(self.xs[0], self.xs[len(self.xs) - 1])
@@ -65,8 +80,22 @@ class Scatter:
             self.ax.set_xlim(self.xlim)
         if self.ylim != None:
             self.ax.set_ylim(self.ylim)
-
         self.ax.set_yscale(self.yscale)
+
+        if self.showXY == False:
+            # self.ax.set_xlabel([])
+            # self.ax.set_ylabel([])
+            # self.ax.set_xticks([])
+            # self.ax.set_yticks([])
+            self.ax.set_yticks([])
+            self.ax.set_xticks([])
+            self.ax.axis('off')
+
+        # plt.autoscale(enable=True, axis='y', tight=True)
+
+        # 全屏显示
+        # mng = plt.get_current_fig_manager()
+        # mng.full_screen_toggle()
 
         if self.pathBgImg != None:
             imgBg = plt.imread(pathBgImg)
@@ -75,13 +104,16 @@ class Scatter:
             # plt.imshow(imgBg, zorder=0, extent=[0, 1, 0, 1])
             # plt.imshow(imgBg, interpolation='bilinear', cmap=cm.gray,
             #     origin='lower', extent=[0, 1, 0, 1])
-            plt.imshow(imgBg, aspect='auto', extent=[0, 1, 0, 1])
+            self.ax.imshow(imgBg, aspect='auto', extent=[self.xlim[0], self.xlim[1], self.ylim[0], self.ylim[1]])
             # plt.imshow(imgBg)
             # self.ax.figimage(imgBg)
             # self.ax.imshow(imgBg)
 
         interactive(True)
         plt.show()
+
+        # 保存图像
+        self.fig.savefig(self.fpath, bbox_inches = 'tight', pad_inches = 0)
 
     @staticmethod
     def marker():
@@ -125,7 +157,8 @@ class Scatter:
         return scatter
 
     @staticmethod
-    def draw_result(all_coord_path, result_path, s=10, show=True, title='title', pathBgImg = None, xlim=None, ylim=None):
+    def draw_result(all_coord_path, result_path, s=10, show=True, title='title', pathBgImg = None,
+                    xlim=None, ylim=None, fName = 'test.pdf', showXY = False):
         # scatter = Scatter.draw_orginal_coord(all_coord_path, s=s, show=False, title=title, pathBgImg=pathBgImg, xlim=xlim, ylim=ylim)
         #  if xs is None:
         #     self.xs = []
@@ -148,7 +181,8 @@ class Scatter:
         # ylim = [0, 1]
 
         Scatter.index_marker = 0
-        scatter = Scatter(title=title[title.rindex('\\') + 1:], xs=xs, ys=ys, pathBgImg = pathBgImg, xlim=xlim, ylim=ylim)
+        scatter = Scatter(title=title[title.rindex('\\') + 1:], xs=xs, ys=ys, pathBgImg = pathBgImg,
+                          xlim=xlim, ylim=ylim, fName=fName, showXY=showXY)
 
         allCoords = [[], []]
         centerCoords = [[], []]
@@ -157,10 +191,12 @@ class Scatter:
         for line in reader:
             if line.startswith('qParams'):
                 coords = line.split(Global.delimiterLevel1)[1].split(Global.delimiterSpace)
+                # if float(coords[0]) >= scatter.xlim[0] and float(coords[0]) <= scatter.xlim[1] and float(coords[1]) >= scatter.ylim[0] and float(coords[1]) <= scatter.ylim[1]:
+                #     continue
                 centerCoords[0].append(float(coords[0]))
                 centerCoords[1].append(float(coords[1]))
             elif line.startswith('Cluster'):
-                scatter.draw_scatter(allCoords, s=s, marker=Scatter.marker())
+                scatter.draw_scatter(allCoords, s=s, marker=Scatter.marker(), c=Scatter.color())
                 # scatter.draw_scatter(allCoords, s=s)
                 allCoords[0].clear()
                 allCoords[1].clear()
@@ -168,6 +204,8 @@ class Scatter:
                 continue
             else:
                 coords = line.split(Global.delimiterLevel1)[2].split(Global.delimiterSpace)
+                # if float(coords[0]) >= scatter.xlim[0] and float(coords[0]) <= scatter.xlim[1] and float(coords[1]) >= scatter.ylim[0] and float(coords[1]) <= scatter.ylim[1]:
+                #     continue
                 allCoords[0].append(float(coords[0]))
                 allCoords[1].append(float(coords[1]))
         scatter.draw_scatter(allCoords, s=s, marker=Scatter.marker(), c=Scatter.color())
@@ -388,7 +426,7 @@ class Line:
 # pathBgImg = Global.pathImgs + 'test.png'
 # pathCoord = Global.pathCoord + '([-112.41,33.46],[-111.9,33.68])[normalized]'
 # pathCoord = 'D:\\kSTC\\Dataset\\places_dump_20110628\\id_coord_longtitude_latitude.txt'
-# pathCoord = 'D:\kSTC\Dataset\places_dump_20110628\[-114.0,31.0],[-108.0,37.0]\input\id_coord_longtitude_latitude.txt'
+# pathCoord = 'D:\\kSTC\\Dataset\\meetup\\id_coord_longtitude_latitude.txt'
 
 # Scatter.draw_orginal_coord(pathCoord, s=20, show=False, scala=10)
 
@@ -408,27 +446,53 @@ pathBgImg = None
 pathBgImg = None
 pathCoord = Global.pathCoord + '[normalized]'
 
-
 ############################################# draw result data start #############################################
 Global.pathOutput = 'D:\kSTC\Dataset\places_dump_20110628\[-114.0,31.0],[-108.0,37.0]\output\\res\\'
+pathBgImg = None
+pathBgImg = 'D:\kSTC\Dataset\places_dump_20110628\[-114.0,31.0],[-108.0,37.0]\input\\bg1_gray.png'
 xlim = [0, 1]
 ylim = [0, 1]
 
+# xlim = [0.0909, 0.0926]
+# ylim = [0.1740, 0.1775]
+
+xlim = [0.525914, 0.530711]
+ylim = [0.1980, 0.2016]
+
+
+# xlim = [0.09137, 0.09155]
+# ylim = [0.1769, 0.1773]
 
 ##############   dbscan #############
 # pathResultAlgEucBase = Global.pathOutput + 'result_ecu_base.txt'
 # Scatter.draw_result(pathCoord, pathResultAlgEucBase, s=20, show=True, title=pathResultAlgEucBase, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
-# #
-pathResultAlgEucFast = Global.pathOutput + 'result_ecu_fast_rFanout=50.alpha=0.5.steepD=0.1.h=10.om=1.oe=1.0E-4.ns=200.t=4.k=5000.nw=2.mpts=5.eps=0.001.xi=0.001.maxPNeiByte=2147483631'
-Scatter.draw_result(pathCoord, pathResultAlgEucFast, s=15, show=True, title=pathResultAlgEucFast, pathBgImg=pathBgImg, xlim=xlim, ylim=ylim)
+
+pathResultAlgEucFast = Global.pathOutput + 'result_ecu_fast_rFanout=50.alpha=0.5.steepD=0.1.h=10.om=1.oe=0.001.ns=200.t=4.k=5000.nw=2.mpts=20.eps=0.001.xi=0.001.maxPNeiByte=2147483631'
+Scatter.draw_result(pathCoord, pathResultAlgEucFast, s=150, show=True, title=pathResultAlgEucFast, pathBgImg=pathBgImg,
+                    xlim=xlim, ylim=ylim, showXY=False,
+                    fName='arizona_case_dbscan_minpts20.pdf')
+
+pathResultAlgEucFast = Global.pathOutput + 'result_ecu_fast_rFanout=50.alpha=0.5.steepD=0.1.h=10.om=1.oe=0.001.ns=200.t=4.k=5000.nw=2.mpts=10.eps=0.001.xi=0.001.maxPNeiByte=2147483631'
+Scatter.draw_result(pathCoord, pathResultAlgEucFast, s=150, show=True, title=pathResultAlgEucFast, pathBgImg=pathBgImg,
+                    xlim=xlim, ylim=ylim, showXY=False,
+                    fName='arizona_case_dbscan_minpts10.pdf')
+
+pathResultAlgEucFast = Global.pathOutput + 'result_ecu_fast_rFanout=50.alpha=0.5.steepD=0.1.h=10.om=1.oe=0.001.ns=200.t=4.k=5000.nw=2.mpts=5.eps=0.001.xi=0.001.maxPNeiByte=2147483631'
+Scatter.draw_result(pathCoord, pathResultAlgEucFast, s=150, show=True, title=pathResultAlgEucFast, pathBgImg=pathBgImg,
+                    xlim=xlim, ylim=ylim, showXY=False,
+                    fName='arizona_case_dbscan_minpts5.pdf')
 
 ##############    optic   #############
-pathResultAlgEucBaseOptics = Global.pathOutput + 'result_ecu_base_optics_rFanout=50.alpha=0.5.steepD=0.1.h=10.om=1.oe=1.0E-4.ns=200.t=4.k=5000.nw=2.mpts=5.eps=0.001.xi=0.001.maxPNeiByte=2147483631'
-Scatter.draw_result(pathCoord, pathResultAlgEucBaseOptics, s=15, show=True, title=pathResultAlgEucBaseOptics, pathBgImg=pathBgImg, xlim=xlim, ylim=ylim)
+pathResultAlgEucBaseOptics = Global.pathOutput + 'result_ecu_base_optics_rFanout=50.alpha=0.5.steepD=0.1.h=10.om=1.oe=0.001.ns=200.t=4.k=5000.nw=2.mpts=5.eps=0.001.xi=0.001.maxPNeiByte=2147483631'
+Scatter.draw_result(pathCoord, pathResultAlgEucBaseOptics, s=150, show=True, title=pathResultAlgEucBaseOptics, pathBgImg=pathBgImg,
+                    xlim=xlim, ylim=ylim, showXY=False,
+                    fName='arizona_case_optic_minpts5.pdf')
 
 ##############   optic wu #############
-pathResultAlgEucBaseOpticsWu = Global.pathOutput + 'result_ecu_base_optics_wu_rFanout=50.alpha=0.5.steepD=0.1.h=10.om=1.oe=1.0E-4.ns=200.t=4.k=5000.nw=2.mpts=5.eps=0.001.xi=0.001.maxPNeiByte=2147483631'
-Scatter.draw_result(pathCoord, pathResultAlgEucBaseOpticsWu, s=15, show=True, title=pathResultAlgEucBaseOpticsWu, pathBgImg=pathBgImg, xlim=xlim, ylim=ylim)
+pathResultAlgEucBaseOpticsWu = Global.pathOutput + 'result_ecu_base_optics_wu_rFanout=50.alpha=0.5.steepD=0.1.h=10.om=1.oe=0.001.ns=200.t=4.k=5000.nw=2.mpts=5.eps=0.001.xi=0.001.maxPNeiByte=2147483631'
+Scatter.draw_result(pathCoord, pathResultAlgEucBaseOpticsWu, s=150, show=True, title=pathResultAlgEucBaseOpticsWu, pathBgImg=pathBgImg,
+                    xlim=xlim, ylim=ylim, showXY=False,
+                    fName='arizona_case_opticwu_minpts5.pdf')
 #
 # pathResultAlgEucBaseOpticsWu = Global.pathOutput + 'result_ecu_base_optics_wu_rFanout=50.alpha=0.5.steepD=0.1.h=8.om=1.oe=1.0E-4.ns=200.t=4.k=100000.nw=1.mpts=5.eps=0.001.xi=0.001.maxPNeiByte=2147483631'
 # Scatter.draw_result(pathCoord, pathResultAlgEucBaseOpticsWu, s=20, show=True, title=pathResultAlgEucBaseOpticsWu, pathBgImg=pathBgImg, xlim=[0, 1], ylim=[0, 1])
@@ -452,7 +516,6 @@ Scatter.draw_result(pathCoord, pathResultAlgEucBaseOpticsWu, s=15, show=True, ti
 
 # pathResultAlgEucAdvancedOptics = Global.pathOutput + 'result_ecu_base_optics_wu_rFanout=50.alpha=0.5.steepD=0.1.h=8.om=1.oe=1.0E-4.ns=200.t=4.k=100000.nw=1.mpts=5.eps=0.001.xi=0.001.maxPNeiByte=2147483631'
 # Scatter.draw_result(pathCoord, pathResultAlgEucAdvancedOptics, s=10, show=True, title=pathResultAlgEucAdvancedOptics)
-
 
 
 ############################################# draw result data end #############################################
@@ -498,6 +561,91 @@ Scatter.draw_result(pathCoord, pathResultAlgEucBaseOpticsWu, s=15, show=True, ti
 # k_paths.append(Global.pathOutput + 'KNNNeighborDis_50.txt')
 # k_paths.append(Global.pathOutput + 'KNNNeighborDis_100.txt')
 # Scatter.draw_k_nearest_distance(k_paths, s=1, title="KNNNeighborDis")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#######################  经纬suffixFile = ([-125.0, 28.0], [15.0, 60.0]) 的测试code  ###########################
+########## draw coordinate data ##############
+# pathCoord = Global.pathCoord
+# pathCoord = Global.pathCoord + '([-125.0, 28.0], [15.0, 60.0])'
+# Scatter.draw_orginal_coord(pathCoord, s=20, show=False)
+# pathCoord = Global.pathCoord + '([-125.0, 28.0], [15.0, 60.0])[normalized]'
+# Scatter.draw_orginal_coord(pathCoord, s=20, show=False)
+
+########## draw result data ###############
+# pathResultAlgEucBase = Global.pathOutput + 'result_ecu_base.txt'
+# Scatter.draw_result(pathCoord, pathResultAlgEucBase, s=10, show=True, title=pathResultAlgEucBase)
+# pathResultAlgEucFast = Global.pathOutput + 'result_ecu_fast.txt'
+# Scatter.draw_result(pathCoord, pathResultAlgEucFast, s=10, show=True, title=pathResultAlgEucFast)
+# pathResultAlgEucBaseOptics = Global.pathOutput + 'result_ecu_base_optics.txt'
+# Scatter.draw_result(pathCoord, pathResultAlgEucBaseOptics, s=10, show=True, title=pathResultAlgEucBaseOptics)
+# pathResultAlgEucAdvancedOptics = Global.pathOutput + 'result_ecu_advanced_optics.txt'
+# Scatter.draw_result(pathCoord, pathResultAlgEucAdvancedOptics, s=10, show=True, title=pathResultAlgEucAdvancedOptics)
+# pathResultAlgEucAdvancedOpticsWu = Global.pathOutput + 'result_ecu_advanced_optics_wu.txt'
+# Scatter.draw_result(pathCoord, pathResultAlgEucAdvancedOpticsWu, s=10, show=True, title=pathResultAlgEucAdvancedOpticsWu)
+
+########## draw k nearest distance ########
+# path_k_nearest = Global.pathOutput + '3_neighbor_dis.txt'
+# Scatter.draw_k_nearest_distance(path_k_nearest, s=1, title=path_k_nearest)
+# path_k_nearest = Global.pathOutput + '4_neighbor_dis.txt'
+# Scatter.draw_k_nearest_distance(path_k_nearest, s=1, title=path_k_nearest)
+# path_k_nearest = Global.pathOutput + '5_neighbor_dis.txt'
+# Scatter.draw_k_nearest_distance(path_k_nearest, s=1, title=path_k_nearest)
+# path_k_nearest = Global.pathOutput + '20_neighbor_dis.txt'
+# Scatter.draw_k_nearest_distance(path_k_nearest, s=1, title=path_k_nearest)
+
+########## draw_reachability_dis ########
+# path_reach_dis = Global.pathOutput + 'order_objects.obj([-125.0, 28.0], [15.0, 60.0])_AlgEucDisBaseOptics'
+# Line.draw_reachability_dis(path_reach_dis, s=1, title=path_reach_dis, max_y=0.004)
+
+########## draw_reachability_dis_cluster ########
+# path_reach_dis = Global.pathOutput + 'order_objects.obj([-125.0, 28.0], [15.0, 60.0])_AlgEucDisAdvancedOpticsWu'
+# pathResultAlgEucFast = Global.pathOutput + 'result_ecu_fast.txt'
+# Line.draw_reachability_dis_base(path_reach_dis, pathResultAlgEucFast, s=1, title=pathResultAlgEucFast, max_y=0.004)
+
+# path_reach_dis = Global.pathOutput + 'order_objects.obj([-125.0, 28.0], [15.0, 60.0])_AlgEucDisAdvancedOptics'
+# pathResultAlgEucAdvancedOptics = Global.pathOutput + 'result_ecu_advanced_optics.txt'
+# Line.draw_reachability_dis_cluster(path_reach_dis, pathResultAlgEucAdvancedOptics, s=1, title=path_reach_dis, max_y=0.004)
+
+# path_reach_dis = Global.pathOutput + 'order_objects.obj([-125.0, 28.0], [15.0, 60.0])_AlgEucDisAdvancedOpticsWu'
+# pathResultAlgEucAdvancedOpticsWu = Global.pathOutput + 'result_ecu_advanced_optics_wu.txt'
+# Line.draw_reachability_dis_cluster(path_reach_dis, pathResultAlgEucAdvancedOpticsWu, s=1, title=pathResultAlgEucAdvancedOpticsWu, max_y=0.004)
 
 
 plt.pause(40000)

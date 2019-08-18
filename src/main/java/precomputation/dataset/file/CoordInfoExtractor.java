@@ -49,19 +49,32 @@ public class CoordInfoExtractor {
 	
 	
 	public static void main(String[] args) throws Exception {
+//		System.out.println(new Rectangle(-125, 31.2, -109, 42.2));
 		
 //		String fp = Global.pathOrgId2Coord;
 //		CoordInfoExtractor.showLBAndRU(fp);
 		
+		
 //		String fp = Global.pathOrgId2Coord;
 //		showNumObjectInRect(fp, new Rectangle(-130, 30, -65, 45));	// 美国
-//		showNumObjectInRect(fp, new Rectangle(-114, 31, -108, 37));
+//		showNumObjectInRect(fp, new Rectangle(-114, 31, -108, 37));	// 亚利桑那州
+//		showNumObjectInRect(fp, new Rectangle(-125, 31.2, -109, 42.2));	// 加利福利亚、内华达、犹他州、亚利桑那州
+		
+		
 		
 //		xlim = [0.31042, 0.31086]
 //		ylim = [0.4200, 0.4210]
-		Rectangle rect = new Rectangle(-125, 28, 15, 60);
-		double[][] coords = {{0.31042, 0.4200},
-				{0.31086, 0.4210}
+//		Rectangle rect = new Rectangle(-125, 28, 15, 60);
+//		double[][] coords = {{0.31042, 0.4200},
+//				{0.31086, 0.4210}
+//		};
+//		showOrginalCoord(rect, coords);
+		
+//		xlim = [0.525914, 0.530711]
+//		ylim = [0.1980, 0.2016]
+		Rectangle rect = new Rectangle(-114, 31, -108, 37);
+		double[][] coords = {{0.525914, 0.1980},
+				{0.530711, 0.2016}
 		};
 		showOrginalCoord(rect, coords);
 		

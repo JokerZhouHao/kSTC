@@ -76,6 +76,8 @@ public class SingleAlgTest {
 			if(SingleAlgTest.eucBaseOptics == null)	SingleAlgTest.eucBaseOptics = new AlgEucDisBaseOptics(qParams);
 			sClusters = SingleAlgTest.eucBaseOptics.excuteQuery(qParams, Global.pathOrderObjects + "_AlgEucDisBaseOptics" +
 					"_" + qParams.toString());
+//			sClusters = SingleAlgTest.eucBaseOptics.excuteQuery(qParams, Global.outPath+ "res" + File.separator + "_AlgEucDisBaseOptics" +
+//					"_" + qParams.toString());
 			resPath = Global.outPath+ "res" + File.separator  + "result_ecu_base_optics_" + qParams.toString();
 			break;
 		case AlgEucDisBaseOpticsWu:
@@ -128,7 +130,7 @@ public class SingleAlgTest {
 		int k = 100000;
 		int numWord = 0;
 		
-		int minpts = 20;
+		int minpts = 10;
 		double epsilon = 0.0001;
 		double xi = 0.0001;
 		
@@ -216,7 +218,7 @@ public class SingleAlgTest {
 		return qp;
 	}
 	
-	public static QueryParams getQParams() throws Exception{
+	public static QueryParams getQParamsArizona() throws Exception{
 		
 		int rtreeFanout = 50;
 		double alpha = 0.5;
@@ -224,7 +226,7 @@ public class SingleAlgTest {
 		int h = 10;
 		
 		int opticMinpts = 1;
-		double opticEpsilon = 0.0001;
+		double opticEpsilon = 0.001;
 		
 		int numSample = 200;
 		int type = 4;
@@ -232,7 +234,7 @@ public class SingleAlgTest {
 		int k = 5000;
 		int numWord = 0;
 		
-		int minpts = 5;
+		int minpts = 20;
 		double epsilon = 0.001;
 		double xi = 0.001;
 		
@@ -273,6 +275,7 @@ public class SingleAlgTest {
 		
 //		QueryParams qParams = SingleAlgTest.getQParams();
 		QueryParams qParams = SingleAlgTest.getQParamsYelpBussCase();
+//		QueryParams qParams = SingleAlgTest.getQParamsArizona();
 		QueryParams.display(qParams);
 		
 //		qParams.type = 1;
@@ -281,14 +284,14 @@ public class SingleAlgTest {
 //		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisBaseAdv1, qParams);
 //		qParams.type = 3;
 //		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisBaseAdv1_2, qParams);
-		qParams.type = 4;
-		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisFastRange, qParams);
+//		qParams.type = 4;
+//		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisFastRange, qParams);
 		
-//		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisBaseOptics, qParams);
+		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisBaseOptics, qParams);
 //		SingleAlgTest.testAlgEuc("AlgEucDisAdvancedOptics", qParams);
 //		SingleAlgTest.testAlgEuc("AlgEucDisAdvancedOpticsWu2", qParams);
 		
-//		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisBaseOpticsWu, qParams);
+		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisBaseOpticsWu, qParams);
 //		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisAdvancedOpticsWu, qParams);
 		
 	}

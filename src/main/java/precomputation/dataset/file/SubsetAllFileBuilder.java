@@ -44,11 +44,12 @@ public class SubsetAllFileBuilder {
 //		Rectangle subRect = new Rectangle(-160,-90, 180,70);
 		
 //		placedump20110628
-//		Rectangle subRect = new Rectangle(-114, 31, -108, 37);	// 亚利桑那州
 //		Rectangle subRect = new Rectangle(-180, -90, 180, 90);
+//		Rectangle subRect = new Rectangle(-114, 31, -108, 37);	// 亚利桑那州
+		Rectangle subRect = new Rectangle(-125, 31.2, -109, 42.2); // 加利福利亚、内华达、犹他州、亚利桑那州
 		
 //		test_dataset
-		Rectangle subRect = new Rectangle(0, 0, 1, 1);
+//		Rectangle subRect = new Rectangle(0, 0, 1, 1);
 		
 		/***************** 提取某范围内的数据文件 *************************************/
 		if(!Global.subDataSetPath.contains(subRect.toString())) {
@@ -59,7 +60,6 @@ public class SubsetAllFileBuilder {
 		
 		/***************** 正则化坐标 *********************************************/
 		ProcessGenerateFiles.normalizedCoordFile(Global.pathIdCoord, subRect);
-		
 		
 		/***************** 创建RTree ********************************************/
 //		String placeFile = Global.pathIdNormCoord;

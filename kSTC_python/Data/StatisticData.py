@@ -44,12 +44,49 @@ class Data:
         return alldata
 
     @staticmethod
+    def indexs(dir, rFanout=50, alpha=0.5, steepD=0.1, h=15, om=1, oe='1.0E-4', ns=50, t=1, k=5000, nw=2, mpts=5,
+                eps='0.001', xi='0.001', maxPNeiByte=2147483631, numMinCluster = -1, timeMaxTotal = 1000000000):
+        alldata = Data.loadCsv(dir, rFanout, alpha, steepD, h, om, oe, ns, t, k, nw, mpts, eps, xi, maxPNeiByte)
+        indexs = set()
+        i = -1
+        for data in alldata:
+            i += 1
+            if data.numCluster < numMinCluster or data.timeTotal > timeMaxTotal:
+                continue
+            else: indexs.add(i)
+        return indexs
+
+    @staticmethod
     def getData(dir, rFanout=50, alpha=0.5, steepD=0.1, h=15, om=1, oe='1.0E-4', ns=50, t=1, k=5000, nw=2, mpts=5,
                 eps='0.001', xi='0.001', maxPNeiByte=2147483631, numMinCluster = -1, timeMaxTotal = 1000000000):
         alldata = Data.loadCsv(dir, rFanout, alpha, steepD, h, om, oe, ns, t, k, nw, mpts, eps, xi, maxPNeiByte)
         res = Data(alldata[0].fp)
         for data in alldata:
             if data.numCluster < numMinCluster or data.timeTotal > timeMaxTotal:
+                continue
+            res.numSample += 1
+            res.numRangeRtree += data.numRangeRtree
+            res.numOpticFastRange += data.numOpticFastRange
+            res.numOpticLuceneRange += data.numOpticLuceneRange
+            res.numCluster += data.numCluster
+            res.timeTotal += data.timeTotal
+
+        res.numRangeRtree = (int)(res.numRangeRtree / res.numSample)
+        res.numOpticFastRange = (int)(res.numOpticFastRange / res.numSample)
+        res.numOpticLuceneRange = (int)(res.numOpticLuceneRange / res.numSample)
+        res.numCluster = (int)(res.numCluster / res.numSample)
+        res.timeTotal = (int)(res.timeTotal / res.numSample)
+        return res
+
+    @staticmethod
+    def getDataByIndexs(dir, rFanout=50, alpha=0.5, steepD=0.1, h=15, om=1, oe='1.0E-4', ns=50, t=1, k=5000, nw=2, mpts=5,
+                eps='0.001', xi='0.001', maxPNeiByte=2147483631, indexs = None):
+        alldata = Data.loadCsv(dir, rFanout, alpha, steepD, h, om, oe, ns, t, k, nw, mpts, eps, xi, maxPNeiByte)
+        res = Data(alldata[0].fp)
+        i = -1
+        for data in alldata:
+            i += 1
+            if indexs != None and i not in indexs:
                 continue
             res.numSample += 1
             res.numRangeRtree += data.numRangeRtree

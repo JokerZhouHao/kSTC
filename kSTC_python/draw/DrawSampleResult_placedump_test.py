@@ -4,8 +4,8 @@ from matplotlib import interactive
 from utility import PathUtility
 from Data.StatisticData import Data
 
-BasePathDbscan = 'D:\\kSTC\\sample_result\\res\\000_dataset\\yelp_buss[-125.0,28.0],[15.0,60.0]\\dbscan\\'
-BasePathOptic = 'D:\\kSTC\\sample_result\\res\\000_dataset\\yelp_buss[-125.0,28.0],[15.0,60.0]\\optic\\'
+BasePathDbscan = 'D:\kSTC\sample_result\places_dump_20110628_[-125.0,31.2],[-109.0,42.2]\dbscan\\'
+BasePathOptic = 'D:\kSTC\sample_result\places_dump_20110628_[-125.0,31.2],[-109.0,42.2]\optic\\'
 
 class Bar:
     def __init__(self, numBar, title=None, widthBar=0.14, spanBars=0.03,
@@ -70,6 +70,9 @@ class Bar:
         xaxis = self.ax.get_xaxis()
         x_labels = xaxis.get_ticklabels()
         for i in range(len(x_labels)):
+            if i==0 or i==len(x_labels)-1:
+                x_labels[i].set_visible(False)
+            else:
                 pos = x_labels[i].get_position()
                 if self.xTxtY != None:
                     pos = (pos[0], self.xTxtY)
@@ -134,13 +137,13 @@ class Bar:
     # dbscan --- nword
     @staticmethod
     def dNword(fName='test.pdf', type=1):
-        rFanout=50
+        rFanout=100
         alpha=0.5
         steepD=0.1
-        h=14
+        h=12
         om=1
         oe='0.001'
-        ns=100
+        ns=200
 
         t=1
         ts = [1, 2, 3, 4]
@@ -149,7 +152,7 @@ class Bar:
         nw=2
         nws = [1, 2, 3, 4]
 
-        mpts=50
+        mpts=20
 
         eps='0.001'
         xi='0.001'
@@ -164,7 +167,7 @@ class Bar:
             ylim=[100, 100000]
         elif type==2:
             ylabel = 'number of range queries'
-            ylim=[100, 100000]
+            ylim=[1000, 100000]
 
         # 创建bar对象
         bar = Bar(4,
@@ -172,13 +175,13 @@ class Bar:
                   ylabel=ylabel, yscale='log', ylim=ylim,
                   fName = fName)
 
-        dir = BasePathDbscan + 'nw_eps_mpt\\'
+        dir = BasePathDbscan + 'nw_mpts\\'
 
         for tIndex in range(len(ts)):
             total = []
             for nwIndex in range(len(nws)):
                 data = Data.getData(dir, rFanout, alpha, steepD, h, om, oe, ns, ts[tIndex],
-                                    k, nws[nwIndex], mpts, eps, xi, maxPNeiByte)
+                                    k, nws[nwIndex], mpts, eps, xi, maxPNeiByte, numMinCluster=k)
                 print(data)
                 if type==1: total.append(data.timeTotal)
                 elif type==2: total.append(data.numRangeRtree)
@@ -189,13 +192,13 @@ class Bar:
     # dbscan --- epsilon
     @staticmethod
     def dEpsilon(fName='test.pdf'):
-        rFanout=50
+        rFanout=100
         alpha=0.5
         steepD=0.1
-        h=14
+        h=12
         om=1
         oe='0.001'
-        ns=100
+        ns=200
 
         t=1
         ts = [1, 2, 3, 4]
@@ -203,7 +206,7 @@ class Bar:
         k=10
         nw=2
 
-        mpts=50
+        mpts=20
 
         eps='0.001'
         epss = ['1.0E-4', '5.0E-4', '0.001', '0.005', '0.01']
@@ -220,17 +223,27 @@ class Bar:
         # 创建bar对象
         bar = Bar(4,
                   xlabel=xlabel, xTxts=xTxts, xRotateAngle=90,
-                  ylabel=ylabel, yscale='log', ylim=[1000, 1000000],
+                  ylabel=ylabel, yscale='log', ylim=[100, 1000000],
                   loc=2,
                   fName = fName)
 
-        dir = BasePathDbscan + 'nw_eps_mpt\\'
+        dir = BasePathDbscan + 'eps\\'
+
+        indexs = Data.indexs(dir, rFanout, alpha, steepD, 12, om, oe, ns, 4,
+                                    k, nw, mpts, '0.001', xi, maxPNeiByte, numMinCluster=k)
+
 
         for tIndex in range(len(ts)):
             timeTotals = []
             for epsIndex in range(len(epss)):
-                data = Data.getData(dir, rFanout, alpha, steepD, h, om, oe, ns, ts[tIndex],
-                                    k, nw, mpts, epss[epsIndex], xi, maxPNeiByte)
+                if epsIndex == 0:   h = 14
+                elif epsIndex == 1: h = 14
+                else:   h = 12
+
+                # data = Data.getData(dir, rFanout, alpha, steepD, h, om, oe, ns, ts[tIndex],
+                #                     k, nw, mpts, epss[epsIndex], xi, maxPNeiByte, numMinCluster=10)
+                data = Data.getDataByIndexs(dir, rFanout, alpha, steepD, h, om, oe, ns, ts[tIndex],
+                                      k, nw, mpts, epss[epsIndex], xi, indexs=indexs)
                 print(data)
                 timeTotals.append(data.timeTotal)
             bar.drawBar(barlabels[tIndex], tIndex, timeTotals)
@@ -240,13 +253,13 @@ class Bar:
     # dbscan --- minpts
     @staticmethod
     def dMinpts(fName='test.pdf'):
-        rFanout=50
+        rFanout=100
         alpha=0.5
         steepD=0.1
-        h=14
+        h=12
         om=1
         oe='0.001'
-        ns=100
+        ns=200
 
         t=1
         ts = [1, 2, 3, 4]
@@ -255,7 +268,7 @@ class Bar:
         nw=2
 
         mpts=5
-        mptss = [10, 20, 50, 100, 200]
+        mptss = [5, 10, 20, 50, 100]
 
         eps='0.001'
         xi='0.001'
@@ -273,13 +286,18 @@ class Bar:
                   ylabel=ylabel, yscale='log', ylim=[1000, 100000],
                   fName = fName)
 
-        dir = BasePathDbscan + 'nw_eps_mpt\\'
+        dir = BasePathDbscan + 'nw_mpts\\'
+
+        indexs = Data.indexs(dir, rFanout, alpha, steepD, 12, om, oe, ns, 4,
+                                    k, nw, 20, '0.001', xi, maxPNeiByte, numMinCluster=k)
 
         for tIndex in range(len(ts)):
             timeTotals = []
             for mptIndex in range(len(mptss)):
-                data = Data.getData(dir, rFanout, alpha, steepD, h, om, oe, ns, ts[tIndex],
-                                    k, nw, mptss[mptIndex], eps, xi, maxPNeiByte)
+                # data = Data.getData(dir, rFanout, alpha, steepD, h, om, oe, ns, ts[tIndex],
+                #                     k, nw, mptss[mptIndex], eps, xi, maxPNeiByte)
+                data = Data.getDataByIndexs(dir, rFanout, alpha, steepD, h, om, oe, ns, ts[tIndex],
+                                    k, nw, mptss[mptIndex], eps, xi, indexs=indexs)
                 print(data)
                 timeTotals.append(data.timeTotal)
             bar.drawBar(barlabels[tIndex], tIndex, timeTotals)
@@ -289,16 +307,17 @@ class Bar:
     # dbscan --- h all
     @staticmethod
     def dHAll(fName='test.pdf', isAll=False):
-        rFanout=50
+        rFanout=100
         alpha=0.5
         steepD=0.1
 
         h=15
-        hs = ['4', '6', '8', '10', '12', '14', '16']
+        # hs = ['4', '6', '8', '10', '12', '14', '16']
+        hs = ['6', '8', '10', '12', '14', '16']
 
         om=1
         oe='0.001'
-        ns=100
+        ns=200
 
         t=1
         ts = None
@@ -308,7 +327,7 @@ class Bar:
         k=10
         nw=2
 
-        mpts=50
+        mpts=20
 
         eps='0.001'
         xi='0.001'
@@ -336,13 +355,77 @@ class Bar:
                       ylabel=ylabel, yscale='log', ylim=[1000, 100000],
                       fName = fName)
 
-        dir = BasePathDbscan + 'h_all\\'
+        dir = BasePathDbscan + 'h_all02\\'
+
+        indexs = Data.indexs(dir, rFanout, alpha, steepD, 14, om, oe, ns, 4,
+                                    k, nw, mpts, eps, xi, maxPNeiByte, numMinCluster=k)
 
         for tIndex in range(len(ts)):
             timeTotals = []
             for hIndex in range(len(hs)):
-                data = Data.getData(dir, rFanout, alpha, steepD, hs[hIndex], om, oe, ns, ts[tIndex],
-                                    k, nw, mpts, eps, xi, maxPNeiByte)
+                # data = Data.getData(dir, rFanout, alpha, steepD, hs[hIndex], om, oe, ns, ts[tIndex],
+                #                     k, nw, mpts, eps, xi, maxPNeiByte, numMinCluster=k)
+                data = Data.getDataByIndexs(dir, rFanout, alpha, steepD, hs[hIndex], om, oe, ns, ts[tIndex],
+                                    k, nw, mpts, eps, xi, indexs=indexs)
+                print(data)
+                timeTotals.append(data.timeTotal)
+            bar.drawBar(barlabels[tIndex], tIndex, timeTotals)
+
+        bar.show()
+
+    # dbscan --- diff scale
+    @staticmethod
+    def dDiffScale(fName='test.pdf'):
+        rFanout=100
+        alpha=0.5
+        steepD=0.1
+
+        h=12
+
+        om=1
+        oe='0.001'
+        ns=200
+
+        t=1
+        ts = [1, 4]
+
+        k=10
+        nw=2
+
+        mpts=20
+
+        eps='0.001'
+        xi='0.001'
+        maxPNeiByte=2147483631
+
+        # 设置bar参数
+        barlabels = ['Basic', 'Adv3']
+        xlabel = 'data set size (in million)'
+        ylabel = 'milliseconds'
+
+        scaleTxts = ['0.5', '1.0', '1.5', '2.0']
+
+        # 创建bar对象
+        numBar = 2
+        bar = Bar(numBar,
+                  xlabel=xlabel, xTxts=scaleTxts,
+                  ylabel=ylabel, yscale='log', ylim=[100, 100000],
+                  fName = fName, xRotateAngle='0')
+
+        dir = BasePathDbscan + 'diff_scale\\'
+
+        # indexs = Data.indexs(dir, rFanout, alpha, steepD, 14, om, oe, ns, 4,
+        #                             k, nw, mpts, eps, xi, maxPNeiByte, numMinCluster=k)
+
+        scalePaths = ['50\\', '100\\', '150\\', '200\\']
+
+        for tIndex in range(len(ts)):
+            timeTotals = []
+            for scalePathIndex in range(len(scalePaths)):
+                data = Data.getData(dir + scalePaths[scalePathIndex], rFanout, alpha, steepD, str(h), om, oe, ns, ts[tIndex],
+                                    k, nw, mpts, eps, xi, maxPNeiByte, numMinCluster=k)
+                # data = Data.getDataByIndexs(dir, rFanout, alpha, steepD, hs[hIndex], om, oe, ns, ts[tIndex],
+                #                     k, nw, mpts, eps, xi, indexs=indexs)
                 print(data)
                 timeTotals.append(data.timeTotal)
             bar.drawBar(barlabels[tIndex], tIndex, timeTotals)
@@ -352,13 +435,14 @@ class Bar:
     # optic --- nword
     @staticmethod
     def oNword(fName='test.pdf', type=1):
-        rFanout=50
+        rFanout=100
         alpha=0.5
         steepD=0.1
-        h=14
+        h=12
         om=1
-        oe='1.0E-4'
-        ns=100
+        # oe='5.0E-4'
+        oe='0.001'
+        ns=200
 
         t=1
         ts = [11, 12]
@@ -367,44 +451,178 @@ class Bar:
         nw=2
         nws = [1, 2, 3, 4]
 
-        mpts=50
+        mpts=20
 
-        eps='1.0E-4'
-        xi='1.0E-4'
+        eps='0.001'
+        xi ='0.001'
+        # xi ='5.0E-4'
         maxPNeiByte=2147483631
 
         # 设置bar参数
-        barlabels = ['Basic', 'Adv1']
+        barlabels = ['Basic', 'Adv']
         xlabel = 'number of keyword'
         xTxts = ['1', '2', '3', '4']
+        ys = None
         if type==1:
-            ylabel = 'milliseconds'
-            ys = [i * 500 for i in range(5)]
+            ylabel = 'seconds'
+            ys = [i * 5 for i in range(6)]
             # ylim=[10, 10000]
+            yscale = 'linear'
         elif type==2:
             ylabel = 'number of range queries'
             ylim=[100, 100000]
+            yscale = 'linear'
 
         # 创建bar对象
         bar = Bar(len(ts),
                   xlabel=xlabel, xTxts=xTxts,
-                  ylabel=ylabel, yscale='linear', ys=ys,
+                  ylabel=ylabel, yscale=yscale, ys=ys,
                   fName = fName)
 
-        dir = BasePathOptic + 'nword\\'
+        dir = BasePathOptic + 'nw_01\\'
+
+        # indexs = Data.indexs(dir, rFanout, alpha, steepD, 12, om, oe, ns, 12,
+        #                             k, nw, mpts, eps, xi, maxPNeiByte, numMinCluster=k)
 
         for tIndex in range(len(ts)):
             total = []
             for nwIndex in range(len(nws)):
                 data = Data.getData(dir, rFanout, alpha, steepD, h, om, oe, ns, ts[tIndex],
-                                    k, nws[nwIndex], mpts, eps, xi, maxPNeiByte)
+                                    k, nws[nwIndex], mpts, eps, xi, maxPNeiByte, numMinCluster=k)
+                # data = Data.getDataByIndexs(dir, rFanout, alpha, steepD, h, om, oe, ns, ts[tIndex],
+                #                     k, nws[nwIndex], mpts, eps, xi, indexs=indexs)
                 print(data)
-                if type==1: total.append(data.timeTotal)
+                if type==1: total.append(data.timeTotal / 1000)
                 elif type==2: total.append(data.numRangeRtree)
             bar.drawBar(barlabels[tIndex], tIndex, total)
 
         bar.show()
 
+
+    # optic --- k
+    @staticmethod
+    def oK(fName='test.pdf'):
+        rFanout=100
+        alpha=0.5
+        steepD=0.1
+        h=12
+        om=1
+        # oe='5.0E-4'
+        oe='0.001'
+        ns=200
+
+        t=1
+        ts = [11, 12]
+
+        k=10
+        ks = [5, 10, 15, 20]
+
+        nw=2
+
+        mpts=20
+
+        eps='0.001'
+        xi ='0.001'
+        # xi ='5.0E-4'
+        maxPNeiByte=2147483631
+
+        # 设置bar参数
+        barlabels = ['Basic', 'Adv']
+        xlabel = 'k'
+        xTxts = ['5', '10', '15', '20']
+        ys = None
+        ylabel = 'seconds'
+        ys = [i * 5 for i in range(6)]
+        # ylim=[10, 10000]
+        yscale = 'linear'
+
+        # 创建bar对象
+        bar = Bar(len(ts),
+                  xlabel=xlabel, xTxts=xTxts,
+                  ylabel=ylabel, yscale=yscale, ys=ys,
+                  fName = fName)
+
+        dir = BasePathOptic + 'k\\'
+
+        indexs = Data.indexs(dir, rFanout, alpha, steepD, 12, om, oe, ns, 12,
+                                    k, nw, mpts, eps, xi, maxPNeiByte, numMinCluster=k)
+
+        for tIndex in range(len(ts)):
+            total = []
+            for kIndex in range(len(ks)):
+                # data = Data.getData(dir, rFanout, alpha, steepD, h, om, oe, ns, ts[tIndex],
+                #                     ks[kIndex], nw, mpts, eps, xi, maxPNeiByte)
+                data = Data.getDataByIndexs(dir, rFanout, alpha, steepD, h, om, oe, ns, ts[tIndex],
+                                    ks[kIndex], nw, mpts, eps, xi, indexs=indexs)
+                print(data)
+                total.append(data.timeTotal / 1000)
+            bar.drawBar(barlabels[tIndex], tIndex, total)
+
+        bar.show()
+
+
+    # dbscan --- diff scale
+    @staticmethod
+    def oDiffScale(fName='test.pdf'):
+        rFanout=100
+        alpha=0.5
+        steepD=0.1
+
+        h=12
+
+        om=1
+        oe='0.001'
+        ns=200
+
+        t=1
+        ts = [11, 12]
+
+        k=10
+        nw=2
+
+        mpts=20
+
+        eps='0.001'
+        xi='0.001'
+        maxPNeiByte=2147483631
+
+        # 设置bar参数
+        barlabels = ['Basic', 'Adv']
+        xlabel = 'data set size (in million)'
+        ylabel = 'seconds'
+
+        scaleTxts = ['0.5', '1.0', '1.5', '2.0']
+
+        # 创建bar对象
+        numBar = 2
+        # bar = Bar(numBar,
+        #           xlabel=xlabel, xTxts=scaleTxts,
+        #           ylabel=ylabel, yscale='log', ylim=[100, 100000],
+        #           fName = fName, xRotateAngle='0')
+        bar = Bar(numBar, loc=2,
+                  xlabel=xlabel, xTxts=scaleTxts,
+                  ylabel=ylabel, yscale='linear', ys=[i * 5 for i in range(5)],
+                  fName = fName, xRotateAngle='0')
+
+        dir = BasePathOptic + 'diff_scale\\'
+
+        # indexs = Data.indexs(dir, rFanout, alpha, steepD, 14, om, oe, ns, 4,
+        #                             k, nw, mpts, eps, xi, maxPNeiByte, numMinCluster=k)
+
+        scalePaths = ['50\\', '100\\', '150\\', '200\\']
+
+        for tIndex in range(len(ts)):
+            timeTotals = []
+            for scalePathIndex in range(len(scalePaths)):
+                data = Data.getData(dir + scalePaths[scalePathIndex], rFanout, alpha, steepD, str(h), om, oe, ns, ts[tIndex],
+                                    k, nw, mpts, eps, xi, maxPNeiByte, numMinCluster=k)
+                # data = Data.getDataByIndexs(dir, rFanout, alpha, steepD, hs[hIndex], om, oe, ns, ts[tIndex],
+                #                     k, nw, mpts, eps, xi, indexs=indexs)
+                print(data)
+                timeTotals.append(data.timeTotal / 1000)
+            bar.drawBar(barlabels[tIndex], tIndex, timeTotals)
+
+        bar.show()
 
 ######################    dbscan   #########################
 # Bar.dNword('dbscan_nword_runtime.pdf')
@@ -412,14 +630,13 @@ class Bar:
 # Bar.dMinpts('dbscan_minpts_runtime.pdf')
 # Bar.dEpsilon('dbscan_epsilon_runtime.pdf')
 # Bar.dHAll('dbscan_h_runtime.pdf')
-Bar.dHAll('dbscan_h_all_runtime.pdf', True)
-
+# Bar.dHAll('dbscan_h_all_runtime.pdf', True)
+# Bar.dDiffScale('dbscan_diff_scale.pdf')
 
 ######################     optic   #########################
-# Bar.oNword('optic_nword_runtime.pdf')
-
-
-
+Bar.oNword('optics_nword_runtime.pdf')
+Bar.oK('optics_k_runtime.pdf')
+Bar.oDiffScale('optics_diff_scale.pdf')
 
 
 

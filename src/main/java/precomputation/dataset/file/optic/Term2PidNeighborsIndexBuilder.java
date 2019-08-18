@@ -117,6 +117,7 @@ public class Term2PidNeighborsIndexBuilder implements Runnable{
 			pidNeighborLenBW.write(Global.delimiterLevel1);
 			pidNeighborLenBW.write(String.valueOf(numBytes));
 			pidNeighborLenBW.write('\n');
+			pidNeighborLenBW.flush();
 		}
 	}
 	
