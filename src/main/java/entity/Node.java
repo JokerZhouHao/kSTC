@@ -30,6 +30,8 @@ public class Node implements Serializable, Comparable{
 	
 	public LinkedList<Node> neighbors = null;
 	
+	public Node() {}
+	
 	public Node(int id, Point location, double distance, double score) {
 		this.id = id;
 		this.location = location;

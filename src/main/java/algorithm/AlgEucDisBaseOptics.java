@@ -286,7 +286,6 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 //				centerNode.setCoreDistance(qParams, neighbors);
 				centerNode.setCoreDistanceBySorted(qParams, neighbors);
 				
-				
 				if(null != ofw)	ofw.writeIdCoreAndDirectDis(centerNode.id, centerNode.coreDistance, centerNode.reachabilityDistance);
 				orderedNodes.add(centerNode);
 				if(centerNode.coreDistance != Node.UNDEFINED) {

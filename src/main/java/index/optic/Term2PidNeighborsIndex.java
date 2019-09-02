@@ -56,6 +56,24 @@ public class Term2PidNeighborsIndex extends AbstractLuceneIndex{
 		return bb.array();
 	}
 	
+	public byte[] pidNeighborsToBytes(List<Node> ngbs, int numByte) throws Exception{
+		ByteBuffer bb = ByteBuffer.allocate(numByte);
+		bb.putInt(ngbs.size());
+		for(Node nd : ngbs) {
+			bb.putInt(nd.id);
+			bb.putFloat((float)nd.coreDistance);
+			bb.putFloat((float)nd.reachabilityDistance);
+			if(nd.coreDistance == Node.UNDEFINED)	continue;
+			bb.putInt(nd.neighbors.size());
+			for(Node ngb : nd.neighbors) {
+				bb.putInt(ngb.id);
+				bb.putFloat((float)ngb.disToCenter);
+			}
+		}
+		return bb.array();
+	}
+	
+	
 	public byte[] pidNeighborsToBytes(Entry<Integer, List<Node>> pidNeighbors) throws Exception{
 		int numByte = 4 * (1 + 1 + pidNeighbors.getValue().size() * 3);
 		ByteBuffer bb = ByteBuffer.allocate(numByte);
@@ -104,6 +122,57 @@ public class Term2PidNeighborsIndex extends AbstractLuceneIndex{
 		return map;
 	}
 	
+	private Map<Node, List<NeighborsNode>> bytesToNodeNeighbors(byte[] bytes) {
+		int numInt = 0;
+		ByteBuffer bb = ByteBuffer.wrap(bytes);
+		Map<Node, List<NeighborsNode>> map = new HashMap<>();
+		numInt = bb.getInt();
+		List<NeighborsNode> neighbors = null;
+		for(int i=0; i<numInt; i++) {
+			Node nd = new Node();
+			nd.id = bb.getInt();
+			nd.coreDistance = bb.getFloat();
+			nd.reachabilityDistance = bb.getFloat();
+			neighbors = null;
+			if(nd.coreDistance != Node.UNDEFINED) {
+				neighbors = new ArrayList<>();
+				int numNgb = bb.getInt();
+				while(numNgb > 0) {
+					neighbors.add(new NeighborsNode(bb.getInt(), bb.getFloat()));
+					numNgb--;
+				}
+			}
+			map.put(nd, neighbors);
+		}
+		return map;
+	}
+	
+	private List<Node> bytesToNodeList(byte[] bytes) {
+		int numInt = 0;
+		ByteBuffer bb = ByteBuffer.wrap(bytes);
+		numInt = bb.getInt();
+		List<Node> orderNodes = new ArrayList<>();
+		for(int i=0; i<numInt; i++) {
+			Node nd = new Node();
+			nd.id = bb.getInt();
+			nd.coreDistance = bb.getFloat();
+			nd.reachabilityDistance = bb.getFloat();
+			orderNodes.add(nd);
+			
+			if(nd.coreDistance != Node.UNDEFINED) {
+				int numNgb = bb.getInt();
+				while(numNgb > 0) {
+					bb.getInt();
+					bb.getFloat();
+					numNgb--;
+				}
+			}
+		}
+		return orderNodes;
+	}
+	
+	
+	
 	public void addDoc(String term, byte[] pidNeighbors) throws Exception{
 		Document doc = new Document();
 		doc.add(new StringField(fieldTerm, term, Store.NO));
@@ -126,6 +195,32 @@ public class Term2PidNeighborsIndex extends AbstractLuceneIndex{
 		qp.runTimeRec.timeReadTermPNgb += qp.runTimeRec.getTimeSpan();
 		
 		return bytesToPidNeighbors(bs);
+	}
+	
+	public Map<Node, List<NeighborsNode>> searchTermReNode2Ngbs(String term, QueryParams qp) throws Exception{
+		TopDocs results = indexSearcher.search(queryParser.parse(term), 1);
+		ScoreDoc[] hits = results.scoreDocs;
+		if(0 == hits.length)	return null;
+		
+		qp.runTimeRec.setFrontTime();
+		byte[] bs = indexSearcher.doc(hits[0].doc).getBinaryValue(fieldPidNeighbors).bytes;
+		qp.runTimeRec.numByteOfTermPNgb += bs.length;
+		qp.runTimeRec.timeReadTermPNgb += qp.runTimeRec.getTimeSpan();
+		
+		return bytesToNodeNeighbors(bs);
+	}
+	
+	public List<Node> searchTermReNodes(String term, QueryParams qp) throws Exception{
+		TopDocs results = indexSearcher.search(queryParser.parse(term), 1);
+		ScoreDoc[] hits = results.scoreDocs;
+		if(0 == hits.length)	return null;
+		
+		qp.runTimeRec.setFrontTime();
+		byte[] bs = indexSearcher.doc(hits[0].doc).getBinaryValue(fieldPidNeighbors).bytes;
+		qp.runTimeRec.numByteOfTermPNgb += bs.length;
+		qp.runTimeRec.timeReadTermPNgb += qp.runTimeRec.getTimeSpan();
+		
+		return bytesToNodeList(bs);
 	}
 	
 	public Map<Integer, List<NeighborsNode>> searchTerm1(String term) throws Exception{

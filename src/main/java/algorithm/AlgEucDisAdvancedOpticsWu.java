@@ -152,25 +152,44 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics {
 			}
 		} else {	// the term ngb in index
 			qp.runTimeRec.timeSearchTermPNgb = System.nanoTime();
-//			查交集
-			List<Map<Integer, List<NeighborsNode>>> pid2Ngbs = new ArrayList<>();
-			pid2Ngbs.add(term2PNgb.searchTerm(minTerm, qp));
-//			查并集
-//			List<Map<Integer, List<NeighborsNode>>> pid2Ngbs = new ArrayList<>();
-//			for(String tm : qParams.sWords) {
-//				pid2Ngbs.add(term2PNgb.searchTerm(tm));
-//			}
-			qp.runTimeRec.timeSearchTermPNgb = System.nanoTime() - qp.runTimeRec.timeSearchTermPNgb; 
-			
-			qp.runTimeRec.excludeTimeOpticAdvToCellidNodes = System.nanoTime();
-			cellid2Nodes = nodeCol.toCellid2Nodes();
-			qp.runTimeRec.excludeTimeOpticAdvToCellidNodes = System.nanoTime() - qp.runTimeRec.excludeTimeOpticAdvToCellidNodes;
-			
-			for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
-				for(Node nd : en.getValue()) {
-					if(!nd.isProcessed) {
-						expandClusterOrder(nd, qParams, orderedNodes, ofw, pid2Ngbs, pid2Node);
-						qp.runTimeRec.numExpandClusterOrder++;
+			if(qp.sWords.size() == 1) {	// 只有一个查询词，就直接从索引中取出core_distance、reach_distance
+				List<Node> oNodes = term2PNgb.searchTermReNodes(minTerm, qp);
+				qp.runTimeRec.timeSearchTermPNgb = System.nanoTime() - qp.runTimeRec.timeSearchTermPNgb; 
+				Map<Integer, Node> nid2Node = new HashMap<>();
+				for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
+					for(Node nd : en.getValue()) {
+						nid2Node.put(nd.id, nd);
+					}
+				}
+				for(Node oNd : oNodes) {
+					Node centerNode = nid2Node.get(oNd.id);
+					centerNode.coreDistance = oNd.coreDistance;
+					centerNode.reachabilityDistance = oNd.reachabilityDistance;
+					centerNode.isProcessed = Boolean.TRUE;
+					if(null != ofw)	ofw.writeIdCoreAndDirectDis(centerNode.id, centerNode.coreDistance, centerNode.reachabilityDistance); 
+					orderedNodes.add(centerNode);
+				}
+			} else {
+				// 查交集
+				List<Map<Node, List<NeighborsNode>>> pid2Ngbs = new ArrayList<>();
+				pid2Ngbs.add(term2PNgb.searchTermReNode2Ngbs(minTerm, qp));
+//				查并集
+//				List<Map<Integer, List<NeighborsNode>>> pid2Ngbs = new ArrayList<>();
+//				for(String tm : qParams.sWords) {
+//					pid2Ngbs.add(term2PNgb.searchTerm(tm));
+//				}
+				qp.runTimeRec.timeSearchTermPNgb = System.nanoTime() - qp.runTimeRec.timeSearchTermPNgb; 
+				
+				qp.runTimeRec.excludeTimeOpticAdvToCellidNodes = System.nanoTime();
+				cellid2Nodes = nodeCol.toCellid2Nodes();
+				qp.runTimeRec.excludeTimeOpticAdvToCellidNodes = System.nanoTime() - qp.runTimeRec.excludeTimeOpticAdvToCellidNodes;
+				
+				for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
+					for(Node nd : en.getValue()) {
+						if(!nd.isProcessed) {
+							expandClusterOrder(nd, qParams, orderedNodes, ofw, pid2Ngbs, pid2Node);
+							qp.runTimeRec.numExpandClusterOrder++;
+						}
 					}
 				}
 			}
@@ -182,7 +201,7 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics {
 	}
 
 	public void expandClusterOrder(Node centerNode, QueryParams qParams,
-			List<Node> orderedNodes, OrginalFileWriter ofw, List<Map<Integer, List<NeighborsNode>>> pid2Ngbs,
+			List<Node> orderedNodes, OrginalFileWriter ofw, List<Map<Node, List<NeighborsNode>>> pid2Ngbs,
 			Map<Integer, Node> pid2Node) throws Exception {
 		
 		qp.runTimeRec.setFrontTime();
@@ -222,12 +241,12 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics {
 	}
 	
 	
-	public List<Node> fastIndexRange(List<Map<Integer, List<NeighborsNode>>> pid2Ngbs, Map<Integer, Node> pid2Node, Node centerNode){
+	public List<Node> fastIndexRange(List<Map<Node, List<NeighborsNode>>> pid2Ngbs, Map<Integer, Node> pid2Node, Node centerNode){
 //		NgbNodes recNgb = new NgbNodes(Boolean.TRUE);
 		List<Node> ngbList = new ArrayList<>();
 		
-		for(Map<Integer, List<NeighborsNode>> pidNeighbors : pid2Ngbs) {
-			List<NeighborsNode> ngb = pidNeighbors.get(centerNode.id);
+		for(Map<Node, List<NeighborsNode>> pidNeighbors : pid2Ngbs) {
+			List<NeighborsNode> ngb = pidNeighbors.get(centerNode);
 			if(ngb==null)	continue;
 			Node nd = null;
 			for(NeighborsNode nn : ngb) {
