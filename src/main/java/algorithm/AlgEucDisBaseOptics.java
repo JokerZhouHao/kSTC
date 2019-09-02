@@ -120,7 +120,8 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 		qp.runTimeRec.timeExcuteQueryFunc = System.nanoTime();
 		SortedClusters sc = null;
 		if(this.getClass().equals(AlgEucDisBaseOptics.class)) {
-			sc = excuteQuery(qParams, pathOrderedFile, cid2nds.cellid2Nodes, sortedNodes);
+//			sc = excuteQuery(qParams, pathOrderedFile, cid2nds.cellid2Nodes, sortedNodes);
+			sc = excuteQueryByRight(qParams, pathOrderedFile, cid2nds.pNodes, sortedNodes);
 		} else if(this.getClass().equals(AlgEucDisBaseOpticsWu.class)) {
 			sc = excuteQueryByWu(qParams, pathOrderedFile, cid2nds.pNodes, sortedNodes);
 		}
@@ -418,19 +419,171 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 		
 	}
 	
-	public void filterDownAreas(List<Node> sortedNodes, List<SteepArea> downAreas, double curMib, SteepArea steepArea) {
-		if(null != steepArea)	// is a up area
-			curMib = Math.max(curMib, steepArea.mib);
+	public boolean filterDownAreas(List<Node> sortedNodes, List<SteepArea> downAreas, double curMib, SteepArea steepArea) {
+		boolean success = true;
+//		if(null != steepArea) {	// is a up area
+//			if(sortedNodes.get(steepArea.end).reachabilityDistance * qp.steepOppositeDegree < curMib) {
+//				success = false;
+//				curMib = Math.max(curMib, steepArea.mib);
+//			}
+//		}
 		int i = downAreas.size() - 1;
 		for(; i>=0; i--) {
 			steepArea = downAreas.get(i);
 			if(steepArea.isStop())	break;
 			else if(steepArea.noUsed()) {
 				if(sortedNodes.get(steepArea.start).reachabilityDistance * qp.steepOppositeDegree < curMib)	steepArea.status = SteepArea.STATUSHASUSED;
-				else	steepArea.mib = Math.max(steepArea.mib, curMib);
+			}
+			curMib = steepArea.mib = Math.max(steepArea.mib, curMib);
+		}
+		return success;
+	}
+	
+	
+	/**********************	以下全部是采用修正后的optics方法来计算cluster的相关函数	******************/
+	public SortedClusters excuteQueryByRight(QueryParams qParams, String pathOrderedFile, List<Node> nodes,
+			List<Node> sortedNodes) throws Exception{
+	
+		qp.runTimeRec.setFrontTime();
+		PNodeCollection disPNodeCol = new PNodeCollection(nodes).sortByDistance();
+		qp.runTimeRec.timeSortByDistance = qp.runTimeRec.getTimeSpan();
+		
+		qp.runTimeRec.setFrontTime();
+		PNodeCollection scorePNodeCol = new PNodeCollection(nodes).sortByScore();
+		qp.runTimeRec.timeSortByScore = qp.runTimeRec.getTimeSpan();
+		
+		SortedClusters sClusters = new SortedClusters(qParams);
+		Cluster cluster = null;
+		int curClusterId = 1;
+		
+		double bound = Double.MIN_VALUE;
+		List<SteepArea> downAreas = new ArrayList<>();
+		int index = 0;
+		double mib = 0.0;
+		int size = sortedNodes.size();
+		SteepArea steepArea = null;
+		int i = 0;
+		SteepArea upArea = null;
+		
+		while(index + 1< size) {
+			if(sortedNodes.get(index).reachabilityDistance * qp.steepOppositeDegree >= sortedNodes.get(index + 1).reachabilityDistance) {
+				// may be is start point of down area
+				steepArea = getDownArea(sortedNodes, qParams, index);
+				if(steepArea.isNormalArea()) {
+					mib = Math.max(mib, steepArea.lastMib);
+					index = steepArea.lastEnd;
+				} else {	// is down area
+//					filterDownAreas(sortedNodes, downAreas, mib, null);
+					downAreas.add(steepArea.copy());
+					index = steepArea.lastEnd;
+					mib = steepArea.lastMib;
+				}
+			} else if (sortedNodes.get(index).reachabilityDistance > sortedNodes.get(index + 1).reachabilityDistance * qp.steepOppositeDegree) {
+				// is normal point
+				mib = Math.max(mib, sortedNodes.get(index).reachabilityDistance);
+				index++;
+			} else {
+				// may be is start point of up area
+				upArea = getUpArea(sortedNodes, qParams, index);
+				if(upArea.isNormalArea()) {
+					mib = Math.max(mib, upArea.lastMib);
+					index = upArea.lastEnd;
+				} else {	// is up area
+//					filterDownAreas(sortedNodes, downAreas, mib, upArea);
+//					if(upArea.start > 1915) {
+//						System.out.println();
+//					}
+					
+					
+					cluster = null;
+					for(i = downAreas.size() - 1; i >= 0; i--) {
+						steepArea = downAreas.get(i);
+						if(steepArea.isStop())	break;
+						else if(steepArea.noUsed()) {
+							cluster = getClusterByRight(curClusterId, qParams, sortedNodes, steepArea, upArea);
+							if(null != cluster) {
+								downAreas.get(downAreas.size() - 1).status = SteepArea.STATUSSTOP;
+								sClusters.add(cluster);
+								curClusterId++;
+								// compare to threshold
+								disPNodeCol.refreshFirstIndex();
+								scorePNodeCol.refreshFirstIndex();
+								bound = disPNodeCol.getFirstNoUsedDis() * qp.alpha + scorePNodeCol.getFirstNoUsedScore() * (1 - qp.alpha);
+								if(bound >= sClusters.getTopKScore())	return sClusters;
+								break;
+							}
+						}
+					}
+					
+					index = upArea.lastEnd;
+					mib = upArea.lastMib;
+				}
 			}
 		}
+		if(sClusters.getSize() == 0)	return null;
+		return sClusters;
 	}
+	
+	public Cluster getClusterByRight(int clusterId, QueryParams qParams, List<Node> sortedNodes, SteepArea downArea, SteepArea upArea) {
+		if(upArea.end - downArea.start + 1 < qParams.minpts) {
+			return null;
+		} else {
+			double tDou = Math.min(sortedNodes.get(downArea.start).reachabilityDistance, sortedNodes.get(upArea.end).reachabilityDistance) 
+							* qp.steepOppositeDegree;
+			int i, start, end;
+			double threshDis = 0.0, dis = 0.0;
+			if(sortedNodes.get(downArea.start).reachabilityDistance * qParams.steepOppositeDegree >= 
+				sortedNodes.get(upArea.end + 1).reachabilityDistance) {
+				threshDis = sortedNodes.get(upArea.end + 1).reachabilityDistance;
+				for(i = upArea.start - 1; i >= downArea.start; i--) {
+					dis = sortedNodes.get(i).reachabilityDistance;
+					if(dis > threshDis || dis > tDou)	break;
+				}
+				i++;
+				if(i > downArea.end)	return null;
+				start = i;
+				end = upArea.end;
+			} else if (sortedNodes.get(downArea.start).reachabilityDistance <= 
+					sortedNodes.get(upArea.end + 1).reachabilityDistance * qParams.steepOppositeDegree) {
+				threshDis = sortedNodes.get(downArea.start).reachabilityDistance;
+				for(i = downArea.end + 1; i <= upArea.end; i++) {
+					dis = sortedNodes.get(i).reachabilityDistance;
+					if(dis > threshDis || dis > tDou)	break;
+				}
+				i--;
+				if(i < upArea.start)	return null;
+				start = downArea.start;
+				end = i;
+			} else {
+				for(i = downArea.start; i <= upArea.end; i++) {
+					dis = sortedNodes.get(i).reachabilityDistance;
+					if(dis <= tDou)	break;
+				}
+				start = i;
+				if(i > downArea.end)	return null;
+				
+				for(; i <= upArea.end; i++) {
+					dis = sortedNodes.get(i).reachabilityDistance;
+					if(dis > tDou)	break;
+				}
+				i--;
+				if(i < upArea.start)	return null;
+				end = i;
+			}
+			
+			if(end - start + 1 < qParams.minpts)	return null;
+			List<Node> nds = new ArrayList<>();
+			for(i=start; i <= end; i++) {
+				sortedNodes.get(i).isUsed = Boolean.TRUE;
+				sortedNodes.get(i).orderId = i;
+				nds.add(sortedNodes.get(i));
+			}
+			return new Cluster(clusterId, nds, qp);
+		}
+		
+	}
+	
+	
 	
 	/**********************	以下全部是采用吴老师提出的方法来计算cluster的相关函数	******************/
 	public SortedClusters excuteQueryByWu(QueryParams qParams, String pathOrderedFile, List<Node> nodes,
