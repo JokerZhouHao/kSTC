@@ -2,6 +2,7 @@ package entity.optics;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 import java.util.Map.Entry;
 
@@ -62,6 +63,31 @@ public class OrderSeeds {
 		double newRDist = 0.0;
 		double tDist = 0.0;
 		for(Node nd : neighbors) {
+			if(!nd.isProcessed) {
+//				newRDist = Math.max(cDist, centerNode.location.getMinimumDistance(nd.location));
+				newRDist = Math.max(cDist, nd.disToCenter);
+				if(nd.reachabilityDistance == Node.UNDEFINED) {
+					nd.reachabilityDistance = newRDist;
+					this.add(nd);
+				} else {
+					if(newRDist < nd.reachabilityDistance) {
+						tDist = nd.reachabilityDistance;
+						nd.reachabilityDistance = newRDist;
+						this.add(tDist, nd);
+					}
+				}
+			}
+		}
+	}
+	
+	public void update(Map<Integer, Node> id2Node, List<Node> neighbors, Node centerNode) {
+		double cDist = centerNode.coreDistance;
+		double newRDist = 0.0;
+		double tDist = 0.0;
+		for(Node nd : neighbors) {
+			tDist = nd.disToCenter;
+			nd = id2Node.get(nd.id);
+			nd.disToCenter = tDist;
 			if(!nd.isProcessed) {
 //				newRDist = Math.max(cDist, centerNode.location.getMinimumDistance(nd.location));
 				newRDist = Math.max(cDist, nd.disToCenter);

@@ -1,5 +1,6 @@
 package test;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.PriorityQueue;
 import java.util.Set;
@@ -21,17 +22,33 @@ public class T1 {
 //		System.out.println(Double.isNaN(0.0/0.0));
 //		System.out.println(1/0.000000000000000000001);
 		
-		Rectangle subRect = new Rectangle(0, 1, 0, 1);
-		System.out.println(subRect);
+//		Rectangle subRect = new Rectangle(0, 1, 0, 1);
+//		System.out.println(subRect);
+//		
+//		String line = "\nss";
+//		line = line.replace('\n', ' ');
+//		System.out.println(line);
+//		
+//		System.out.println("23,23".replaceAll(",", " "));
+//		
+//		
+//		float a = 1.123456789f;
+//		System.out.println(a);
 		
-		String line = "\nss";
-		line = line.replace('\n', ' ');
-		System.out.println(line);
+		HashMap<Node, Integer> map = new HashMap<>();
+		int x = 16164;
+		Integer xx = x;
+		int y = 16164;
+		Integer yy = y;
+		System.out.println(xx.hashCode() + " " + yy.hashCode());
 		
-		System.out.println("23,23".replaceAll(",", " "));
 		
+		Node nd1 = new Node(16164, null, 0.0, 0.0);
+		Node nd2 = new Node(16164, null, 0.0, 0.0);
 		
-		float a = 1.123456789f;
-		System.out.println(a);
+		System.out.println(nd1.equals(nd2));
+		
+		map.put(nd1, nd1.id);
+		System.out.println(map.containsKey(nd2));
 	}
 }

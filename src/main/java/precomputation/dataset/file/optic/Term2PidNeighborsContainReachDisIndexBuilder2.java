@@ -160,14 +160,22 @@ public class Term2PidNeighborsContainReachDisIndexBuilder2 implements Runnable{
 	
 	/************** 计算reach distance *************/
 	private int numCur4Bytes = 0;
+	private String curSearchTerm = null;
 	
 	private List<Node> optics(Map<Integer, List<Node>> cellid2Nodes, QueryParams qParams) throws Exception{
+		Map<Integer, Node> id2Node = new HashMap<>();
+		for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
+			for(Node nd : en.getValue()) {
+				id2Node.put(nd.id, nd);
+			}
+		}
+		
 		List<Node> orderedNodes = new ArrayList<>();
 		
 		for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
 			for(Node nd : en.getValue()) {
 				if(!nd.isProcessed) {
-					expandClusterOrder(cellid2Nodes, nd, qParams, orderedNodes);
+					expandClusterOrder(cellid2Nodes, id2Node, nd, qParams, orderedNodes);
 					if(numCur4Bytes > Global.maxPidNeighbors4Bytes)	return null;
 				}
 			}
@@ -175,7 +183,8 @@ public class Term2PidNeighborsContainReachDisIndexBuilder2 implements Runnable{
 		return orderedNodes;
 	}
 	
-	private void expandClusterOrder(Map<Integer, List<Node>> cellid2Nodes, Node centerNode, QueryParams qParams, List<Node> orderedNodes) throws Exception{
+	private void expandClusterOrder(Map<Integer, List<Node>> cellid2Nodes, Map<Integer, Node> id2Node,
+			Node centerNode, QueryParams qParams, List<Node> orderedNodes) throws Exception{
 		NgbNodes neighbors = fastRange(cellid2Nodes, qParams, centerNode);
 		if(neighbors == null)	centerNode.neighbors = null;
 		else centerNode.neighbors = neighbors.toList();
@@ -190,10 +199,34 @@ public class Term2PidNeighborsContainReachDisIndexBuilder2 implements Runnable{
 		
 		orderedNodes.add(centerNode);
 		OrderSeeds orderSeeds = new OrderSeeds();
+		
+		
+		
+//		long startTime = System.currentTimeMillis();
+		
+		
+		
+		
 		if(centerNode.coreDistance != Node.UNDEFINED) {
-			orderSeeds.update(centerNode.neighbors, centerNode);
+			orderSeeds.update(id2Node, centerNode.neighbors, centerNode);
 			while(!orderSeeds.isEmpty()) {
+				
+				
+				
+				
+//				if(System.currentTimeMillis() - startTime >= 120 * 1000) {
+//					System.out.println(Thread.currentThread() + " " + curSearchTerm + " " + cellid2Nodes.size());
+//					break;
+//				}
+				
+				
+				
+				
+				
 				centerNode = orderSeeds.pollFirst();
+				
+				
+				
 				
 				neighbors = fastRange(cellid2Nodes, qParams, centerNode);
 				if(neighbors == null)	centerNode.neighbors = null;
@@ -208,7 +241,7 @@ public class Term2PidNeighborsContainReachDisIndexBuilder2 implements Runnable{
 				
 				orderedNodes.add(centerNode);
 				if(centerNode.coreDistance != Node.UNDEFINED) {
-					orderSeeds.update(centerNode.neighbors, centerNode);
+					orderSeeds.update(id2Node, centerNode.neighbors, centerNode);
 				}
 			}
 		}
@@ -225,7 +258,7 @@ public class Term2PidNeighborsContainReachDisIndexBuilder2 implements Runnable{
 			List<String> sTerms = new ArrayList<>();
 //			List<Node> tList = null, ndList = null;
 			for(int termIndex = start; termIndex < end; termIndex++) {
-				term = allTerms[termIndex];
+				curSearchTerm = term = allTerms[termIndex];
 				sTerms.clear();
 				synchronized (numDealedTerm) {
 //					System.out.print("> 正处理第" + String.valueOf(termIndex) + "个term，");
@@ -234,6 +267,11 @@ public class Term2PidNeighborsContainReachDisIndexBuilder2 implements Runnable{
 					}
 				}
 				sTerms.add(term);
+				
+				///////////////////////////////
+//				System.out.println(Thread.currentThread() + " " + sTerms);
+				
+				
 				Map<Integer, List<Node>> cellid2Nodes = cellidWIndex.searchWords(sTerms, allLocations);
 				if(null == cellid2Nodes) {
 					this.writePidNeighborLen(term, -1);
@@ -242,6 +280,8 @@ public class Term2PidNeighborsContainReachDisIndexBuilder2 implements Runnable{
 				
 				numCur4Bytes = 1;
 				List<Node> ngbNodes = optics(cellid2Nodes, qParams);
+				
+				
 				if(numCur4Bytes > Global.maxPidNeighbors4Bytes) {
 					synchronized (numNgbTooLong) {
 						numNgbTooLong.x++;
@@ -360,8 +400,7 @@ public class Term2PidNeighborsContainReachDisIndexBuilder2 implements Runnable{
 		return ngb;
 	}
 	
-	
-	public static void main(String[] args) throws Exception{
+	private static void mainM() throws Exception {
 		Term2PidNeighborsContainReachDisIndexBuilder2.reset();
 		
 		System.out.println("> starting build term2PidNeighborsIndex . . .");
@@ -410,5 +449,28 @@ public class Term2PidNeighborsContainReachDisIndexBuilder2 implements Runnable{
 		}
 		
 		while(!Term2PidNeighborsContainReachDisIndexBuilder2.hasStop())	Thread.sleep(30000);
+	}
+	
+	private static void test() throws Exception {
+		Term2PidNeighborsContainReachDisIndexBuilder2 builder = new Term2PidNeighborsContainReachDisIndexBuilder2(new String[2], 0, 0,Global.opticQParams, 
+				Global.pathTerm2PidNeighborsIndex, Global.pathCellidRtreeidOrPidWordsIndex, Global.pathPidNeighborLen);
+		List<String> sTerms = new ArrayList<>();
+		sTerms.add("9744");
+		Map<Integer, List<Node>> cellid2Nodes =  builder.cellidWIndex.searchWords(sTerms, allLocations);
+		if(cellid2Nodes != null) {
+			int num = 0;
+			for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
+				num += en.getValue().size();
+			}
+			System.out.println("NumSearchNode: " + num);
+		}
+		builder.numCur4Bytes = 1;
+		List<Node> nds = builder.optics(cellid2Nodes, builder.qParams);
+		System.out.println(nds);
+	}
+	
+	public static void main(String[] args) throws Exception{
+		mainM();
+//		test();
 	}
 }

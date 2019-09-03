@@ -117,7 +117,7 @@ public class Node implements Serializable, Comparable{
 	@Override
 	public boolean equals(Object obj) {
 		if(obj instanceof Node) {
-			if(id == ((Node)obj).id)	return Boolean.TRUE;
+			if(id.equals(((Node)obj).id))	return Boolean.TRUE;
 			else return Boolean.FALSE;
 		} else if(obj instanceof NeighborsNode) {
 			if(id == ((NeighborsNode)obj).id)	return Boolean.TRUE;
@@ -129,7 +129,8 @@ public class Node implements Serializable, Comparable{
 	public String toString() {
 		return orderId + Global.delimiterLevel1 + id + Global.delimiterLevel1 + location.getCoord(0) + Global.delimiterSpace + location.getCoord(1);
 //		return "SearchedNode [id=" + id + ", distance=" + distance + ", score=" + score + ", clusterId=" + clusterId
-//				+ "][" + String.valueOf(location.getCoord(0)) + ", " + String.valueOf(location.getCoord(1) + "]");
+//				+ "][" + String.valueOf(location.getCoord(0)) + ", " + String.valueOf(location.getCoord(1) + "]\n");
+//		return id + Global.delimiterLevel1 + id + Global.delimiterLevel1 + coreDistance + Global.delimiterSpace + reachabilityDistance + '\n';
 	}
 	
 	public static void main(String[] args) {

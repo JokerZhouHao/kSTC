@@ -531,9 +531,10 @@ public class ProcessGenerateFiles {
 		Global.sgplInfo = SGPLInfo.getInstance(h);
 		Global.pathCellidRtreeidOrPidWordsIndex = Global.getPathCellidRtreeidOrPidWordsIndex(Global.rtreeFanout, h);
 		List<Integer> mpts = new ArrayList<>();
-		mpts.add(5);
+		mpts.add(10);
+		mpts.add(20);
 		List<Double> epss = new ArrayList<>();
-		epss.add(0.0001);
+		epss.add(0.001);
 //		epss.add(0.0001);
 //		epss.add(0.0005);
 		List<Integer> maxNumBytes = new ArrayList<>();

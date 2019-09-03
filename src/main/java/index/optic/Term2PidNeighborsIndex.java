@@ -133,6 +133,7 @@ public class Term2PidNeighborsIndex extends AbstractLuceneIndex{
 			nd.id = bb.getInt();
 			nd.coreDistance = bb.getFloat();
 			nd.reachabilityDistance = bb.getFloat();
+			
 			neighbors = null;
 			if(nd.coreDistance != Node.UNDEFINED) {
 				neighbors = new ArrayList<>();
@@ -143,7 +144,9 @@ public class Term2PidNeighborsIndex extends AbstractLuceneIndex{
 				}
 			}
 			map.put(nd, neighbors);
+			
 		}
+		
 		return map;
 	}
 	
