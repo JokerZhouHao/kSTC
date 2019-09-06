@@ -258,6 +258,8 @@ public class Term2PidNeighborsContainReachDisIndexBuilder2 implements Runnable{
 			List<String> sTerms = new ArrayList<>();
 //			List<Node> tList = null, ndList = null;
 			for(int termIndex = start; termIndex < end; termIndex++) {
+				if(termIndex >= allTerms.length || termIndex < 0)	break;
+				
 				curSearchTerm = term = allTerms[termIndex];
 				sTerms.clear();
 				synchronized (numDealedTerm) {
@@ -435,20 +437,22 @@ public class Term2PidNeighborsContainReachDisIndexBuilder2 implements Runnable{
 		numThread = 10;
 		start = end;
 		end = allTerms.length;
-		span = (end - start) / numThread;
-		for(int i=0; i<=numThread; i++) {
-			if(i!=numThread) {
-				new Thread(new Term2PidNeighborsContainReachDisIndexBuilder2(allTerms, start + span * i, start + span * (i+1), Global.opticQParams, 
-						Global.pathTerm2PidNeighborsIndex, Global.pathCellidRtreeidOrPidWordsIndex, Global.pathPidNeighborLen)).start();
-			} else {
-				if(start + span * i < end) {
-					new Thread(new Term2PidNeighborsContainReachDisIndexBuilder2(allTerms, start + span * i, end, Global.opticQParams, 
+		if(start < allTerms.length) {
+			span = (end - start) / numThread;
+			for(int i=0; i<=numThread; i++) {
+				if(i!=numThread) {
+					new Thread(new Term2PidNeighborsContainReachDisIndexBuilder2(allTerms, start + span * i, start + span * (i+1), Global.opticQParams, 
 							Global.pathTerm2PidNeighborsIndex, Global.pathCellidRtreeidOrPidWordsIndex, Global.pathPidNeighborLen)).start();
+				} else {
+					if(start + span * i < end) {
+						new Thread(new Term2PidNeighborsContainReachDisIndexBuilder2(allTerms, start + span * i, end, Global.opticQParams, 
+								Global.pathTerm2PidNeighborsIndex, Global.pathCellidRtreeidOrPidWordsIndex, Global.pathPidNeighborLen)).start();
+					}
 				}
 			}
 		}
 		
-		while(!Term2PidNeighborsContainReachDisIndexBuilder2.hasStop())	Thread.sleep(30000);
+		while(!Term2PidNeighborsContainReachDisIndexBuilder2.hasStop())	Thread.sleep(5000);
 	}
 	
 	private static void test() throws Exception {

@@ -32,9 +32,9 @@ public class GeoDisUtilityYelpbuss {
 	
 	
 	public static void main(String[] args) {
-		dis2GeoDis(0.001);
+//		dis2GeoDis(0.001);
 		dis2GeoDis(0.0001);
-		dis2GeoDis(0.00005);
+//		dis2GeoDis(0.00005);
 		
 //		float f = (float)1/3;
 //		System.out.println(f);

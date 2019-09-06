@@ -412,12 +412,12 @@ class Bar:
 # Bar.dMinpts('dbscan_minpts_runtime.pdf')
 # Bar.dEpsilon('dbscan_epsilon_runtime.pdf')
 # Bar.dHAll('dbscan_h_runtime.pdf')
-Bar.dHAll('dbscan_h_all_runtime.pdf', True)
+# Bar.dHAll('dbscan_h_all_runtime.pdf', True)
 
 
 ######################     optic   #########################
 # Bar.oNword('optic_nword_runtime.pdf')
-
+Bar.o
 
 
 

@@ -8,6 +8,7 @@ import java.util.PriorityQueue;
 import java.util.Set;
 
 import spatialindex.spatialindex.Point;
+import utility.MLog;
 
 /**
  * Mutual Reach Dist Graph
@@ -53,7 +54,21 @@ public class VGraph {
 		Set<GNode> ndHasAdd = new HashSet<>();
 		ndHasAdd.add(edges[0]);
 		int index = 0;
+		
+		
+		long startTime = System.currentTimeMillis();
+		if(edges.length == 14 || edges.length==9498 || edges.length==24079 || edges.length==14) {
+			MLog.log("edge num: " + edges.length);
+		}
+		
 		while(ndHasAdd.size() != edges.length) {
+			
+			
+			if(edges.length == 14 || edges.length==9498 || edges.length==24079 || edges.length==14) {
+				MLog.log("ndHasAdd size: " + ndHasAdd.size());
+			}
+			
+			
 			GNode p = edges[index].next;
 			while(p != null) {
 				if(!ndHasAdd.contains(p)) {

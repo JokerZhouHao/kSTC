@@ -43,16 +43,16 @@ public class QueryGeneratorPlacedumpTest {
 		double steepDegree = 0.1;
 		int h = 12;
 		
-		int opticMinpts = 1;
-		double opticEpsilon = 0.001;
+		int opticMinpts = 4;
+		double opticEpsilon = 0.00035;
 		
 		int numSample = 200;
 //		int type = 11'
 		List<Integer> types = new ArrayList<>();
-		types.add(1);
+//		types.add(1);
 //		types.add(2);
 //		types.add(3);
-		types.add(4);
+//		types.add(4);
 		
 		types.add(11);
 		types.add(12);
@@ -60,9 +60,9 @@ public class QueryGeneratorPlacedumpTest {
 		int k = 10;
 		int numWord = 2;
 		
-		int minpts = 20;
-		double epsilon = 0.001;
-		double xi = 0.001;
+		int minpts = 4;
+		double epsilon = 0.00035;
+		double xi = 0.00035;
 		
 		int maxPidNeighborsBytes = 2147483631;
 		
@@ -253,8 +253,8 @@ public class QueryGeneratorPlacedumpTest {
 		double steepDegree = 0.1;
 		int h = 12;
 		
-		int opticMinpts = 1;
-		double opticEpsilon = 0.0005;
+		int opticMinpts = 4;
+		double opticEpsilon = 0.00035;
 		
 		int numSample = 200;
 		List<Integer> types = new ArrayList<>();
@@ -268,11 +268,11 @@ public class QueryGeneratorPlacedumpTest {
 		numWords.add(3);
 		numWords.add(4);
 		
-		int minpts = 20;
+		int minpts = 4;
 		
-		double epsilon = 0.001;
+		double epsilon = 0.00035;
 		
-		double xi = 0.0005;
+		double xi = 0.00035;
 		
 		int maxPidNeighborsBytes = 2147483631;
 		
@@ -292,8 +292,8 @@ public class QueryGeneratorPlacedumpTest {
 		double steepDegree = 0.1;
 		int h = 12;
 		
-		int opticMinpts = 1;
-		double opticEpsilon = 0.001;
+		int opticMinpts = 4;
+		double opticEpsilon = 0.00035;
 		
 		int numSample = 200;
 		List<Integer> types = new ArrayList<>();
@@ -308,11 +308,11 @@ public class QueryGeneratorPlacedumpTest {
 		
 		int numWord = 2;
 		
-		int minpts = 20;
+		int minpts = 4;
 		
-		double epsilon = 0.001;
+		double epsilon = 0.00035;
 		
-		double xi = 0.001;
+		double xi = 0.00035;
 		
 		int maxPidNeighborsBytes = 2147483631;
 		
@@ -328,7 +328,8 @@ public class QueryGeneratorPlacedumpTest {
 	
 	public static void main(String[] args) {
 //		one();
-//		oneGroup();
+		oneGroup();
+		
 		
 		/*********************   dbscan  *********************/
 //		dbscanNumWord();
@@ -338,6 +339,6 @@ public class QueryGeneratorPlacedumpTest {
 		
 		/*********************   optic  *********************/
 //		opticNumWord();
-		opticK();
+//		opticK();
 	}
 }

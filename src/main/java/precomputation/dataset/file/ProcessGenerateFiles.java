@@ -454,7 +454,7 @@ public class ProcessGenerateFiles {
 	}
 	
 	public static void main(String[] args) throws Exception{
-		Global.displayInputOutputPath();
+//		Global.displayInputOutputPath();
 		long startTime = System.currentTimeMillis();
 		
 		/*********************  alg ecu dis dbscan starting *******************************/ 
@@ -498,17 +498,18 @@ public class ProcessGenerateFiles {
 		
 		
 		/* used	 building cellid rtreeid pid words index */
-//		List<Integer> hs = new ArrayList<>();
+		List<Integer> hs = new ArrayList<>();
+//		hs.add(4);
 //		hs.add(8);
-//		hs.add(10);
+		hs.add(10);
 //		hs.add(12);
 //		hs.add(14);
-//		for(int h : hs) {
-//			String pathCellidRtreeidOrPidWordsIndex = Global.getPathCellidRtreeidOrPidWordsIndex(Global.rtreeFanout, h);
-//			ProcessGenerateFiles.buildCellidRtreeidOrPidWordsIndex(pathCellidRtreeidOrPidWordsIndex, 
-//								 SGPLInfo.getInstance(h));
-//			System.out.println();
-//		}
+		for(int h : hs) {
+			String pathCellidRtreeidOrPidWordsIndex = Global.getPathCellidRtreeidOrPidWordsIndex(Global.rtreeFanout, h);
+			ProcessGenerateFiles.buildCellidRtreeidOrPidWordsIndex(pathCellidRtreeidOrPidWordsIndex, 
+								 SGPLInfo.getInstance(h));
+			System.out.println();
+		}
 		
 		
 		/* building term_cellCol_index */
@@ -523,19 +524,24 @@ public class ProcessGenerateFiles {
 		
 		/*********************	alg optic ******************/
 		/* used		generate wid_terms file, 供后面并行生成索引使用 */
-		String pathWidTerms = Global.pathWidTerms;
-		ProcessGenerateFiles.generateWidTermsFile(pathWidTerms);
-		
-//		/* building term_2_pidNeighbors index 需要用到上面生成的pathWidTerms*/
+//		String pathWidTerms = Global.pathWidTerms;
+//		ProcessGenerateFiles.generateWidTermsFile(pathWidTerms);
+//		
+////		/* building term_2_pidNeighbors index 需要用到上面生成的pathWidTerms*/
 		int h = 12;	// 注意：得先创建h对应的CellidRtreeidOrPidWordsIndex 
 		Global.sgplInfo = SGPLInfo.getInstance(h);
 		Global.pathCellidRtreeidOrPidWordsIndex = Global.getPathCellidRtreeidOrPidWordsIndex(Global.rtreeFanout, h);
 		List<Integer> mpts = new ArrayList<>();
-		mpts.add(10);
-		mpts.add(20);
+//		mpts.add(2);
+		mpts.add(4);
+//		mpts.add(5);
+//		mpts.add(10);
+//		mpts.add(20);
 		List<Double> epss = new ArrayList<>();
 		epss.add(0.001);
 //		epss.add(0.0001);
+//		epss.add(0.3);
+//		epss.add(0.00035);
 //		epss.add(0.0005);
 		List<Integer> maxNumBytes = new ArrayList<>();
 		maxNumBytes.add(2147483631);

@@ -28,7 +28,7 @@ public class Global {
 //	public static Map<Integer, Node> pid2Node = null;
 //	public static List<Node> nodes = null;
 	
-	public final static int NUM_THREAD_CAL_DBCV = 56;
+	public final static int NUM_THREAD_CAL_DBCV = 1;
 	
 	/**
 	 * 各种标志

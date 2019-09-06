@@ -60,6 +60,10 @@ public class OrginalFileWriter {
 		bw.write('\n');
 	}
 	
+	public void write(String str) throws Exception {
+		bw.write(str);
+	}
+	
 	public void close() throws Exception{
 		this.bw.close();
 	}

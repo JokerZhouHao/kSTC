@@ -17,6 +17,7 @@ import entity.Node;
 import entity.SortedClusters;
 import spatialindex.spatialindex.Point;
 import utility.Global;
+import utility.MLog;
 import utility.SystemInfoUtility;
 import utility.io.IOUtility;
 
@@ -101,24 +102,44 @@ public class DBCVCalculator {
 		int numProcessor = Global.NUM_THREAD_CAL_DBCV;
 //		if(SystemInfoUtility.isWindow())	numProcessor = 4;
 		
+		// 计算DSC
 		ArrayBlockingQueue<Object> queue = new ArrayBlockingQueue<>(numProcessor);
 		DSCOrDSPCCalculator cals[] = new DSCOrDSPCCalculator[numProcessor];
 		for(int i=0; i<numProcessor; i++) {
 			cals[i] = new DSCOrDSPCCalculator(queue);
 			new Thread(cals[i]).start();
 		}
-		
-		// 计算DSC
 		for(int i=0; i<cluss.size(); i++) {
 			queue.put(cluss.get(i));
+			MLog.log("cluss-" + i + " size: " + cluss.get(i).nds.size());
+		}
+		MLog.log("cluss-" + (cluss.size() - 1) + " size: " + cluss.get(cluss.size() - 1).nds.size());
+		
+		// 发送结束信号
+		for(int i=0; i<numProcessor; i++)	queue.put(signOver);
+		while(!queue.isEmpty()) {
+			MLog.log("queue size: " + queue.size());
+			Thread.sleep(2000);
 		}
 		
+		MLog.log("DSC caculate over");
+		Thread.sleep(100000);
+		
+		
 		// 计算DSPC
+		queue = new ArrayBlockingQueue<>(numProcessor);
+		cals = new DSCOrDSPCCalculator[numProcessor];
+		for(int i=0; i<numProcessor; i++) {
+			cals[i] = new DSCOrDSPCCalculator(queue);
+			new Thread(cals[i]).start();
+		}
 		this.v2ClusCol = new V2ClusterCollection(cluss.size());
 		for(int i=0; i<cluss.size(); i++) {
 			for(int j=i+1; j<cluss.size(); j++) {
 				this.v2ClusCol.set(i, j, new V2Cluster(cluss.get(i), cluss.get(j)));
 				queue.put(this.v2ClusCol.get(i, j));
+				MLog.log("<c" + i + "-num-" + cluss.get(i).nds.size() + ", " + "c-" + 
+							j + "-" + cluss.get(j).nds.size() + ">");
 			}
 		}
 		

@@ -194,11 +194,14 @@ public class KNNDisProcessorBigdataset implements Runnable{
 		Global.displayInputOutputPath();
 		
 		List<Integer> ks = new ArrayList<>();
-		ks.add(3);
-		ks.add(5);
-		ks.add(10);
-		ks.add(50);
-		ks.add(100);
+//		ks.add(3);
+		ks.add(4);
+//		ks.add(5);
+		ks.add(6);
+//		ks.add(10);
+//		ks.add(20);
+//		ks.add(50);
+//		ks.add(100);
 		Collections.sort(ks);
 //		calKNNDistance(ks, 10, 0.0005);	// yelp_buss
 //		calKNNDistance(ks, 4, 0.1);		// test_dataset

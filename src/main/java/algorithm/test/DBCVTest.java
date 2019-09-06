@@ -88,10 +88,10 @@ public class DBCVTest {
 					if(sClu == null)	break;
 					MLog.logNoln(qps.get(i).numWord + " " + j + " " + k + " " + sClu.getSize());
 					
-					if(Global.inputPath.contains("yelp_academic") && sClu.getSize() >= 500) {
-						System.out.println(" Size >= 500");
-						break;	// 避免计算时间过长 yelp_buss
-					}
+//					if(Global.inputPath.contains("yelp_academic") && sClu.getSize() >= 500) {
+//						System.out.println(" Size >= 500");
+//						break;	// 避免计算时间过长 yelp_buss
+//					}
 					if(Global.inputPath.contains("meetup") && sClu.getSize() >= 200) {
 						System.out.println(" Size >= 200");
 						break;	// 避免计算时间过长 meetup

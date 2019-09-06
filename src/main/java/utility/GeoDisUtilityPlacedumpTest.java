@@ -32,11 +32,11 @@ public class GeoDisUtilityPlacedumpTest {
 	
 	
 	public static void main(String[] args) {
-		dis2GeoDis(0.000001);
+//		dis2GeoDis(0.000001);
 //		dis2GeoDis(0.001);
-//		dis2GeoDis(0.00005);
+		dis2GeoDis(0.00035);
 		
-//		geoDis2dis(1000);
+//		geoDis2dis(500);
 		
 	}
 }

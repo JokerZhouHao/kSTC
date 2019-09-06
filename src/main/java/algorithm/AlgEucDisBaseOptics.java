@@ -242,6 +242,17 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 			ofw = new OrginalFileWriter(pathOrderedFile);
 		}
 		
+		/******************** 测试 ************************/
+		Node minIdNode = null;
+		for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
+			for(Node nd : en.getValue()) {
+				if(minIdNode == null)	minIdNode = nd;
+				else minIdNode = minIdNode.id <= nd.id ? minIdNode : nd;
+			}
+		}
+		expandClusterOrder(cellid2Nodes, minIdNode, qParams, orderedNodes, ofw);
+		
+		
 		for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
 			for(Node nd : en.getValue()) {
 				if(!nd.isProcessed) {
@@ -268,7 +279,15 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 //		centerNode.setCoreDistance(qParams, neighbors);
 		centerNode.setCoreDistanceBySorted(qParams, neighbors);
 		
-		if(null != ofw)	ofw.writeIdCoreAndDirectDis(centerNode.id, centerNode.coreDistance, centerNode.reachabilityDistance); 
+		if(null != ofw)	{
+			ofw.writeIdCoreAndDirectDis(centerNode.id, centerNode.coreDistance, centerNode.reachabilityDistance); 
+//			if(centerNode.coreDistance != Node.UNDEFINED) {
+//				for(Node nd : neighbors) {
+//					ofw.write("<" + nd.id + ", " + nd.disToCenter + "> ");
+//				}
+//				ofw.write("\n\n");
+//			}
+		}
 		orderedNodes.add(centerNode);
 		OrderSeeds orderSeeds = new OrderSeeds();
 		if(centerNode.coreDistance != Node.UNDEFINED) {
@@ -286,7 +305,15 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 //				centerNode.setCoreDistance(qParams, neighbors);
 				centerNode.setCoreDistanceBySorted(qParams, neighbors);
 				
-				if(null != ofw)	ofw.writeIdCoreAndDirectDis(centerNode.id, centerNode.coreDistance, centerNode.reachabilityDistance);
+				if(null != ofw) {
+					ofw.writeIdCoreAndDirectDis(centerNode.id, centerNode.coreDistance, centerNode.reachabilityDistance);
+//					if(centerNode.coreDistance != Node.UNDEFINED) {
+//						for(Node nd : neighbors) {
+//							ofw.write("<" + nd.id + ", " + nd.disToCenter + "> ");
+//						}
+//						ofw.write("\n\n");
+//					}
+				}
 				orderedNodes.add(centerNode);
 				if(centerNode.coreDistance != Node.UNDEFINED) {
 					orderSeeds.update(neighbors, centerNode);

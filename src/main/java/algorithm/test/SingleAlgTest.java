@@ -272,10 +272,10 @@ public class SingleAlgTest {
 		int rtreeFanout = 50;
 		double alpha = 0.5;
 		double steepDegree = 0.1;
-		int h = 12;
+		int h = 4;
 		
 		int opticMinpts = 2;
-		double opticEpsilon = 0.001;
+		double opticEpsilon = 0.3;
 		
 		int numSample = 200;
 		int type = 4;
@@ -284,8 +284,8 @@ public class SingleAlgTest {
 		int numWord = 0;
 		
 		int minpts = 2;
-		double epsilon = 0.001;
-		double xi = 0.001;
+		double epsilon = 0.3;
+		double xi = 0.3;
 		
 		int maxPidNeighborsBytes = 2147483631;
 		
@@ -296,7 +296,7 @@ public class SingleAlgTest {
 		Point location = null;
 		List<String> sWords = new ArrayList<>();
 		
-		double[] loca = {0.7, 0.7};
+		double[] loca = {0.249, 0.548};
 		location = new Point(loca);
 		
 //		sWords.add("Coffee".toLowerCase());
@@ -306,7 +306,8 @@ public class SingleAlgTest {
 //		sWords.add("Good".toLowerCase());
 //		sWords.add("Bars".toLowerCase());
 //		sWords.add("university".toLowerCase());
-		sWords.add("kids".toLowerCase());
+		sWords.add("w1".toLowerCase());
+		sWords.add("w2".toLowerCase());
 //		sWords.add("Restaurants".toLowerCase());
 		
 		qp.numWord = sWords.size();
@@ -341,7 +342,7 @@ public class SingleAlgTest {
 //		SingleAlgTest.testAlgEuc("AlgEucDisAdvancedOpticsWu2", qParams);
 		
 		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisBaseOpticsWu, qParams);
-		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisAdvancedOpticsWu, qParams);
+//		SingleAlgTest.testAlgEuc(AlgType.AlgEucDisAdvancedOpticsWu, qParams);
 		
 	}
 

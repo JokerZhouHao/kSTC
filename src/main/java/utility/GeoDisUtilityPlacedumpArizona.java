@@ -32,8 +32,8 @@ public class GeoDisUtilityPlacedumpArizona {
 	
 	
 	public static void main(String[] args) {
-		dis2GeoDis(0.001);
 //		dis2GeoDis(0.001);
+		dis2GeoDis(0.001);
 //		dis2GeoDis(0.00005);
 		
 //		geoDis2dis(1000);

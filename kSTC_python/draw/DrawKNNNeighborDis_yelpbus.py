@@ -117,10 +117,12 @@ class Line:
 Global.pathOutput = 'D:\kSTC\Dataset\yelp_academic_dataset_business\[-125.0,28.0],[15.0,60.0]_ReaptCoord\output\\KNN-01\\'
 k_paths = []
 k_paths.append(Global.pathOutput + 'KNNNeighborDis_3.txt')
+k_paths.append(Global.pathOutput + 'KNNNeighborDis_4.txt')
 k_paths.append(Global.pathOutput + 'KNNNeighborDis_5.txt')
-k_paths.append(Global.pathOutput + 'KNNNeighborDis_10.txt')
-k_paths.append(Global.pathOutput + 'KNNNeighborDis_50.txt')
-k_paths.append(Global.pathOutput + 'KNNNeighborDis_100.txt')
+k_paths.append(Global.pathOutput + 'KNNNeighborDis_6.txt')
+# k_paths.append(Global.pathOutput + 'KNNNeighborDis_10.txt')
+# k_paths.append(Global.pathOutput + 'KNNNeighborDis_50.txt')
+# k_paths.append(Global.pathOutput + 'KNNNeighborDis_100.txt')
 Line.draw_k_nearest_distance(k_paths, title="KNNNeighborDis", fName="KNNNeighborDis.pdf")
 
 

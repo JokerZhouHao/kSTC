@@ -439,9 +439,12 @@ class Bar:
         alpha=0.5
         steepD=0.1
         h=12
+
         om=1
-        # oe='5.0E-4'
         oe='0.001'
+        om=4
+        oe='3.5E-4'
+
         ns=200
 
         t=1
@@ -452,10 +455,13 @@ class Bar:
         nws = [1, 2, 3, 4]
 
         mpts=20
+        mpts=4
 
         eps='0.001'
         xi ='0.001'
-        # xi ='5.0E-4'
+        eps='3.5E-4'
+        xi ='3.5E-4'
+
         maxPNeiByte=2147483631
 
         # 设置bar参数
@@ -465,7 +471,8 @@ class Bar:
         ys = None
         if type==1:
             ylabel = 'seconds'
-            ys = [i * 5 for i in range(6)]
+            # ys = [i * 5 for i in range(6)]
+            ys = [i * 2 for i in range(5)]
             # ylim=[10, 10000]
             yscale = 'linear'
         elif type==2:
@@ -479,7 +486,8 @@ class Bar:
                   ylabel=ylabel, yscale=yscale, ys=ys,
                   fName = fName)
 
-        dir = BasePathOptic + 'nw_01\\'
+        # dir = BasePathOptic + 'nw_01\\'
+        dir = BasePathOptic + 'nw_20190906\\'
 
         # indexs = Data.indexs(dir, rFanout, alpha, steepD, 12, om, oe, ns, 12,
         #                             k, nw, mpts, eps, xi, maxPNeiByte, numMinCluster=k)
@@ -506,9 +514,12 @@ class Bar:
         alpha=0.5
         steepD=0.1
         h=12
-        om=1
-        # oe='5.0E-4'
+
         oe='0.001'
+        om=1
+        oe='3.5E-4'
+        om=4
+
         ns=200
 
         t=1
@@ -520,10 +531,13 @@ class Bar:
         nw=2
 
         mpts=20
+        mpts=4
 
         eps='0.001'
         xi ='0.001'
-        # xi ='5.0E-4'
+        eps='3.5E-4'
+        xi ='3.5E-4'
+
         maxPNeiByte=2147483631
 
         # 设置bar参数
@@ -532,7 +546,8 @@ class Bar:
         xTxts = ['5', '10', '15', '20']
         ys = None
         ylabel = 'seconds'
-        ys = [i * 5 for i in range(6)]
+        # ys = [i * 5 for i in range(6)]
+        ys = [i * 2 for i in range(5)]
         # ylim=[10, 10000]
         yscale = 'linear'
 
@@ -542,7 +557,8 @@ class Bar:
                   ylabel=ylabel, yscale=yscale, ys=ys,
                   fName = fName)
 
-        dir = BasePathOptic + 'k\\'
+        # dir = BasePathOptic + 'k\\'
+        dir = BasePathOptic + 'k_20190904\\'
 
         indexs = Data.indexs(dir, rFanout, alpha, steepD, 12, om, oe, ns, 12,
                                     k, nw, mpts, eps, xi, maxPNeiByte, numMinCluster=k)
@@ -572,6 +588,9 @@ class Bar:
 
         om=1
         oe='0.001'
+        om=4
+        oe='3.5E-4'
+
         ns=200
 
         t=1
@@ -581,9 +600,13 @@ class Bar:
         nw=2
 
         mpts=20
+        mpts=4
 
         eps='0.001'
         xi='0.001'
+        eps='3.5E-4'
+        xi='3.5E-4'
+
         maxPNeiByte=2147483631
 
         # 设置bar参数
@@ -599,12 +622,17 @@ class Bar:
         #           xlabel=xlabel, xTxts=scaleTxts,
         #           ylabel=ylabel, yscale='log', ylim=[100, 100000],
         #           fName = fName, xRotateAngle='0')
+        # bar = Bar(numBar, loc=2,
+        #           xlabel=xlabel, xTxts=scaleTxts,
+        #           ylabel=ylabel, yscale='linear', ys=[i * 5 for i in range(5)],
+        #           fName = fName, xRotateAngle='0')
         bar = Bar(numBar, loc=2,
                   xlabel=xlabel, xTxts=scaleTxts,
-                  ylabel=ylabel, yscale='linear', ys=[i * 5 for i in range(5)],
+                  ylabel=ylabel, yscale='linear', ys=[i * 2 for i in range(5)],
                   fName = fName, xRotateAngle='0')
 
         dir = BasePathOptic + 'diff_scale\\'
+        dir = BasePathOptic + 'diff\\'
 
         # indexs = Data.indexs(dir, rFanout, alpha, steepD, 14, om, oe, ns, 4,
         #                             k, nw, mpts, eps, xi, maxPNeiByte, numMinCluster=k)
@@ -634,9 +662,9 @@ class Bar:
 # Bar.dDiffScale('dbscan_diff_scale.pdf')
 
 ######################     optic   #########################
-Bar.oNword('optics_nword_runtime.pdf')
-Bar.oK('optics_k_runtime.pdf')
-Bar.oDiffScale('optics_diff_scale.pdf')
+# Bar.oNword('optics_nword_runtime.pdf')
+# Bar.oK('optics_k_runtime.pdf')
+# Bar.oDiffScale('optics_diff_scale.pdf')
 
 
 

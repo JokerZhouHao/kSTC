@@ -73,7 +73,10 @@ class Line:
                 self.ax.set_ylim(self.ylim)
 
         # 设置x轴对应txt
-        self.xTxts = ['0', '', '', '', '1e6', '', '', '', '2e6', '', '']
+        # self.xTxts = ['0', '', '', '', '1e6', '', '', '', '2e6', '', '']
+        # self.xTxts = ['0', '', '', '', r'$1 \times 10^6$', '', '', '', r'$2 \times 10^6$', '', '']
+        # self.xTxts = ['0', '', r'$1 \times 10^6$', '', r'$2 \times 10^6$', '', '', '', '', '', '']
+        self.xTxts = ['0', '', '', '', r'$1$', '', '', '', r'$2$', '', '']
         xaxis = self.ax.get_xaxis()
         x_labels = xaxis.get_ticklabels()
         for i in range(len(x_labels)):
@@ -84,7 +87,9 @@ class Line:
         xaxis.set_ticklabels(x_labels)
 
         # 设置y轴对应txt
-        self.yTxts = ['0', '1.4e-2', '1.4e-1', '1.4', '1.4e1', '1.4e2', '1.4e3', '1.4e4', '1.4e5', '1.4e6', '1.4e6', '1.4e7']
+        # self.yTxts = ['0', '1.4e-2', '1.4e-1', '1.4', '1.4e1', '1.4e2', '1.4e3', '1.4e4', '1.4e5', '1.4e6', '1.4e6', '1.4e7']
+        self.yTxts = ['$0$', r'$1.4 \times 10^{-2}$', r'$1.4 \times 10^{-1}$', r'$1.4$', r'$1.4 \times 10^1$', r'$1.4 \times 10^2$',
+                      r'$1.4 \times 10^3$', r'$1.4 \times 10^4$', r'$1.4 \times 10^5$', r'$1.4 \times 10^6$', r'$1.4 \times 10^6$', r'$1.4 \times 10^7$']
         yaxis = self.ax.get_yaxis()
         y_labels = yaxis.get_ticklabels()
         for i in range(len(y_labels)):
@@ -110,7 +115,7 @@ class Line:
     @staticmethod
     def draw_k_nearest_distance(file_paths, title='title', fName='test.pdf'):
         upRate = 1000000000
-        myline = Line(title, fName=fName, yscale='log', ylim=[1, upRate], xlabel='number of object', ylable='distance (m)')
+        myline = Line(title, fName=fName, yscale='log', ylim=[1, upRate], xlabel='number of object (million)', ylable='distance (m)')
         for file_path in file_paths:
             allCoords = [[], []]
             reader = IterableReader(file_path)
@@ -139,10 +144,13 @@ class Line:
 Global.pathOutput = 'D:\kSTC\Dataset\places_dump_20110628\[-125.0,31.2],[-109.0,42.2]\output\\'
 k_paths = []
 k_paths.append(Global.pathOutput + 'KNNNeighborDis_3.txt')
+k_paths.append(Global.pathOutput + 'KNNNeighborDis_4.txt')
 k_paths.append(Global.pathOutput + 'KNNNeighborDis_5.txt')
-k_paths.append(Global.pathOutput + 'KNNNeighborDis_10.txt')
-k_paths.append(Global.pathOutput + 'KNNNeighborDis_50.txt')
-k_paths.append(Global.pathOutput + 'KNNNeighborDis_100.txt')
+k_paths.append(Global.pathOutput + 'KNNNeighborDis_6.txt')
+# k_paths.append(Global.pathOutput + 'KNNNeighborDis_10.txt')
+# k_paths.append(Global.pathOutput + 'KNNNeighborDis_20.txt')
+# k_paths.append(Global.pathOutput + 'KNNNeighborDis_50.txt')
+# k_paths.append(Global.pathOutput + 'KNNNeighborDis_100.txt')
 Line.draw_k_nearest_distance(k_paths, title="KNNNeighborDis", fName="KNNNeighborDis.pdf")
 
 

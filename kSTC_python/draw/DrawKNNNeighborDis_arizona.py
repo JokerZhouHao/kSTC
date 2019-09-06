@@ -117,10 +117,12 @@ class Line:
 Global.pathOutput = 'D:\kSTC\Dataset\places_dump_20110628\[-114.0,31.0],[-108.0,37.0]\output\\'
 k_paths = []
 k_paths.append(Global.pathOutput + 'KNNNeighborDis_3.txt')
+k_paths.append(Global.pathOutput + 'KNNNeighborDis_4.txt')
 k_paths.append(Global.pathOutput + 'KNNNeighborDis_5.txt')
-k_paths.append(Global.pathOutput + 'KNNNeighborDis_10.txt')
-k_paths.append(Global.pathOutput + 'KNNNeighborDis_50.txt')
-k_paths.append(Global.pathOutput + 'KNNNeighborDis_100.txt')
+k_paths.append(Global.pathOutput + 'KNNNeighborDis_6.txt')
+# k_paths.append(Global.pathOutput + 'KNNNeighborDis_10.txt')
+# k_paths.append(Global.pathOutput + 'KNNNeighborDis_50.txt')
+# k_paths.append(Global.pathOutput + 'KNNNeighborDis_100.txt')
 Line.draw_k_nearest_distance(k_paths, title="KNNNeighborDis", fName="KNNNeighborDis.pdf")
 
 

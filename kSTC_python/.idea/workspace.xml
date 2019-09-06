@@ -11,23 +11,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="orginaldata_yelpbuss.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/draw/orginaldata_yelpbuss.py">
+      <file leaf-file-name="DrawKNNNeighborDis_meetup.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/draw/DrawKNNNeighborDis_meetup.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="384">
-              <caret line="576" column="113" selection-start-line="576" selection-start-column="113" selection-end-line="576" selection-end-column="113" />
-              <folding>
-                <element signature="e#0#31#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="460">
+              <caret line="124" column="59" lean-forward="true" selection-start-line="124" selection-start-column="59" selection-end-line="124" selection-end-column="59" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DrawSampleResult_placedump_test.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/draw/DrawSampleResult_placedump_test.py">
+      <file leaf-file-name="DrawKNNNeighborDis_arizona.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/draw/DrawKNNNeighborDis_arizona.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="80">
-              <caret line="459" lean-forward="true" selection-start-line="459" selection-end-line="459" />
+            <state relative-caret-position="274">
+              <caret line="116" column="95" lean-forward="true" selection-start-line="116" selection-start-column="95" selection-end-line="116" selection-end-column="95" />
             </state>
           </provider>
         </entry>
@@ -84,22 +81,26 @@
         <option value="$PROJECT_DIR$/draw/orginaldata.py" />
         <option value="$PROJECT_DIR$/draw/DrawKNNNeighborDis.py" />
         <option value="$PROJECT_DIR$/draw/DrawKNNNeighborDis_placedump.py" />
-        <option value="$PROJECT_DIR$/draw/DrawKNNNeighborDis_yelpbus.py" />
         <option value="$PROJECT_DIR$/draw/orginaldata_placedump.py" />
         <option value="$PROJECT_DIR$/draw/orginaldata_meetup.py" />
         <option value="$PROJECT_DIR$/draw/DrawKNNNeighborDis_meetup.py" />
         <option value="$PROJECT_DIR$/draw/orginaldata_placedump_arizona.py" />
-        <option value="$PROJECT_DIR$/draw/DrawSampleResult.py" />
         <option value="$PROJECT_DIR$/Data/StatisticData.py" />
-        <option value="$PROJECT_DIR$/draw/DrawKNNNeighborDis_test.py" />
-        <option value="$PROJECT_DIR$/draw/DrawSampleResult_placedump_test.py" />
+        <option value="$PROJECT_DIR$/draw/DrawKNNNeighborDis_yelpbus.py" />
         <option value="$PROJECT_DIR$/draw/orginaldata_yelpbuss.py" />
+        <option value="$PROJECT_DIR$/draw/pyplot_subp.py" />
+        <option value="$PROJECT_DIR$/draw/orginaldata_subp_test_dataset.py" />
+        <option value="$PROJECT_DIR$/draw/orginaldata_test_dataset.py" />
+        <option value="$PROJECT_DIR$/draw/DrawSampleResult.py" />
+        <option value="$PROJECT_DIR$/draw/DrawSampleResult_placedump_test.py" />
+        <option value="$PROJECT_DIR$/draw/DrawKNNNeighborDis_test.py" />
+        <option value="$PROJECT_DIR$/draw/DrawKNNNeighborDis_arizona.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="7">
-    <option name="x" value="475" />
-    <option name="y" value="31" />
+    <option name="x" value="590" />
+    <option name="y" value="-22" />
     <option name="width" value="1382" />
     <option name="height" value="744" />
   </component>
@@ -108,7 +109,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Course" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -137,6 +137,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Course" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -164,7 +165,25 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.orginaldata_yelpbuss">
+  <component name="RunManager" selected="Python.DrawKNNNeighborDis_arizona">
+    <configuration name="DrawKNNNeighborDis_arizona" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="python_draw" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/draw" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/draw/DrawKNNNeighborDis_arizona.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
     <configuration name="DrawKNNNeighborDis_test" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="python_draw" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -219,7 +238,7 @@
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
     </configuration>
-    <configuration name="orginaldata_placedump_arizona" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="orginaldata_test_dataset" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="python_draw" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -231,44 +250,26 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/draw/orginaldata_placedump_arizona.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-    </configuration>
-    <configuration name="orginaldata_yelpbuss" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="python_draw" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/draw" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/draw/orginaldata_yelpbuss.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/draw/orginaldata_test_dataset.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
     </configuration>
     <list>
-      <item itemvalue="Python.DrawKNNNeighborDis_test" />
+      <item itemvalue="Python.orginaldata_test_dataset" />
       <item itemvalue="Python.DrawSampleResult_placedump_test" />
-      <item itemvalue="Python.orginaldata_placedump_arizona" />
-      <item itemvalue="Python.orginaldata_yelpbuss" />
       <item itemvalue="Python.DrawSampleResult" />
+      <item itemvalue="Python.DrawKNNNeighborDis_test" />
+      <item itemvalue="Python.DrawKNNNeighborDis_arizona" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.orginaldata_yelpbuss" />
-        <item itemvalue="Python.DrawSampleResult_placedump_test" />
+        <item itemvalue="Python.DrawKNNNeighborDis_arizona" />
         <item itemvalue="Python.DrawKNNNeighborDis_test" />
+        <item itemvalue="Python.DrawSampleResult_placedump_test" />
         <item itemvalue="Python.DrawSampleResult" />
-        <item itemvalue="Python.orginaldata_placedump_arizona" />
+        <item itemvalue="Python.orginaldata_test_dataset" />
       </list>
     </recent_temporary>
   </component>
@@ -279,16 +280,16 @@
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19020021" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1849315" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Python Console" order="8" weight="0.32947367" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.10315789" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.26526317" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.15473685" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.26526317" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -328,38 +329,10 @@
           <option name="timeStamp" value="26" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="27" />
+      <option name="time" value="31" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/utility/myplt.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1936">
-          <caret line="88" column="37" selection-start-line="88" selection-start-column="12" selection-end-line="88" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/draw/circle.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="440">
-          <caret line="27" selection-start-line="27" selection-end-line="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/utility/io.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="4" column="4" selection-start-line="4" selection-start-column="4" selection-end-line="4" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/draw/orginaldata_yelpbuss.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4972">
-          <caret line="232" column="30" selection-start-line="232" selection-start-column="30" selection-end-line="232" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/utility/myplt.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1848">
@@ -577,24 +550,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/draw/DrawKNNNeighborDis_arizona.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2530">
-          <caret line="120" column="59" selection-start-line="120" selection-start-column="59" selection-end-line="120" selection-end-column="59" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/draw/orginaldata_meetup.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="9988">
           <caret line="466" selection-start-line="466" selection-end-line="466" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/draw/DrawKNNNeighborDis_meetup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="438">
-          <caret line="123" column="59" lean-forward="true" selection-start-line="123" selection-start-column="59" selection-end-line="123" selection-end-column="59" />
         </state>
       </provider>
     </entry>
@@ -626,45 +585,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/draw/DrawSampleResult.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="402">
-          <caret line="415" lean-forward="true" selection-start-line="415" selection-end-line="415" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/draw/DrawKNNNeighborDis_test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="264">
-          <caret line="114" column="32" lean-forward="true" selection-start-line="114" selection-start-column="32" selection-end-line="114" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/draw/orginaldata_placedump_test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="748">
-          <caret line="425" column="39" lean-forward="true" selection-start-line="425" selection-start-column="39" selection-end-line="425" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/draw/DrawKNNNeighborDis_yelpbus.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="111" column="50" selection-start-line="111" selection-start-column="50" selection-end-line="111" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Data/StatisticData.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="226">
           <caret line="46" column="8" selection-start-line="46" selection-start-column="8" selection-end-line="46" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/utility/io.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="264">
-          <caret line="12" column="4" selection-start-line="12" selection-start-column="4" selection-end-line="12" selection-end-column="4" />
         </state>
       </provider>
     </entry>
@@ -678,20 +602,100 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/draw/DrawKNNNeighborDis_yelpbus.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="907">
+          <caret line="126" lean-forward="true" selection-start-line="126" selection-end-line="126" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/install/python36_64/Lib/site-packages/matplotlib/cbook/deprecation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="226">
+          <caret line="106" selection-start-line="106" selection-end-line="106" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utility/io.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="503">
+          <caret line="32" selection-start-line="32" selection-end-line="32" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/draw/orginaldata_yelpbuss.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="384">
-          <caret line="576" column="113" selection-start-line="576" selection-start-column="113" selection-end-line="576" selection-end-column="113" />
+        <state relative-caret-position="582">
+          <caret line="441" column="65" lean-forward="true" selection-start-line="441" selection-start-column="65" selection-end-line="441" selection-end-column="65" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/draw/pyplot_subp.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="264">
+          <caret line="12" column="4" selection-start-line="12" selection-start-column="4" selection-end-line="12" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/draw/orginaldata_subp_test_dataset.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="578" lean-forward="true" selection-start-line="578" selection-end-line="578" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/draw/orginaldata_placedump_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1825">
+          <caret line="491" lean-forward="true" selection-start-line="491" selection-end-line="491" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/draw/orginaldata_test_dataset.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="14058">
+          <caret line="651" column="61" selection-start-line="651" selection-start-column="61" selection-end-line="651" selection-end-column="61" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/draw/DrawSampleResult.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="605">
+          <caret line="419" column="5" selection-start-line="419" selection-start-column="5" selection-end-line="419" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/draw/DrawSampleResult_placedump_test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="80">
-          <caret line="459" lean-forward="true" selection-start-line="459" selection-end-line="459" />
+        <state relative-caret-position="407">
+          <caret line="667" lean-forward="true" selection-start-line="667" selection-end-line="667" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/draw/DrawKNNNeighborDis_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="861">
+          <caret line="81" column="38" lean-forward="true" selection-start-line="81" selection-start-column="38" selection-end-line="81" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/draw/DrawKNNNeighborDis_meetup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="460">
+          <caret line="124" column="59" lean-forward="true" selection-start-line="124" selection-start-column="59" selection-end-line="124" selection-end-column="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/draw/DrawKNNNeighborDis_arizona.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="274">
+          <caret line="116" column="95" lean-forward="true" selection-start-line="116" selection-start-column="95" selection-end-line="116" selection-end-column="95" />
         </state>
       </provider>
     </entry>

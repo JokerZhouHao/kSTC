@@ -23,7 +23,10 @@ public class DSCOrDSPCCalculator implements Runnable{
 		try {
 			while(true) {
 				Object obj = queue.take();
-				if(obj == DBCVCalculator.signOver)	return;
+				if(obj == DBCVCalculator.signOver) {
+					System.out.println("get signOver");
+					return;
+				}
 				if(obj.getClass().equals(VCluster.class))	((VCluster)obj).getDSC();
 				else if(obj.getClass().equals(V2Cluster.class))	((V2Cluster)obj).getDSPC();
 			}
