@@ -55,8 +55,9 @@ public class CoordInfoExtractor {
 //		CoordInfoExtractor.showLBAndRU(fp);
 		
 		
-//		String fp = Global.pathOrgId2Coord;
+		String fp = Global.pathOrgId2Coord;
 //		showNumObjectInRect(fp, new Rectangle(-130, 30, -65, 45));	// 美国
+		showNumObjectInRect(fp, new Rectangle(-130, 30, -65, 44));	// 美国
 //		showNumObjectInRect(fp, new Rectangle(-114, 31, -108, 37));	// 亚利桑那州
 //		showNumObjectInRect(fp, new Rectangle(-125, 31.2, -109, 42.2));	// 加利福利亚、内华达、犹他州、亚利桑那州
 		
@@ -72,11 +73,11 @@ public class CoordInfoExtractor {
 		
 //		xlim = [0.525914, 0.530711]
 //		ylim = [0.1980, 0.2016]
-		Rectangle rect = new Rectangle(-114, 31, -108, 37);
-		double[][] coords = {{0.525914, 0.1980},
-				{0.530711, 0.2016}
-		};
-		showOrginalCoord(rect, coords);
+//		Rectangle rect = new Rectangle(-114, 31, -108, 37);
+//		double[][] coords = {{0.525914, 0.1980},
+//				{0.530711, 0.2016}
+//		};
+//		showOrginalCoord(rect, coords);
 		
 	}
 }

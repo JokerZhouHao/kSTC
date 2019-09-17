@@ -194,9 +194,9 @@ public class KNNDisProcessorBigdataset implements Runnable{
 		Global.displayInputOutputPath();
 		
 		List<Integer> ks = new ArrayList<>();
-//		ks.add(3);
+		ks.add(3);
 		ks.add(4);
-//		ks.add(5);
+		ks.add(5);
 		ks.add(6);
 //		ks.add(10);
 //		ks.add(20);

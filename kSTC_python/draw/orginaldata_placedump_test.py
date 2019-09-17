@@ -387,9 +387,9 @@ class Line:
 # pathBgImg = Global.pathImgs + 'LonLat^-112.41,33.46 -111.90,33.68[gray].png'
 # pathBgImg = Global.pathImgs + 'test.png'
 # pathCoord = Global.pathCoord + '([-112.41,33.46],[-111.9,33.68])[normalized]'
-# pathCoord = 'D:\\kSTC\\Dataset\\places_dump_20110628\\id_coord_longtitude_latitude.txt'
+pathCoord = 'D:\\kSTC\\Dataset\\places_dump_20110628\\id_coord_longtitude_latitude.txt'
 # pathCoord = 'D:\kSTC\Dataset\places_dump_20110628\[-114.0,31.0],[-108.0,37.0]\input\id_coord_longtitude_latitude.txt'
-pathCoord = 'D:\kSTC\Dataset\places_dump_20110628\[-125.0,31.2],[-109.0,42.2]\input\id_coord_longtitude_latitude.txt'
+# pathCoord = 'D:\kSTC\Dataset\places_dump_20110628\[-125.0,31.2],[-109.0,42.2]\input\id_coord_longtitude_latitude.txt'
 
 Scatter.draw_orginal_coord(pathCoord, s=20, show=False, scala=10)
 

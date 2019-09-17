@@ -5,6 +5,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import dbcv.entity.V2Cluster;
 import dbcv.entity.V2ClusterCollection;
 import dbcv.entity.VCluster;
+import utility.MLog;
 
 /**
  * 计算DSC、DSPC
@@ -24,7 +25,7 @@ public class DSCOrDSPCCalculator implements Runnable{
 			while(true) {
 				Object obj = queue.take();
 				if(obj == DBCVCalculator.signOver) {
-					System.out.println("get signOver");
+//					MLog.log("get signOver");
 					return;
 				}
 				if(obj.getClass().equals(VCluster.class))	((VCluster)obj).getDSC();

@@ -243,14 +243,14 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 		}
 		
 		/******************** 测试 ************************/
-		Node minIdNode = null;
-		for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
-			for(Node nd : en.getValue()) {
-				if(minIdNode == null)	minIdNode = nd;
-				else minIdNode = minIdNode.id <= nd.id ? minIdNode : nd;
-			}
-		}
-		expandClusterOrder(cellid2Nodes, minIdNode, qParams, orderedNodes, ofw);
+//		Node minIdNode = null;
+//		for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
+//			for(Node nd : en.getValue()) {
+//				if(minIdNode == null)	minIdNode = nd;
+//				else minIdNode = minIdNode.id <= nd.id ? minIdNode : nd;
+//			}
+//		}
+//		expandClusterOrder(cellid2Nodes, minIdNode, qParams, orderedNodes, ofw);
 		
 		
 		for(Entry<Integer, List<Node>> en : cellid2Nodes.entrySet()) {
@@ -261,6 +261,7 @@ public class AlgEucDisBaseOptics implements AlgInterface{
 				}
 			}
 		}
+		
 		if(null!=pathOrderedFile) {
 			ofw.close();
 		}

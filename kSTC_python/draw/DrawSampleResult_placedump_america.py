@@ -435,15 +435,13 @@ class Bar:
     # optic --- nword
     @staticmethod
     def oNword(fName='test.pdf', type=1):
-        rFanout=100
+        rFanout=300
         alpha=0.5
         steepD=0.1
         h=12
 
-        om=1
-        oe='0.001'
         om=4
-        oe='3.5E-4'
+        oe='2.0E-4'
 
         ns=200
 
@@ -457,10 +455,8 @@ class Bar:
         mpts=20
         mpts=4
 
-        eps='0.001'
-        xi ='0.001'
-        eps='3.5E-4'
-        xi ='3.5E-4'
+        eps='2.0E-4'
+        xi ='2.0E-4'
 
         maxPNeiByte=2147483631
 
@@ -472,7 +468,7 @@ class Bar:
         if type==1:
             ylabel = 'seconds'
             # ys = [i * 5 for i in range(6)]
-            ys = [i * 2 for i in range(5)]
+            ys = [i * 5 for i in range(5)]
             # ylim=[10, 10000]
             yscale = 'linear'
         elif type==2:
@@ -486,10 +482,7 @@ class Bar:
                   ylabel=ylabel, yscale=yscale, ys=ys,
                   fName = fName)
 
-        # dir = BasePathOptic + 'nw_01\\'
-        dir = BasePathOptic + 'nw1\\'
-        # dir = BasePathOptic + 'nw_org\\'
-        # dir = BasePathOptic + 'nw_20190906_01\\'
+        dir = BasePathOptic + 'n0\\'
 
         # indexs = Data.indexs(dir, rFanout, alpha, steepD, 12, om, oe, ns, 12,
         #                             k, nw, mpts, eps, xi, maxPNeiByte, numMinCluster=k)

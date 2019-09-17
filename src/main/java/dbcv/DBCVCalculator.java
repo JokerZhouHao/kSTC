@@ -111,19 +111,19 @@ public class DBCVCalculator {
 		}
 		for(int i=0; i<cluss.size(); i++) {
 			queue.put(cluss.get(i));
-			MLog.log("cluss-" + i + " size: " + cluss.get(i).nds.size());
+//			MLog.log("cluss-" + i + " size: " + cluss.get(i).nds.size());
 		}
-		MLog.log("cluss-" + (cluss.size() - 1) + " size: " + cluss.get(cluss.size() - 1).nds.size());
+//		MLog.log("cluss-" + (cluss.size() - 1) + " size: " + cluss.get(cluss.size() - 1).nds.size());
 		
 		// 发送结束信号
 		for(int i=0; i<numProcessor; i++)	queue.put(signOver);
 		while(!queue.isEmpty()) {
-			MLog.log("queue size: " + queue.size());
+//			MLog.log("queue size: " + queue.size());
 			Thread.sleep(2000);
 		}
 		
-		MLog.log("DSC caculate over");
-		Thread.sleep(100000);
+//		MLog.log("DSC caculate over");
+//		Thread.sleep(100000);
 		
 		
 		// 计算DSPC
@@ -138,8 +138,8 @@ public class DBCVCalculator {
 			for(int j=i+1; j<cluss.size(); j++) {
 				this.v2ClusCol.set(i, j, new V2Cluster(cluss.get(i), cluss.get(j)));
 				queue.put(this.v2ClusCol.get(i, j));
-				MLog.log("<c" + i + "-num-" + cluss.get(i).nds.size() + ", " + "c-" + 
-							j + "-" + cluss.get(j).nds.size() + ">");
+//				MLog.log("<c" + i + "-num-" + cluss.get(i).nds.size() + ", " + "c-" + 
+//							j + "-" + cluss.get(j).nds.size() + ">");
 			}
 		}
 		

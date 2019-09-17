@@ -1,5 +1,6 @@
 package dbcv.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class V2Cluster extends VCluster {
@@ -7,7 +8,7 @@ public class V2Cluster extends VCluster {
 	private static final double INVALID_DSPC = Double.MAX_VALUE;
 	
 	public int id = -1;
-	private double DSPC = INVALID_DSPC;
+	private volatile double DSPC = INVALID_DSPC;
 	public VCluster clus1 = null;
 	public VCluster clus2 = null;
 	
@@ -16,14 +17,24 @@ public class V2Cluster extends VCluster {
 		this.clus2 = clus2.copy();
 	}
 	
-	private void calAllCoreDis() {
+	private void calAllCoreDis() throws Exception{
+		List<Double> distances = new ArrayList<Double>(clus1.nds.size() + clus2.nds.size());
+		int orgSize = clus1.nds.size() + clus2.nds.size();
 		List<CNode> nds = clus1.nds;
 		for(CNode nd : nds) {
-			nd.calCoreDist(d, clus1.nds, clus2.nds);
+			nd.calCoreDist(d, distances, clus1.nds, clus2.nds);
+			if(distances.size() > orgSize) {
+				throw new Exception("distances's size is more than orgSize's size");
+			}
+			distances.clear();
 		}
 		nds = clus2.nds;
 		for(CNode nd : nds) {
-			nd.calCoreDist(d, clus1.nds, clus2.nds);
+			nd.calCoreDist(d, distances, clus1.nds, clus2.nds);
+			if(distances.size() > orgSize) {
+				throw new Exception("distances's size is more than orgSize's size");
+			}
+			distances.clear();
 		}
 	}
 	
@@ -37,6 +48,7 @@ public class V2Cluster extends VCluster {
 				DSPC = DSPC <= mReachDis ? DSPC : mReachDis;
 			}
 		}
+		clus1 = clus2 = null;
 		return DSPC;
 	}
 	

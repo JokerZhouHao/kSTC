@@ -125,8 +125,8 @@ public class Term2PidNeighborsIndex extends AbstractLuceneIndex{
 	private Map<Node, List<NeighborsNode>> bytesToNodeNeighbors(byte[] bytes) {
 		int numInt = 0;
 		ByteBuffer bb = ByteBuffer.wrap(bytes);
-		Map<Node, List<NeighborsNode>> map = new HashMap<>();
 		numInt = bb.getInt();
+		Map<Node, List<NeighborsNode>> map = new HashMap<>(numInt);
 		List<NeighborsNode> neighbors = null;
 		for(int i=0; i<numInt; i++) {
 			Node nd = new Node();
@@ -136,8 +136,8 @@ public class Term2PidNeighborsIndex extends AbstractLuceneIndex{
 			
 			neighbors = null;
 			if(nd.coreDistance != Node.UNDEFINED) {
-				neighbors = new ArrayList<>();
 				int numNgb = bb.getInt();
+				neighbors = new ArrayList<>(numNgb);
 				while(numNgb > 0) {
 					neighbors.add(new NeighborsNode(bb.getInt(), bb.getFloat()));
 					numNgb--;
@@ -154,7 +154,7 @@ public class Term2PidNeighborsIndex extends AbstractLuceneIndex{
 		int numInt = 0;
 		ByteBuffer bb = ByteBuffer.wrap(bytes);
 		numInt = bb.getInt();
-		List<Node> orderNodes = new ArrayList<>();
+		List<Node> orderNodes = new ArrayList<>(numInt);
 		for(int i=0; i<numInt; i++) {
 			Node nd = new Node();
 			nd.id = bb.getInt();

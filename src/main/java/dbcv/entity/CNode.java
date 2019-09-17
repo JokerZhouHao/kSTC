@@ -32,9 +32,8 @@ public class CNode {
 		return coords[orgId].getMinimumDistance(coords[node.orgId]);
 	}
 	
-	public double calCoreDist(double d, List<CNode>... ndss) {
+	public double calCoreDist(double d, List<Double> distances, List<CNode>... ndss) {
 		signHasCalCoreDis = Boolean.TRUE;
-		List<Double> distances = new ArrayList<>();
 		coreDis = 0.0;
 		for(List<CNode> nds : ndss) {
 			for(CNode nd : nds) {
@@ -77,7 +76,7 @@ public class CNode {
 		nds.add(new CNode(coords, 0, 0));
 		nds.add(new CNode(coords, 1, 1));
 		nds.add(new CNode(coords, 2, 2));
-		System.out.println(nds.get(0).calCoreDist(2, nds));
+//		System.out.println(nds.get(0).calCoreDist(2, nds));
 		System.out.println(nds.get(0).coreDist());
 	}
 }

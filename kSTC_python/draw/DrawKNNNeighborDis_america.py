@@ -85,7 +85,7 @@ class Line:
             x_labels[i].set_position(pos)
             x_labels[i].set_verticalalignment('top')
             x_labels[i].set_text(self.xTxts[i-1])
-        xaxis.set_ticklabels(x_labels)
+        # xaxis.set_ticklabels(x_labels)
 
         # 设置y轴对应txt
         # self.yTxts = ['0', '1.4e-2', '1.4e-1', '1.4', '1.4e1', '1.4e2', '1.4e3', '1.4e4', '1.4e5', '1.4e6', '1.4e6', '1.4e7']
@@ -100,7 +100,7 @@ class Line:
             y_labels[i].set_position(pos)
             # y_labels[i].set_verticalalignment('top')
             y_labels[i].set_text(self.yTxts[i-1])
-        yaxis.set_ticklabels(y_labels)
+        # yaxis.set_ticklabels(y_labels)
 
         interactive(True)
         plt.show()
@@ -144,7 +144,7 @@ class Line:
 
 
 ########## draw k nearest distance ########
-Global.pathOutput = 'D:\kSTC\Dataset\places_dump_20110628\[-125.0,31.2],[-109.0,42.2]\output\\'
+Global.pathOutput = 'D:\kSTC\Dataset\places_dump_20110628\[-130.0,30.0],[-65.0,44.0]\output\\'
 k_paths = []
 k_paths.append(Global.pathOutput + 'KNNNeighborDis_3.txt')
 k_paths.append(Global.pathOutput + 'KNNNeighborDis_4.txt')

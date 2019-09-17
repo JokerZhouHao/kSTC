@@ -55,6 +55,8 @@ public class RunTimeRecordor {
 	public long timeTotal = 0;
 	public int numCluster = 0;
 	
+	public int numIndexObject = 0;
+	
 	public double topKScore = 0;
 	
 	public static String getHeader() {
@@ -64,7 +66,7 @@ public class RunTimeRecordor {
 				"numGetCluster,numRangeRtree,timeRangeRtree,numRangeZCurve,timeRangeZCurve," +
 				"numExpandClusterOrder,numMinByteOfTermPNgb,numByteOfTermPNgb,timeReadTermPNgb,timeSearchTermPNgb," + 
 				"numOpticFastRange,timeOpticFastRange,numOpticLuceneRange,timeOpticLuceneRange,timeOpticFunc,timeExcuteQueryFunc," +
-				"timeTotalPrepareData,timeTotalGetCluster,timeTotal,numCluster,topKScore," +
+				"timeTotalPrepareData,timeTotalGetCluster,timeTotal,numCluster,topKScore,numIndexObject," +
 				"\n";
 	}
 	
@@ -102,6 +104,7 @@ public class RunTimeRecordor {
 				String.valueOf(timeTotal/base) + "," + 
 				String.valueOf(numCluster) + "," + 
 				String.valueOf(topKScore) + "," + 
+				String.valueOf(numIndexObject) + "," + 
 				"\n";
 	}
 }

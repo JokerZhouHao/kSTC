@@ -96,10 +96,10 @@ public class DBCVTest {
 						System.out.println(" Size >= 200");
 						break;	// 避免计算时间过长 meetup
 					}
-					if(Global.inputPath.contains("places_dump") && sClu.getSize() >= 500) {
-						System.out.println(" Size >= 500");
-						break;	// 避免计算时间过长 places_dump
-					}
+//					if(Global.inputPath.contains("places_dump") && sClu.getSize() >= 500) {
+//						System.out.println(" Size >= 500");
+//						break;	// 避免计算时间过长 places_dump
+//					}
 					
 					tempDV[k] = DBCVCalculator.DBCV(sClu, (int)qp.runTimeRec.numNid);
 					if(Double.isNaN(tempDV[k])) {

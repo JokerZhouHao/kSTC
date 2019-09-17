@@ -5,6 +5,8 @@ import java.io.BufferedWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import entity.Sample;
 import precomputation.dataset.file.FileLoader;
@@ -28,6 +30,8 @@ public class SampleChooser {
 	private static String[] txts = null;
 	private static RandomNumGenerator genId = null;
 	private static String pathFormat = "testSample.ns=%s.nw=%s";
+	
+	public static Map<String, Integer> ngbLens = null;
 	
 	/**
 	 * 获得sample path
@@ -70,16 +74,22 @@ public class SampleChooser {
 			if(words == null || words.isEmpty())	continue;	
 			words = new ArrayList<>(new HashSet<>(words));	// 去重
 			if(words.size() < sampWords.length)	continue;
-			for(int i=0; i<sampWords.length; i++) {
+			int i = 0;
+			for(i=0; i<sampWords.length; i++) {
 				int j = RandomNumGenerator.getRandomInt(0, words.size() - 1);
 				sampWords[i] = words.get(j);
+				if(ngbLens.get(sampWords[i]) == Integer.MAX_VALUE) {
+					MLog.log(sampWords[i] + " is too long ");
+					break;
+				}
 				words.remove(j);
 			}
+			if(i < sampWords.length)	continue;
 			
 			bw.write(String.valueOf(num) + Global.delimiterLevel1);
 			bw.write(String.valueOf(id) + Global.delimiterLevel1);
 			bw.write(String.valueOf(sampCoords[0]) + Global.delimiterSpace + String.valueOf(sampCoords[1]));
-			for(int i=0; i<sampWords.length; i++) {
+			for(i=0; i<sampWords.length; i++) {
 				bw.write(Global.delimiterSpace + sampWords[i]);
 			}
 			bw.write("\n");
@@ -112,6 +122,9 @@ public class SampleChooser {
 	
 	public static void main(String[] args) throws Exception {
 		Global.displayInputOutputPath();
+		
+		String pathNgbLen = Global.outPath + "term_2_pid_neighbors_len.txt,opticMinpts=4,opticEpsilon=2.0E-4,maxPidNeighborsBytes=2147483631";
+		SampleChooser.ngbLens = FileLoader.loadPidNgbLens(pathNgbLen);
 		
 		List<Integer> nws = new ArrayList<>();
 		nws.add(1);

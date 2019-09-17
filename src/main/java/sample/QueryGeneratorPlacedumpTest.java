@@ -44,7 +44,7 @@ public class QueryGeneratorPlacedumpTest {
 		int h = 12;
 		
 		int opticMinpts = 4;
-		double opticEpsilon = 0.00035;
+		double opticEpsilon = 0.001;
 		
 		int numSample = 200;
 //		int type = 11'
@@ -61,8 +61,8 @@ public class QueryGeneratorPlacedumpTest {
 		int numWord = 2;
 		
 		int minpts = 4;
-		double epsilon = 0.00035;
-		double xi = 0.00035;
+		double epsilon = 0.001;
+		double xi = 0.001;
 		
 		int maxPidNeighborsBytes = 2147483631;
 		
@@ -254,7 +254,7 @@ public class QueryGeneratorPlacedumpTest {
 		int h = 12;
 		
 		int opticMinpts = 4;
-		double opticEpsilon = 0.00035;
+		double opticEpsilon = 0.001;
 		
 		int numSample = 200;
 		List<Integer> types = new ArrayList<>();
@@ -270,9 +270,9 @@ public class QueryGeneratorPlacedumpTest {
 		
 		int minpts = 4;
 		
-		double epsilon = 0.00035;
+		double epsilon = 0.001;
 		
-		double xi = 0.00035;
+		double xi = 0.001;
 		
 		int maxPidNeighborsBytes = 2147483631;
 		
@@ -328,7 +328,7 @@ public class QueryGeneratorPlacedumpTest {
 	
 	public static void main(String[] args) {
 //		one();
-		oneGroup();
+//		oneGroup();
 		
 		
 		/*********************   dbscan  *********************/
@@ -339,6 +339,6 @@ public class QueryGeneratorPlacedumpTest {
 		
 		/*********************   optic  *********************/
 //		opticNumWord();
-//		opticK();
+		opticK();
 	}
 }

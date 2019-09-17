@@ -14,11 +14,13 @@ public class VCluster {
 	public final static double d = 2;
 	public Point[] coords = null;
 	public Integer id = -1;
-	public double DSC = Double.MAX_VALUE;
-	public List<CNode> nds = new ArrayList<>();
+	public volatile double DSC = Double.MAX_VALUE;
+	public List<CNode> nds = null;
 	public VGraph graph = null;
 	
-	public VCluster() {}
+	public VCluster() {
+		nds = new ArrayList<>();
+	}
 	
 	public VCluster(Point[] coords, int id, List<CNode> nds) {
 		this.coords = coords;
@@ -37,9 +39,14 @@ public class VCluster {
 		return clus;
 	}
 	
-	private void calAllCoreDis() {
+	private void calAllCoreDis() throws Exception{
+		List<Double> distances = new ArrayList<Double>(nds.size());
 		for(CNode nd : nds) {
-			nd.calCoreDist(d, nds);
+			nd.calCoreDist(d, distances, nds);
+			if(distances.size() > nds.size()) {
+				throw new Exception("distances's size is more than nds's size");
+			}
+			distances.clear();
 		}
 	}
 	

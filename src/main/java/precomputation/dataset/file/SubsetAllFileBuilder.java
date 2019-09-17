@@ -46,7 +46,8 @@ public class SubsetAllFileBuilder {
 //		placedump20110628
 //		Rectangle subRect = new Rectangle(-180, -90, 180, 90);
 //		Rectangle subRect = new Rectangle(-114, 31, -108, 37);	// 亚利桑那州
-		Rectangle subRect = new Rectangle(-125, 31.2, -109, 42.2); // 加利福利亚、内华达、犹他州、亚利桑那州
+//		Rectangle subRect = new Rectangle(-125, 31.2, -109, 42.2); // 加利福利亚、内华达、犹他州、亚利桑那州
+		Rectangle subRect = new Rectangle(-130, 30, -65, 44);	// 美国
 		
 //		test_dataset
 //		Rectangle subRect = new Rectangle(0, 0, 1, 1);
