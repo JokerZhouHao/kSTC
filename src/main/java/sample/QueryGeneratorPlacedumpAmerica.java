@@ -251,12 +251,12 @@ public class QueryGeneratorPlacedumpAmerica {
 		int rtreeFanout = 300;
 		double alpha = 0.5;
 		double steepDegree = 0.1;
-		int h = 6;
+		int h = 12;
 		
 		int opticMinpts = 4;
-		double opticEpsilon = 0.0003;
+		double opticEpsilon = 0.0002;
 		
-		int numSample = 200;
+		int numSample = 50;
 		List<Integer> types = new ArrayList<>();
 		types.add(11);
 		types.add(12);
@@ -270,9 +270,8 @@ public class QueryGeneratorPlacedumpAmerica {
 		
 		int minpts = 4;
 		
-		double epsilon = 0.0003;
-		
-		double xi = 0.0003;
+		double epsilon = 0.0002;
+		double xi = 0.0002;
 		
 		int maxPidNeighborsBytes = 2147483631;
 		

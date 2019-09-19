@@ -101,6 +101,8 @@ public class Global {
 	public static String pathTestFile = null;
 	public static String pathSample = null;
 	public static String pathResult = null;
+	public static String pathTermFrequency = null;
+	public static String pathFGInputFile = null;
 	
 	// index
 	public static String pathPidAndRtreeIdWordsIndex = null;
@@ -258,6 +260,9 @@ public class Global {
 		pathOrderObjects = outPath + "res" + File.separator + (String)configProps.get("fileOrderObjects") + suffixFile;
 		pathSample = inputPath + "sample" + File.separator;
 		pathResult = inputPath + "result" + File.separator;
+		pathTermFrequency = Global.outPath + "term_frequency.txt";
+		
+		pathFGInputFile = Global.outPath + "FGInputFile.txt";
 		
 		// set index path
 		pathPidAndRtreeIdWordsIndex = outPath + (String)configProps.get("pathPidAndRtreeIdWordsIndex") + suffixFile + File.separator;

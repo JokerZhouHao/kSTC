@@ -15,6 +15,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Map.Entry;
 
+import entity.Term2Fre;
 import entity.Node;
 import entity.SGPLInfo;
 import spatialindex.spatialindex.Point;
@@ -193,6 +194,17 @@ public class FileLoader {
 		return words;
 	}
 	
+	public static Set<String> loadTooLongTerms(String pathNgbLen) throws Exception{
+		Map<String, Integer> ngbLens = FileLoader.loadPidNgbLens(pathNgbLen);
+		HashSet<String> filter = new HashSet<>();
+		for(Entry<String, Integer> en : ngbLens.entrySet()) {
+			if(en.getValue() == Integer.MAX_VALUE) {
+				filter.add(en.getKey());
+			}
+		}
+		return filter;
+	}
+	
 	public static List<String>[] loadTerms(String fp) throws Exception{
 		BufferedReader br = IOUtility.getBR(fp);
 		String line = br.readLine();
@@ -276,6 +288,20 @@ public class FileLoader {
 		}
 		br.close();
 		return term2Len;
+	}
+	
+	public static List<Term2Fre> loadTerm2Fre(String path, HashSet<String> filter) throws Exception {
+		BufferedReader br = IOUtility.getBR(path);
+		List<Term2Fre> list = new ArrayList<>();
+		String line = null;
+		while(null != (line =br.readLine())) {
+			if(line.startsWith("#"))	continue;
+			String[] arr = line.split(Global.delimiterLevel1);
+			if(filter != null && filter.contains(arr[0]))	continue;
+			list.add(new Term2Fre(Integer.parseInt(arr[1]), arr[0]));
+		}
+		br.close();
+		return list;
 	}
 	
 	// 查看Ngb大于一定长度的词
@@ -447,8 +473,10 @@ public class FileLoader {
 //		float ft = -115.283122245f;
 //		System.out.println(ft);
 		
-		writeCellId2Pids(Global.pathIdCoord + Global.signNormalized, Global.pathCell2Pids);
-		loadCellid2Pids(Global.pathCell2Pids);
+//		writeCellId2Pids(Global.pathIdCoord + Global.signNormalized, Global.pathCell2Pids);
+//		loadCellid2Pids(Global.pathCell2Pids);
+		
+		loadTerm2Fre(Global.pathTermFrequency, null);
 		
 	}
 }

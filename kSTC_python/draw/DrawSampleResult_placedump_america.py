@@ -443,7 +443,7 @@ class Bar:
         om=4
         oe='2.0E-4'
 
-        ns=200
+        ns=50
 
         t=1
         ts = [11, 12]
@@ -482,7 +482,7 @@ class Bar:
                   ylabel=ylabel, yscale=yscale, ys=ys,
                   fName = fName)
 
-        dir = BasePathOptic + 'n0\\'
+        dir = BasePathOptic + 'nw20190918_by_fre_in_object_50_100000\\'
 
         # indexs = Data.indexs(dir, rFanout, alpha, steepD, 12, om, oe, ns, 12,
         #                             k, nw, mpts, eps, xi, maxPNeiByte, numMinCluster=k)

@@ -41,6 +41,12 @@ public class MComparator<T> implements Comparator<T> {
 			if(node1.disToCenter > node2.disToCenter)	return 1;
 			else if(node1.disToCenter == node2.disToCenter)	return 0;
 			else return -1;
+		} else if(5==type) {
+			Node node1 = (Node)o1;
+			Node node2 = (Node)o2;
+			if(node1.disToCenter > node2.disToCenter)	return -1;
+			else if(node1.disToCenter == node2.disToCenter)	return 0;
+			else return 1;
 		} else if(o1 instanceof Cluster) {
 			Cluster c1 = (Cluster)o1;
 			Cluster c2 = (Cluster)o2;

@@ -19,7 +19,7 @@ import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 
 import entity.Cell;
 import entity.CellCollection;
-import entity.Fre2Term;
+import entity.Term2Fre;
 import entity.KSortedCollection;
 import entity.Rectangle;
 import entity.SGPLInfo;
@@ -168,9 +168,14 @@ public class ProcessGenerateFiles {
 		System.out.println("> Over.");
 	}
 	
+	/**
+	 * 生成词频文件
+	 * @param pathTermFre
+	 * @throws Exception
+	 */
 	public static void generateTermFrequencyFile(String pathTermFre) throws Exception{
 		System.out.println("> start generate file " + pathTermFre);
-		String[] allTxts = FileLoader.loadText(Global.pathOrgId2Text);
+		String[] allTxts = FileLoader.loadText(Global.pathIdText);
 		Map<String, Integer> term2fre = new HashMap<>();
 		Integer tempFre = 0;
 		List<String> terms = null;
@@ -182,21 +187,28 @@ public class ProcessGenerateFiles {
 				else term2fre.put(st, tempFre + 1);
 			}
 		}
-		List<Fre2Term> fres = new ArrayList<>();
+		List<Term2Fre> fres = new ArrayList<>();
 		for(Map.Entry<String, Integer> en : term2fre.entrySet()) {
-			fres.add(new Fre2Term(en.getValue(), en.getKey()));
+			fres.add(new Term2Fre(en.getValue(), en.getKey()));
 		}
 		Collections.sort(fres);
 		
 		BufferedWriter bw = IOUtility.getBW(pathTermFre);
 		bw.write(Global.delimiterPound + fres.size() + "\n");
-		for(Fre2Term f : fres) {
+		for(Term2Fre f : fres) {
 			bw.write(f.toString() + "\n");
 		}
 		bw.close();
 		System.out.println("> Over.");
 	}
 	
+	public static void generateFGInputFile(String path) throws Exception {
+		String[] txts = FileLoader.loadText(Global.pathIdText);
+		for(String st : txts) {
+			if(st == null) continue;
+			
+		}
+	}
 	
 	/**
 	 * normalize coordinate
@@ -494,14 +506,13 @@ public class ProcessGenerateFiles {
 //		ProcessGenerateFiles.buildCellidPidWordsIndex(pathCellidpidWordsIndex);
 		
 		/* generateTermFrequencyFile */
-//		String pathTermFrequency = Global.datasetPath + "term_frequency.txt";
-//		generateTermFrequencyFile(pathTermFrequency);
+//		generateTermFrequencyFile(Global.pathTermFrequency);
 		
 		
 		/* used	 building cellid rtreeid pid words index */
 		List<Integer> hs = new ArrayList<>();
-		hs.add(6);
-//		hs.add(12);
+//		hs.add(6);
+		hs.add(12);
 //		hs.add(14);
 //		hs.add(16);
 //		hs.add(18);

@@ -11,23 +11,14 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="DrawSampleResult_placedump_test.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/draw/DrawSampleResult_placedump_test.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-4388">
-              <caret line="453" column="12" lean-forward="true" selection-start-line="453" selection-start-column="12" selection-end-line="453" selection-end-column="12" />
-              <folding>
-                <element signature="e#0#31#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="DrawSampleResult_placedump_america.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/draw/DrawSampleResult_placedump_america.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="522">
-              <caret line="659" column="38" lean-forward="true" selection-start-line="659" selection-start-column="38" selection-end-line="659" selection-end-column="38" />
+            <state relative-caret-position="394">
+              <caret line="447" column="11" lean-forward="true" selection-start-line="447" selection-start-column="11" selection-end-line="447" selection-end-column="11" />
+              <folding>
+                <element signature="e#0#31#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -88,7 +79,6 @@
         <option value="$PROJECT_DIR$/draw/orginaldata_meetup.py" />
         <option value="$PROJECT_DIR$/draw/DrawKNNNeighborDis_meetup.py" />
         <option value="$PROJECT_DIR$/draw/orginaldata_placedump_arizona.py" />
-        <option value="$PROJECT_DIR$/Data/StatisticData.py" />
         <option value="$PROJECT_DIR$/draw/DrawKNNNeighborDis_yelpbus.py" />
         <option value="$PROJECT_DIR$/draw/orginaldata_yelpbuss.py" />
         <option value="$PROJECT_DIR$/draw/pyplot_subp.py" />
@@ -100,13 +90,14 @@
         <option value="$PROJECT_DIR$/draw/DrawSampleResult_placedump_test.py" />
         <option value="$PROJECT_DIR$/draw/orginaldata_placedump_test.py" />
         <option value="$PROJECT_DIR$/draw/DrawKNNNeighborDis_america.py" />
+        <option value="$PROJECT_DIR$/Data/StatisticData.py" />
         <option value="$PROJECT_DIR$/draw/DrawSampleResult_placedump_america.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="590" />
-    <option name="y" value="-22" />
+  <component name="ProjectFrameBounds" extendedState="7">
+    <option name="x" value="396" />
+    <option name="y" value="144" />
     <option name="width" value="1382" />
     <option name="height" value="744" />
   </component>
@@ -138,13 +129,6 @@
               <item name="python_draw" type="47feb1d3:ProjectViewModuleNode" />
               <item name="kSTC_python" type="462c0819:PsiDirectoryNode" />
               <item name="draw" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="kSTC_python" type="b2602c69:ProjectViewProjectNode" />
-              <item name="python_draw" type="47feb1d3:ProjectViewModuleNode" />
-              <item name="kSTC_python" type="462c0819:PsiDirectoryNode" />
-              <item name="draw" type="462c0819:PsiDirectoryNode" />
-              <item name="DrawSampleResult_placedump_america.py" type="8704e2dd:PyFileNode" />
             </path>
           </expand>
           <select />
@@ -297,13 +281,13 @@
     <configuration />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19178082" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Python Console" order="8" weight="0.32947367" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.1431579" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.25894737" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.26526317" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info id="Structure" order="1" weight="0.25" />
@@ -318,16 +302,16 @@
     <layout-to-restore>
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1264489" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.26842105" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.26526317" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Python Console" order="8" weight="0.32947367" />
     </layout-to-restore>
@@ -343,13 +327,8 @@
           <line>210</line>
           <option name="timeStamp" value="22" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Data/StatisticData.py</url>
-          <line>87</line>
-          <option name="timeStamp" value="26" />
-        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="31" />
+      <option name="time" value="32" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
@@ -591,13 +570,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Data/StatisticData.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="226">
-          <caret line="46" column="8" selection-start-line="46" selection-start-column="8" selection-end-line="46" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/draw/orginaldata_placedump_arizona.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="242">
@@ -682,9 +654,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="458">
           <caret line="108" column="36" lean-forward="true" selection-start-line="108" selection-start-column="36" selection-end-line="108" selection-end-column="36" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -704,18 +673,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/draw/DrawSampleResult_placedump_test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4388">
-          <caret line="453" column="12" lean-forward="true" selection-start-line="453" selection-start-column="12" selection-end-line="453" selection-end-column="12" />
+        <state relative-caret-position="9878">
+          <caret line="453" column="12" selection-start-line="453" selection-start-column="12" selection-end-line="453" selection-end-column="12" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Data/StatisticData.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="371">
+          <caret line="74" column="22" selection-start-line="74" selection-start-column="22" selection-end-line="74" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/draw/DrawSampleResult_placedump_america.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="522">
-          <caret line="659" column="38" lean-forward="true" selection-start-line="659" selection-start-column="38" selection-end-line="659" selection-end-column="38" />
+        <state relative-caret-position="394">
+          <caret line="447" column="11" lean-forward="true" selection-start-line="447" selection-start-column="11" selection-end-line="447" selection-end-column="11" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -71,6 +71,8 @@ class Data:
             res.numCluster += data.numCluster
             res.timeTotal += data.timeTotal
 
+        if res.numSample == 0:
+            return res
         res.numRangeRtree = (int)(res.numRangeRtree / res.numSample)
         res.numOpticFastRange = (int)(res.numOpticFastRange / res.numSample)
         res.numOpticLuceneRange = (int)(res.numOpticLuceneRange / res.numSample)

@@ -152,7 +152,7 @@ public class AlgEucDisAdvancedOpticsWu extends AlgEucDisBaseOptics {
 			}
 		} else {	// the term ngb in index
 			qp.runTimeRec.timeSearchTermPNgb = System.nanoTime();
-			if(qp.sWords.size() == 1) {	// 只有一个查询词，就直接从索引中取出core_distance、reach_distance
+			if(qp.sWords.size() == -1) {	// 只有一个查询词，就直接从索引中取出core_distance、reach_distance
 				List<Node> oNodes = term2PNgb.searchTermReNodes(minTerm, qp);
 				
 				qp.runTimeRec.numIndexObject = oNodes.size();
